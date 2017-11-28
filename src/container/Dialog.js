@@ -6,13 +6,15 @@ class Dialog extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      visible: true
+      visible: true,
+      confirmLoading: false
     };
     this.handleOk = this.handleOk.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.onClose = this.onClose.bind(this);
   }
   handleOk(e) {
+    this.setState({confirmLoading: true})
     var result = this.props.handleOk(e);
     if(result && result.constructor === Promise){
       result.then(this.onClose);
@@ -46,7 +48,7 @@ class Dialog extends Component {
       <Modal title={this.props.title}
           visible={this.state.visible}
           onOk={(e)=>{this.handleOk(e)}}
-          confirmLoading={ this.props.confirmLoading}
+          confirmLoading={ this.state.confirmLoading}
           onCancel={(e)=>{this.handleCancel(e)}}>
         {this.props.content}
       </Modal>:null

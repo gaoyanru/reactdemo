@@ -1,9 +1,62 @@
 import React, { Component } from 'react'
 import SearchForm from '@/container/SearchForm';
 import ContractStatusSelect from '@/component/ContractStatusSelect';
-import { getContractManageList } from '@/api'
-import { Table } from 'antd';
+import { getListData } from '@/api'
+import { Table, Button } from 'antd';
 import Dialog from '@/container/Dialog'
+import {fContractType, fContractStatus, fDate, fFinancialAuditStatus, powerList} from '@/config/filters'
+
+let search = {
+    items: [{
+        label: '合同编号',
+        type: 'text',
+        field: 'contractNo'
+    }, {
+        label: '甲方',
+        type: 'text',
+        field: 'companyname'
+    }, {
+        label: '联系人',
+        type: 'text',
+        field: 'contact'
+    }, {
+        label: '销售人员',
+        type: 'text',
+        field: 'saleName'
+    }, {
+        label: '合同状态',
+        type: 'custom',
+        field: 'contractStatus',
+        view: ContractStatusSelect,
+        defaultValue: '0'
+    }, {
+        label: '合同类型',
+        type: 'select',
+        field: 'contractType',
+        data:[{id:0,label:'请选择'},{id:1,label:'新增'},{id:2,label:'续费'}],
+        defaultValue: '0'
+    }, {
+        label: '财务状态选择',
+        type: 'select',
+        field: 'financeStatus',
+        data:{ 
+          0: "请选择",
+          1: "待审核",
+          2: "已审核",
+          3: "已驳回"
+        },
+        defaultValue: '0'
+    }, {
+        label: '合同签订日期',
+        type: 'date',
+        field: 'starttime'
+    }, {
+        label: '至',
+        type: 'date',
+        field: 'endtime'
+    }],
+    buttons:[]
+};
 
 class Manage extends Component {
     constructor(props) {
@@ -18,43 +71,45 @@ class Manage extends Component {
                 }
             },
             searchParams: {},
-            loading: false
+            loading: false,
         };
+        
         this.onSearch = this.onSearch.bind(this);
         this.handleTableChange = this.handleTableChange.bind(this);
+        console.log('manage', this)
+        this.hasPower= powerList(this.props.functions);
     }
     handleTableChange (pagination){
-        const pager = {
-            ...this.state.pagination
-        };
-        pager.current = pagination.current;
-        this.setState({
-            pagination: pager,
-        });
-        this.onSearch(this.state.searchParams);
+        this.setState({pagination: pagination})
+        this.onSearch(this.state.searchParams,pagination);
     }
-    onSearch(vals={}) {
+    onSearch(vals={"contractNo":"","companyname":"","contact":"","saleName":"","contractStatus":"0","contractType":"0","financeStatus":"0","starttime":null,"endtime":null},pager) {
+
         this.setState({searchParams: vals, loading: true});
-        const pagination = this.state.pagination;
+        const pagination = pager || this.state.pagination;
         vals.limit = pagination.pageSize;
         vals.offset = (pagination.current - 1) * pagination.pageSize;
 
-        getContractManageList(vals).then(res => {
-            const pagination = { ...this.state.pagination };
-            pagination.total = res.data.total;
+        getListData('contract', vals).then(res => {
+            if(res.status){
+                const pagination = { ...this.state.pagination };
+                pagination.total = res.data.total;
+                this.setState({
+                    loading: false,
+                    data: res.data.list,
+                    pagination,
+                });
+            }
+        },err=>{
             this.setState({
-                loading: false,
-                data: res.data.list,
-                pagination,
+                loading: false
             });
         })
     }
     openDialog(row){
-        console.log(row);
         Dialog({
             content: (<div>test</div>),
             handleOk (){
-                console.log('handleOk')
             },
             confirmLoading: false,
             handleCancel (){
@@ -63,64 +118,23 @@ class Manage extends Component {
             title: '表头' 
         });
     }
+    addNew(){
+        Dialog({
+            content: (<div>test</div>),
+            handleOk (){
+            },
+            confirmLoading: false,
+            handleCancel (){
+                console.log('onCancel')
+            },
+            title: '合同新建' 
+        });
+    }
     componentDidMount() {
         this.onSearch();
     }
     render() {
-        const search = {
-            items: [{
-                label: '合同编号',
-                type: 'text',
-                field: 'contractNo'
-            }, {
-                label: '甲方',
-                type: 'text',
-                field: 'companyname'
-            }, {
-                label: '联系人',
-                type: 'text',
-                field: 'contact'
-            }, {
-                label: '销售人员',
-                type: 'text',
-                field: 'saleName'
-            }, {
-                label: '合同状态',
-                type: 'custom',
-                field: 'contractType',
-                view: ContractStatusSelect
-            }, {
-                label: '合同状态',
-                type: 'custom',
-                field: 'contractType',
-                view: ContractStatusSelect
-            }, {
-                label: '合同类型',
-                type: 'select',
-                field: 'contractType',
-                data:[{id:0,label:'请选择'},{id:1,label:'新增'},{id:2,label:'续费'}],
-                defaultValue: '0'
-            }, {
-                label: '财务状态选择',
-                type: 'select',
-                field: 'financeStatus',
-                data:{ 
-                  0: "请选择",
-                  1: "待审核",
-                  2: "已审核",
-                  3: "已驳回"
-                },
-                defaultValue: '0'
-            }, {
-                label: '合同签订日期',
-                type: 'date',
-                field: 'starttime'
-            }, {
-                label: '至',
-                type: 'date',
-                field: 'endtime'
-            }]
-        };
+        
         const columns = [{
             title: '合同编号',
             dataIndex: 'ContractNo',
@@ -132,34 +146,51 @@ class Manage extends Component {
             title: '联系人',
             dataIndex: 'Connector',
         }, {
+            title: '销售人员',
+            dataIndex: 'SaleName',
+        }, {
+            title: '合同类型',
+            dataIndex: 'OrderType',
+            render: type=> fContractType(type)
+        }, {
+            title: '合同状态',
+            dataIndex: 'OrderStatus',
+            render: val=> fContractStatus(val)
+        }, {
+            title: '合同签订日期',
+            dataIndex: 'ContractDate',
+            render: val=> fDate(val)
+        }, {
+            title: '合同总金额',
+            dataIndex: 'Amount',
+        }, {
+            title: '财务审核',
+            dataIndex: 'FinancialAuditStatus',
+            render: val=> fFinancialAuditStatus(val)
+        }, {
+            title: '最后操作人',
+            dataIndex: 'ModifyUserName',
+        }, {
+            title: '最后修改日期',
+            dataIndex: 'ModifyDate',
+            render: val=> fDate(val)
+        }, {
             title: 'Action',
             render: (text, record) => (
                 <span>
-                  <a href="#" className="ant-dropdown-link" onClick={(e)=>this.openDialog(record)}>
+                  <a href="javascript:;" className="ant-dropdown-link" onClick={(e)=>this.openDialog(record)}>
                     More 
                   </a>
                 </span>
             ),
         }];
-
-        const mapStateToProps = state => {
-          return {
-            loading: state.loading,
-            isLogin: state.isLogin
-          }
+        if(this.hasPower("NEW")){
+            search.buttons=[(<Button type="primary" onClick={this.addNew} key="btn_addNew">新建</Button>)]
         }
-        const mapDispatchToProps = dispatch => {
-          return {
-            onSearch: payload => {
-              dispatch(login(payload))
-            }
-          }
-        }
-        
-        
+       
         return (
             <div>
-                <SearchForm items={search.items} onSearch={this.onSearch}> 
+                <SearchForm items={search.items} buttons={search.buttons} onSearch={this.onSearch}> 
                 </SearchForm>
                 <Table columns={columns} 
                     rowKey={record => record.OrderId}
@@ -175,4 +206,4 @@ class Manage extends Component {
     }
 }
 
-export default Manage;
+export default Manage

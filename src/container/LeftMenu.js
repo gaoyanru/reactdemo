@@ -28,13 +28,12 @@ class LeftMenu extends React.Component {
           defaultOpenKeys={['sub1']}
           mode="inline"
           theme="dark"
-          inlineCollapsed={this.state.collapsed}
-        >
+          inlineCollapsed={this.state.collapsed}>
         {menu.map((route, index) => (
           <SubMenu key={route.FunctionId} title={<span><Icon type="mail" /><span>{route.FunctionName}</span></span>}>
           {route.Children.map((page,index)=>(
             <Menu.Item key={page.FunctionId}>
-              <Link to={ '/' + page.FunctionKey.replace('.','/')}>
+              <Link to={{functions:page.Children, pathname: '/' + page.FunctionKey.replace('.','/')}}>
                 <Icon type="pie-chart" />
                 <span>{page.FunctionName}</span>
               </Link>

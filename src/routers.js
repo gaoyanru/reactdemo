@@ -22,21 +22,18 @@ const Routers = ({ store }) => (
             <App/>
           ) : (
             <Redirect to={{
-              pathname: '/login',
-              state: { from: props.location }
+              pathname: '/login'
             }}/>
           )
         )}/>
         <Route path="/" exact  render={props => (
           sessionStorage.getItem('user') ? (
             <Redirect to={{
-              pathname: '/main',
-              state: { from: props.location }
+              pathname: '/main'
             }}/>
           ) : (
             <Redirect to={{
-              pathname: '/login',
-              state: { from: props.location }
+              pathname: '/login'
             }}/>
           )
         )}/>

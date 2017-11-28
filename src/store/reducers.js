@@ -1,5 +1,3 @@
-import { combineReducers } from 'redux'
-
 import { handleActions } from 'redux-actions'
 
 var user =  sessionStorage.getItem('user');
@@ -31,13 +29,6 @@ const actions = handleActions({
             token: data.Token,
             isLogin: true,
             loading: false
-        }
-    },
-    'PAGE_LIST_DATA': (state,{data}) => {
-        return {
-            ...state,
-            pageListData: 
-            loading: action.data
         }
     }
 }, defaultState)

@@ -4,10 +4,43 @@ import {
   BrowserRouter as Router,
   Route
 } from 'react-router-dom'
-import ContractManage from './pages/contract/manage';
+// import ContractManage from './pages/contract/manage';
+import { connect } from 'react-redux'
+const pagesMap = {
+  'contract_manage' : 'contract/manage',
+  'user_my': 'system/myInfo'
+}
+ 
 
 class App extends Component {
   render() {
+    let funs = [];
+    this.props.functions.forEach(f=>{
+      funs = funs.concat(f.Children);
+    });
+    funs = funs.map(f=>{
+      const key = f.FunctionKey.replace('main.','');
+      try{
+        if(pagesMap[key]){
+          return {
+            key: key,
+            path:'/main/'+key,
+            functions: f.Children,
+            component: require('@/pages/' + pagesMap[key])
+          }
+        }else{
+          return false
+        }
+        
+      } catch(error) {
+        return false
+      }
+    })
+    funs = funs.filter(f=>!!f)
+    const routers = funs.map((fun,index)=>{
+      const Com = fun.component.default;
+      return (<Route strict  path={fun.path} render={(args)=>(<Com {...args} functions={fun.functions}/>)} key={fun.key} />)
+    })
     return (
       <div className="App" >
         <div className="App-header">
@@ -33,7 +66,8 @@ class App extends Component {
           <div className="App-content">
             <LeftMenu/>
             <div style={{flex:1}}>
-              <Route path="/main/contract_manage" component={ContractManage} />
+                {routers}
+                <Route exact path="/main" render={props=>(<div> "hello" </div>)}/>
             </div>
           </div>
         </Router>
@@ -42,4 +76,11 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    functions: JSON.parse(state.user.FunctionList),
+  }
+}
+export default connect(
+  mapStateToProps
+)(App);

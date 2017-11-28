@@ -92,7 +92,7 @@ class Login extends Component {
 
 Login.propTypes = {
   loading: PropTypes.bool.isRequired,
-  isLogin: PropTypes.node.isRequired,
+  isLogin: PropTypes.bool.isRequired,
   onLogin: PropTypes.func.isRequired
 }
 

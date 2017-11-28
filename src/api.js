@@ -32,9 +32,21 @@ export const getSalers = params => {
 }
 
 export const getContractManageList = params => {
-  return axios.get(`${base}/contract?offset=0&limit=15&contractNo=&companyname=&contact=&saleName=&contractStatus=0&contractType=0&financeStatus=0&starttime=&endtime=`).then(res => res.data)
+  return axios.get(`${base}/contract`,{params: params}).then(res => res.data)
 }
 
-// export const getContractManageList = params => {
-//   return axios.get(`${base}/contract`, {params:params}).then(res => res.data)
-// }
+export const getListData = (url,params) => {
+  return axios.get(`${base}/${url}`, {params:params}).then(res => res.data)
+}
+
+export const fetchUserInfo  = params => {
+  return axios.get(`${base}/users/${params}`).then(res => res.data)
+}
+
+export const postData = (url, params) => {
+  return axios.post(`${base}/${url}`,params).then(res => res.data)
+}
+
+export const putData = (url, params) => {
+  return axios.put(`${base}/${url}`,params).then(res => res.data)
+}

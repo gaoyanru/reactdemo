@@ -59,6 +59,7 @@ class SearchForm extends Component {
         {Items}
         <FormItem>
           <Button type="primary" htmlType="submit">查询</Button>
+          {this.props.buttons}
         </FormItem>
       </Form>
     );
