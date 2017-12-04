@@ -30,6 +30,12 @@ const actions = handleActions({
             isLogin: true,
             loading: false
         }
+    },
+    'DEPARTMENTS': (state, { data }) => {
+        return {
+            ...state,
+            departments: data
+        }
     }
 }, defaultState)
 

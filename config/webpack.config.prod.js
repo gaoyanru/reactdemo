@@ -56,7 +56,7 @@ module.exports = {
   // You can exclude the *.map files from the build during deployment.
   devtool: shouldUseSourceMap ? 'source-map' : false,
   // In production, we only want to load the polyfills and the app code.
-  entry: [require.resolve('./polyfills'), paths.managePath],
+  entry: [require.resolve('./polyfills'), paths.outputPath],
   output: {
     // The build folder.
     path: paths.appBuild,
@@ -206,6 +206,19 @@ module.exports = {
               )
             ),
             // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
+          },
+          {
+            test: /\.scss$/,
+            use: [{
+                loader: "style-loader" // creates style nodes from JS strings 
+            }, {
+                loader: "css-loader", // translates CSS into CommonJS 
+                options: {
+                  importLoaders: 1
+                }
+            }, {
+                loader: "sass-loader" // compiles Sass to CSS 
+            }]
           },
           // "file" loader makes sure assets end up in the `build` folder.
           // When you `import` an asset, you get its filename.

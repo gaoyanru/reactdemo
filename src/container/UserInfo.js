@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Form, Input, Radio, DatePicker, Button } from 'antd'
 import { getListData } from '@/api'
 import moment from 'moment'
@@ -59,7 +59,7 @@ class UserInfo extends React.Component {
           },
         };
         const props = this.props;
-        const { getFieldDecorator, getFieldsError, getFieldError } = props.form;
+        const { getFieldDecorator, getFieldsError } = props.form;
         return (
         <Form onSubmit={this.handleSubmit}>
             <FormItem

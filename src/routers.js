@@ -19,7 +19,7 @@ const Routers = ({ store }) => (
         <Route path="/login" component={Login}/>
         <Route path="/main" render={props => (
           sessionStorage.getItem('user') ? (
-            <App/>
+            <App {...props}/>
           ) : (
             <Redirect to={{
               pathname: '/login'

@@ -141,7 +141,7 @@ class Manage extends Component {
         }, {
             title: '甲方',
             dataIndex: 'CompanyName',
-            render: text => <a href="#">{text}</a>,
+            render: text => <a href="javascript:;">{text}</a>,
         }, {
             title: '联系人',
             dataIndex: 'Connector',

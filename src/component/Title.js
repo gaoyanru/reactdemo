@@ -1,14 +1,15 @@
-import React, { Component } from 'react'
-
+import React from 'react'
+import style from '@/config/style'
+console.log(style.bgColorPrimary)
 const Title = function(props){
-  var style = {
-    background: 'rgb(103, 134, 149)',
+  const s = {
+    background: style.bgColorPrimary,
     color: '#fff',
     lineHeight: '35px',
     fontSize:'18px',
     padding: '0 12px'
   }
-  return (<div style={style}>{props.title}</div>)
+  return (<div style={s}>{props.title}</div>)
 }
 
 export default Title;

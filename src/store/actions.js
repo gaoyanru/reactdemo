@@ -1,4 +1,4 @@
-import { requestLogin, fetchList} from '@/api'
+import { requestLogin, getListData } from '@/api'
 
 export const login = (payload) => (dispatch) => {
     dispatch({type: 'LOADING', data: true})
@@ -11,4 +11,14 @@ export const login = (payload) => (dispatch) => {
             dispatch({type: 'LOADING', data: false})
         }
     })
+}
+
+export function getDepartments (payload){
+    return (dispatch) =>{
+        getListData('departmentscenter',payload).then(res => {
+            if(res.status){
+                dispatch({type: 'DEPARTMENTS', data: res.data})
+            }
+        })
+    }
 }

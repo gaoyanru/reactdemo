@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Form, Input, Button } from 'antd'
 
 const FormItem = Form.Item;
@@ -47,7 +47,7 @@ class UserInfo extends React.Component {
           },
         };
         const props = this.props;
-        const { getFieldDecorator, getFieldsError, getFieldError } = props.form;
+        const { getFieldDecorator, getFieldsError } = props.form;
 
         const isRepeat = (rule, value, callback) => {
             const form = this.props.form;

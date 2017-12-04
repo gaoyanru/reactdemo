@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { message } from 'antd';
-
+// instance.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 axios.interceptors.request.use(function(config) {
   if(sessionStorage.getItem('token')){
     config.headers.common['Authorize'] = sessionStorage.getItem('token')
@@ -49,4 +49,30 @@ export const postData = (url, params) => {
 
 export const putData = (url, params) => {
   return axios.put(`${base}/${url}`,params).then(res => res.data)
+}
+
+export const fetchAll = (ajaxs) => {
+  return new Promise(function(resolve, reject) {
+    if(ajaxs.length === 0){
+      resolve()
+    }
+    let count = 0, 
+      total = ajaxs.length, 
+      result = new Array(total);
+    ajaxs.forEach((ajax,index)=>{
+      ajax.then(res=>{
+        count +=1;
+        result[index] = res;
+        if(count === total){
+          resolve(result);
+        }
+      },error=>{
+        count +=1;
+        result[index] = error;
+        if(count === total){
+          resolve(result);
+        }
+      })
+    });
+  });
 }

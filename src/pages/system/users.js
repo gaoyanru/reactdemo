@@ -1,47 +1,27 @@
 import React, { Component } from 'react'
 import { fetchUserInfo, postData, putData } from '@/api'
-import { message, Card, Spin } from 'antd'
+import { message, Card } from 'antd'
 import { connect } from 'react-redux'
-import Title from '@/component/Title'
-import UserInfo from '@/container/UserInfo'
-import ResetPassword from '@/container/ResetPassword'
+import { getDepartments } from '@/store/actions'
 import _ from 'lodash'
 
 
-class MyInfo extends Component {
-    constructor(props) {
-        super(props);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.fetchMyInfo = this.fetchMyInfo.bind(this);
-        this.resetPassword = this.resetPassword.bind(this);
-        this.state = {
-            userInfo: null
-        }
-    }
+
+class Users extends Component {
     handleSubmit (data){
+        console.log(this.state.userInfo,data,_.extend(this.state.userInfo,data))
         postData('users', _.extend(this.state.userInfo,data)).then(res=>{
             if(res.status){
                 message.info('保存成功！')
             }
         })
     }
-    resetPassword (data){
-        putData('user/pwd/reset',data).then(res=>{
-           if(res.status){
-            message.info('密码修改成功！')
-           }
-        })
-    }
-    fetchMyInfo(){
-        fetchUserInfo(this.props.userId).then(res=>{
-            this.setState({userInfo:res.data})
-        })
-    }
-    componentDidMount() {
-        this.fetchMyInfo();
+    componentWillMount() {
+        console.log('componentWillMount');
+        this.props.getDepartments();
     }
     render() {
-        if(!this.state.userInfo) return (<Spin/>);
+        if(!this.state.userInfo) return (<b>loading</b>);
         return (
             <div>
                 <Card title="我的信息" bordered={false} style={{ width: 600 }}>                
@@ -60,7 +40,17 @@ class MyInfo extends Component {
 }
 const mapStateToProps = state => {
   return {
-    userId: state.user.Id
+    user: state.user,
+    departments: state.departments
   }
 }
-export default connect(mapStateToProps)(MyInfo)
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getDepartments: payload => {
+      dispatch(getDepartments({offset:0,limit:99999}))
+    }
+  }
+}
+
+export default connect(mapStateToProps)(Users)

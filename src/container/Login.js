@@ -1,11 +1,12 @@
 
 import React, { Component } from 'react'
 // import { hashHistory } from 'react-router'
-import { Spin, message, Form, Icon, Input, Button, Row, Col } from 'antd'
+import { Spin, Form, Icon,  Button, Row, Col } from 'antd'
 // import { requestLogin } from './api'
-
+import CInput from '@/component/clearableInput'
 import { Redirect } from 'react-router-dom'
 import PropTypes from 'prop-types'
+import  '@/style/login.less';
 
 const FormItem = Form.Item
 
@@ -37,54 +38,44 @@ class Login extends Component {
     const  getFieldDecorator  = this.props.form.getFieldDecorator
     return (
       <div className="login">
-        <div className="btmLogin">
-          <div className="sy_bottom">
-            <h1 id="PerformName">ERP</h1>
-            <Row className="ul-wrap">
-              <Col span={24}>
-                <Spin spinning={!!this.props.loading}>
-                  <Form onSubmit={this.handleSubmit}>
-                    <FormItem hasFeedback>
-                      {getFieldDecorator('UserName', {
-                        rules: [
-                          { required: true, message: '请输入用户名' },
-                          { validator: this.checkName },
-                          // { pattern: regExpConfig.IDcardTrim, message: '身份证号格式不正确' }
-                        ],
-                        // validateTrigger: 'onBlur',
-                      })(
-                        <Input
-                          prefix={<Icon type="user" style={{ fontSize: 13 }} />}
-                          placeholder="请输入用户名"
-                          type="text"
-                        />
-                        )}
-                    </FormItem>
-                    <FormItem hasFeedback>
-                      {getFieldDecorator('PassWord', {
-                        rules: [
-                          { required: true, message: '请输入密码' },
-                          // { pattern: regExpConfig.pwd, message: '密码只能是6-16个数字或者字母组成' }
-                        ],
-                        // validateTrigger: 'onBlur',
-                      })(
-                        <Input
-                          prefix={<Icon type="lock" style={{ fontSize: 13 }} />}
-                          placeholder="请输入密码"
-                          type="password"
-                        />
-                        )}
+        <div className="title"><span className="logo"></span> <span className="text">噼里啪ERP管理系统</span> <span className="text-tag">V2.2.2</span></div>
+        <Row className="logo-context">
+          <Col span={24}>
+            <Spin spinning={!!this.props.loading}>
+              <Form onSubmit={this.handleSubmit}>
+                <FormItem>
+                  {getFieldDecorator('UserName')(
+                    <CInput
+                      prefix={<Icon type="user"/>}
+                      placeholder="请输入用户名"
+                      type="text"
+                      size="large"
+                    />
+                    )}
+                </FormItem>
+                <FormItem>
+                  {getFieldDecorator('PassWord')(
+                    <CInput
+                      prefix={<Icon type="lock" />}
+                      placeholder="请输入密码"
+                      size="large"
+                      type="password"
+                    />
+                    )}
 
-                    </FormItem>
-                    <FormItem>
-                      <Button type="primary" htmlType="submit">登录</Button>
-                    </FormItem>
-                  </Form>
-                </Spin>
-              </Col>
-            </Row>
-          </div>
+                </FormItem>
+                <FormItem>
+                  <Button type="primary" htmlType="submit">登录</Button>
+                </FormItem>
+              </Form>
+            </Spin>
+          </Col>
+        </Row>
+        <div className="down-app">
+          <div className="down-app-img"></div>
+          <div className="down-app-text">扫一扫下载移动端</div>
         </div>
+        <div className="footer">@2017 北京爱康鼎科技有限公司 版权所有</div>
       </div>
     );
   }

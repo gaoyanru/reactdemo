@@ -167,8 +167,8 @@ module.exports = {
               {
                 loader: require.resolve('css-loader'),
                 options: {
-                  importLoaders: 1,
-                },
+                  importLoaders: 1
+                }
               },
               {
                 loader: require.resolve('postcss-loader'),
@@ -193,13 +193,16 @@ module.exports = {
             ],
           },
           {
-            test: /\.scss$/,
+            test: /\.less$/,
             use: [{
                 loader: "style-loader" // creates style nodes from JS strings 
             }, {
-                loader: "css-loader" // translates CSS into CommonJS 
+                loader: "css-loader", // translates CSS into CommonJS 
+                options: {
+                  importLoaders: 1
+                }
             }, {
-                loader: "sass-loader" // compiles Sass to CSS 
+                loader: "less-loader" // compiles Sass to CSS 
             }]
           },
           // "file" loader makes sure those assets get served by WebpackDevServer.
@@ -212,7 +215,7 @@ module.exports = {
             // it's runtime that would otherwise processed through "file" loader.
             // Also exclude `html` and `json` extensions so they get processed
             // by webpacks internal loaders.
-            exclude: [/\.js$/, /\.html$/, /\.json$/],
+            exclude: [/\.js$/, /\.html$/, /\.json$/, /\.scss$/],
             loader: require.resolve('file-loader'),
             options: {
               name: 'static/media/[name].[hash:8].[ext]',

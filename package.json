@@ -28,6 +28,7 @@
     "fs-extra": "3.0.1",
     "html-webpack-plugin": "2.29.0",
     "jest": "20.0.4",
+    "less-loader": "^4.0.5",
     "moment": "^2.19.2",
     "node-sass-chokidar": "0.0.3",
     "npm-run-all": "^4.1.1",
@@ -55,6 +56,8 @@
     "whatwg-fetch": "2.0.3"
   },
   "devDependencies": {
+    "less": "^2.7.3",
+    "less-loader": "^4.0.5",
     "sass-loader": "^6.0.6"
   },
   "scripts": {
@@ -103,5 +106,5 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "proxy": "http://192.168.200.212:8084"
+  "proxy": "https://x-crm.i-counting.cn/"
 }
