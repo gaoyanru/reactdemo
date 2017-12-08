@@ -17,7 +17,7 @@ export function getDepartments (payload){
     return (dispatch) =>{
         getListData('departmentscenter',payload).then(res => {
             if(res.status){
-                dispatch({type: 'DEPARTMENTS', data: res.data})
+                dispatch({type: 'DEPARTMENTS', data: res.data.list})
             }
         })
     }

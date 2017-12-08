@@ -13,7 +13,8 @@ const { Header, Sider, Content } = Layout;
 
 const pagesMap = {
   'contract_manage' : 'contract/manage',
-  'user_my': 'system/myInfo'
+  'user_my': 'system/myInfo',
+  'users': 'system/users'
 }
 
 function getCurrentMenu(funs,path){

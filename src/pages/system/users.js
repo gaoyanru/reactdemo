@@ -1,39 +1,25 @@
 import React, { Component } from 'react'
 import { fetchUserInfo, postData, putData } from '@/api'
-import { message, Card } from 'antd'
+import { message, Spin } from 'antd'
 import { connect } from 'react-redux'
 import { getDepartments } from '@/store/actions'
-import _ from 'lodash'
-
-
+import Department from '@/container/Department'
 
 class Users extends Component {
-    handleSubmit (data){
-        console.log(this.state.userInfo,data,_.extend(this.state.userInfo,data))
-        postData('users', _.extend(this.state.userInfo,data)).then(res=>{
-            if(res.status){
-                message.info('保存成功！')
-            }
-        })
+    handleDepartmentClick (data){
+        console.log(data)
+       
     }
     componentWillMount() {
         console.log('componentWillMount');
         this.props.getDepartments();
     }
     render() {
-        if(!this.state.userInfo) return (<b>loading</b>);
+        console.log(this.props.departments)
+        if(!this.props.departments) return (<Spin style={{ marginLeft: 8 }} />);
         return (
             <div>
-                <Card title="我的信息" bordered={false} style={{ width: 600 }}>                
-                    <div style={{width:'600px',padding:'24px'}}>
-                        <UserInfo user={this.state.userInfo} onSubmit={this.handleSubmit} />
-                    </div>
-                </Card>
-                <Card title="修改密码" bordered={false} style={{ width: 600 }}> 
-                    <div style={{width:'600px',padding:'24px'}}>
-                        <ResetPassword  onSubmit={this.resetPassword} />
-                    </div>
-                </Card>
+                <Department data={this.props.departments} companyName={this.props.user.SubsidiaryName} onclick={this.handleDepartmentClick}  style={{ width: '300px' }}/>                
             </div>
         )
     }
@@ -53,4 +39,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps)(Users)
+export default connect(mapStateToProps,mapDispatchToProps)(Users)
