@@ -36,6 +36,12 @@ const actions = handleActions({
             ...state,
             departments: data
         }
+    },
+    'CURRENT_POWERLIST': (state, { data }) => {
+        return {
+            ...state,
+            functions: data
+        }
     }
 }, defaultState)
 

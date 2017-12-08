@@ -22,3 +22,7 @@ export function getDepartments (payload){
         })
     }
 }
+
+export const setPowerList = (payload) => (dispatch) => {
+    dispatch({type: 'CURRENT_POWERLIST', data: payload})
+}

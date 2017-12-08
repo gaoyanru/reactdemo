@@ -5,6 +5,7 @@ import { getListData } from '@/api'
 import { Table, Button } from 'antd';
 import Dialog from '@/container/Dialog'
 import {fContractType, fContractStatus, fDate, fFinancialAuditStatus, powerList} from '@/config/filters'
+import HasPower from '@/container/HasPower'
 
 let search = {
     items: [{
@@ -177,11 +178,11 @@ class Manage extends Component {
         }, {
             title: 'Action',
             render: (text, record) => (
-                <span>
+                <HasPower power="TeT">
                   <a href="javascript:;" className="ant-dropdown-link" onClick={(e)=>this.openDialog(record)}>
                     More 
                   </a>
-                </span>
+                </HasPower>
             ),
         }];
         if(this.hasPower("NEW")){

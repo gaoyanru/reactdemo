@@ -10,15 +10,17 @@ body {
 .m-list-item{
     cursor: pointer;
 }
-.m-list-item .m-list-item-a{
-    display: block;
-    width: 100%;
-    height: 100%;
-}
 .m-list-item:hover{
     background-color: #1890ff;
     color: #fff;
 }
-.m-list-item:hover .m-list-item-a{
+.m-list-item:hover{
     color: #fff;
+}
+.m-list-item.active{
+    background-color: #1890ff;
+    color: #fff;
+}
+.hide{
+    display: none!important;
 }

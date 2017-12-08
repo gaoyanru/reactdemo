@@ -3,11 +3,11 @@ import { List } from 'antd';
 import Title from '@/component/Title'
 
 class Department extends React.Component {
-  state={selected: undefined}
+  state={selected: {}}
   onClick(item){
     this.props.onclick(item)
     this.setState({
-      selected: item
+      selected: item || {}
     })
   }
   render() {
@@ -18,7 +18,7 @@ class Department extends React.Component {
           size="small"
           bordered
           dataSource={this.props.data}
-          renderItem={item => (<List.Item className={this.state.selected === item? "m-list-item active":"m-list-item"} onClick={(e)=>this.onClick(item)}>{item.DepartmentName}</List.Item>)}
+          renderItem={item => (<List.Item className={this.state.selected.DepartmentId === item.DepartmentId? "m-list-item active":"m-list-item"} onClick={(e)=>this.onClick(item)}>{item.DepartmentName}</List.Item>)}
         />
       </div>
     );

@@ -1,6 +1,6 @@
 import React from 'react'
 import style from '@/config/style'
-console.log(style.bgColorPrimary)
+
 const Title = function(props){
   const s = {
     background: style.bgColorPrimary,

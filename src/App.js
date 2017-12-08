@@ -2,14 +2,23 @@ import React, { Component } from 'react';
 import LeftMenu from './container/LeftMenu'
 import { Layout, Menu, Icon, Avatar, Dropdown, Tag, message, Spin } from 'antd';
 import {Link, Switch, BrowserRouter as Router, Route} from 'react-router-dom'
-// import ContractManage from './pages/contract/manage';
 import { connect } from 'react-redux'
 import  '@/style/BasicLayout.less';
 import  '@/style/app.less';
 import logo from './logo.svg';
 
-const { Header, Sider, Content } = Layout;
+import { setPowerList } from '@/store/actions'
 
+const { Header, Sider, Content } = Layout;
+class WithPower extends Component {
+  componentWillMount(){
+    setPowerList(this.props.functions)
+  }
+  render(){
+    var CompView = this.props.child
+    return (<CompView {...this.props.args}/>)
+  }
+}
 
 const pagesMap = {
   'contract_manage' : 'contract/manage',
@@ -55,8 +64,7 @@ function getRouterMap(funs){
     }
   })
   return arr.filter(f=>!!f).map((fun,index)=>{
-    const Com = fun.component.default;
-    return (<Route strict  path={fun.path} render={(args)=>(<Com {...args} functions={fun.functions}/>)} key={fun.key} />)
+    return (<Route strict  path={fun.path} render={(args)=>(<WithPower functions={fun.functions} args={args} child={fun.component.default}/>)} key={fun.key} />)
   })
 }
 
