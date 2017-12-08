@@ -4,7 +4,7 @@ import ContractStatusSelect from '@/component/ContractStatusSelect';
 import { getListData } from '@/api'
 import { Table, Button } from 'antd';
 import Dialog from '@/container/Dialog'
-import {fContractType, fContractStatus, fDate, fFinancialAuditStatus, powerList} from '@/config/filters'
+import {fContractType, fContractStatus, fDate, fFinancialAuditStatus} from '@/config/filters'
 import HasPower from '@/container/HasPower'
 
 let search = {
@@ -77,8 +77,6 @@ class Manage extends Component {
         
         this.onSearch = this.onSearch.bind(this);
         this.handleTableChange = this.handleTableChange.bind(this);
-        console.log('manage', this)
-        this.hasPower= powerList(this.props.functions);
     }
     handleTableChange (pagination){
         this.setState({pagination: pagination})
@@ -185,10 +183,9 @@ class Manage extends Component {
                 </HasPower>
             ),
         }];
-        if(this.hasPower("NEW")){
-            search.buttons=[(<Button type="primary" onClick={this.addNew} key="btn_addNew">新建</Button>)]
-        }
-       
+
+        search.buttons=[(<HasPower power="NEW"><Button type="primary" onClick={this.addNew} key="btn_addNew">新建</Button></HasPower>)]
+        
         return (
             <div>
                 <SearchForm items={search.items} buttons={search.buttons} onSearch={this.onSearch}> 

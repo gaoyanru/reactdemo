@@ -6,13 +6,16 @@ import { connect } from 'react-redux'
 import  '@/style/BasicLayout.less';
 import  '@/style/app.less';
 import logo from './logo.svg';
+import store from '@/store'
 
 import { setPowerList } from '@/store/actions'
 
 const { Header, Sider, Content } = Layout;
+
 class WithPower extends Component {
   componentWillMount(){
-    setPowerList(this.props.functions)
+    console.log('WithPower',setPowerList)
+    setPowerList(this.props.functions)(store.dispatch)
   }
   render(){
     var CompView = this.props.child
