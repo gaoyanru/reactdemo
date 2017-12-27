@@ -13,6 +13,7 @@ class HasPower extends React.Component {
   render() {
     // console.log('HasPower',this.props)
     const hasPower= powerList(this.props.functions);
+    if(this.props.hide) return null;
     if(hasPower(this.props.power)){
         return React.Children.only(this.props.children)
     }else{

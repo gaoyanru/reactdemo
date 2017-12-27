@@ -7,7 +7,6 @@ import  '@/style/BasicLayout.less';
 import  '@/style/app.less';
 import logo from './logo.svg';
 import store from '@/store'
-
 import { setPowerList } from '@/store/actions'
 
 const { Header, Sider, Content } = Layout;
@@ -29,7 +28,8 @@ const pagesMap = {
   'roles_setting': 'system/roleSetting',
   'department_setting': 'system/departmentSetting',
   'user_group': 'system/groupSetting',
-  'cus_my': 'customer/my'
+  'cus_my': 'customer/my',
+  'outwork_manage': 'outworker/review'
 }
 
 function getCurrentMenu(funs,path){

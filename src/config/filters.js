@@ -9,6 +9,9 @@ const contractStatus = { //合同，财务状态
     5: '已结束',
     8: '已中止'
 }
+const serviceStatus = {
+
+}
 
 //权限类
 export const powerList = (plist)=>{
@@ -28,9 +31,121 @@ export const fContractStatus =(val)=>{
 export const fFinancialAuditStatus =(val)=>{
     return contractStatus[val]||''
 }
+export const fServiceStatus = (status)=>{
+    var str = ''
+    switch (+status) {
+        case 1:
+            str = '待分配'
+            break;
+        case 2:
+            str = '未开始'
+            break;
+        case 3:
+            str = '外勤服务'
+            break;
+        case 4:
+            str = '外勤会计服务'
+            break;
+        case 5:
+            str = '会计服务'
+            break;
+        case 7:
+            str = '结束'
+            break;
+        case 8:
+            str = '中止'
+            break;
+    }
+    return str
+}
+export const fCheckStatus = function(status) {
+    var str = ''
+    switch (+status) {
+        case 1:
+            str = '待审核'
+            break;
+        case 2:
+            str = '已审核'
+            break;
+        case 3:
+            str = '已驳回'
+            break;
+        case 4:
+            str = '外勤提交'
+            break;
+        case 5:
+            str = '部分确认'
+            break;
+        case 6:
+            str = '已提交'
+            break;
+        case 7:
+            str = '已结束'
+            break;
+        case 8:
+            str = '已中止'
+            break;
+    }
+    return str
+}
+export const fPartTax = function(status) {
+    var str = ''
+    switch (+status) {
+        case 1:
+            str = '国税报道'
+            break;
+        case 2:
+            str = '地税报道'
+            break;
+    }
+    return str
+}
+export const fMainTaskStatus = function(status) {
+    var str = ''
+    switch (+status) {
+        case 1:
+            str = '待分配'
+            break;
+        case 2:
+            str = '待处理'
+            break;
+        case 3:
+            str = '进行中'
+            break;
+        case 4:
+            str = '已完成'
+            break;
+        case 5:
+            str = '已取消'
+            break;
+    }
+    return str
+}
+export const fSubTaskStatus = function(status) {
+    var str = ''
+    switch (+status) {
+        case 1:
+            str = '待分配'
+            break;
+        case 2:
+            str = '待处理'
+            break;
+        case 3:
+            str = '进行中'
+            break;
+        case 4:
+            str = '已完成'
+            break;
+        case 5:
+            str = '已取消'
+            break;
+    }
+    return str
+}
 
 // 日期类
 export const fDate =(val)=>{
     if((!val) || val.length<10 || val.substr(0,4)==='0001') return '';
     return val.substr(0, 10);
 }
+
