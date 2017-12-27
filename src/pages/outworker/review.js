@@ -120,65 +120,12 @@ class Main extends Component {
                 loading: false
             });
         })
-    }
-    addNew() {
-        Dialog({
-            content: <CrmCustomer data={customer} wrappedComponentRef={crmform =>{this.crmform = crmform}}/>,
-            width: width|| 540,
-            handleOk: ()=>{
-                return new Promise((resolve, reject) => {
-                    const formValues = this.crmform.getFieldsValue()
-                    if(formValues){
-                        postData('customer?verify=0', formValues).then(res=>{
-                            if (res && _.isObject(res.data)) {
-                                const data = res.data;
-                                if (data.errorcode == 1) {
-                                    message.error(res.data.name);
-                                } else {
-                                    const customers = JSON.parse(data.name);
-                                    Dialog({
-                                        content: <CrmCustomerRepeatWarning data={customers}/>,
-                                        width: 800,
-                                        handleOk (){
-                                            return true
-                                        },
-                                        confirmLoading: false,
-                                        handleCancel (){
-                                            console.log('onCancel')
-                                        },
-                                        title: '新增客户' 
-                                    }).result.then(()=>{
-                                         postData('customer?verify=1', formValues).then(res=>{
-                                            message.info('保存成功！')
-                                            resolve()
-                                         })
-                                    });
-
-                                }
-                            }else{
-                                message.info('保存成功！')
-                                resolve()
-                            }
-                        });
-                    }else{
-                        reject();
-                    }
-                });
-            },
-            confirmLoading: false,
-            handleCancel (){
-                console.log('onCancel')
-            },
-            title: title 
-        }).result.then(()=>{
-            this.onSearch(this.state.searchParams)
-        },()=>{});
-    }   
+    }  
     componentWillMount() {
         this.onSearch();
     }
     render() {
-        
+
         const columns = [{
             title: '序列ID',
             dataIndex: 'SequenceNo',
@@ -247,15 +194,15 @@ class Main extends Component {
                 </Button.Group>
             ),
         }];
-    
+
         search.buttons=[
         <HasPower power="ADD" key="btn_addNew"><Button type="primary" onClick={this.addNew} style={{margin:'0 8px'}}>新增</Button></HasPower>]
         return (
             <div>
-                <SearchForm items={search.items} buttons={search.buttons} onSearch={this.onSearch}/> 
-                <Table columns={columns} 
+                <SearchForm items={search.items} buttons={search.buttons} onSearch={this.onSearch}/>
+                <Table columns={columns}
                     rowKey={record => record.Id}
-                    dataSource={this.state.data} 
+                    dataSource={this.state.data}
                     pagination={this.state.pagination}
                     loading={this.state.loading}
                     onChange={this.handleTableChange}
