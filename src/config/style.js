@@ -1,5 +1,5 @@
 export default {
-  bgColorPrimary: '#001529',
-  colorDark: '#001529',
+  bgColorPrimary: '#384f65',
+  colorDark: '#003466',
   colorWhite: '#fff'
 }

@@ -19,6 +19,9 @@ axios.interceptors.response.use(function(response) {
     sessionStorage.removeItem('token')
     window.location.replace('/login')
   }
+  if(typeof error.response.data === "object"){
+    message.error(error.response.data.message)
+  }
   return Promise.reject(error)
 })
 
@@ -51,28 +54,7 @@ export const putData = (url, params) => {
   return axios.put(`${base}/${url}`,params).then(res => res.data)
 }
 
-export const fetchAll = (ajaxs) => {
-  return new Promise(function(resolve, reject) {
-    if(ajaxs.length === 0){
-      resolve()
-    }
-    let count = 0, 
-      total = ajaxs.length, 
-      result = new Array(total);
-    ajaxs.forEach((ajax,index)=>{
-      ajax.then(res=>{
-        count +=1;
-        result[index] = res;
-        if(count === total){
-          resolve(result);
-        }
-      },error=>{
-        count +=1;
-        result[index] = error;
-        if(count === total){
-          resolve(result);
-        }
-      })
-    });
-  });
+export const deleteData = (url, params) => {
+  return axios.delete(`${base}/${url}`,params).then(res => res.data)
 }
+

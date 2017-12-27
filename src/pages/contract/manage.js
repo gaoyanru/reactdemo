@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import SearchForm from '@/container/SearchForm';
-import ContractStatusSelect from '@/component/ContractStatusSelect';
+import SearchForm from '@/container/SearchForm'
+import ContractStatusSelect from '@/container/searchComponent/ContractStatusSelect'
 import { getListData } from '@/api'
-import { Table, Button } from 'antd';
+import { Table, Button } from 'antd'
 import Dialog from '@/container/Dialog'
 import {fContractType, fContractStatus, fDate, fFinancialAuditStatus} from '@/config/filters'
 import HasPower from '@/container/HasPower'
@@ -184,12 +184,11 @@ class Manage extends Component {
             ),
         }];
 
-        search.buttons=[(<HasPower power="NEW"><Button type="primary" onClick={this.addNew} key="btn_addNew">新建</Button></HasPower>)]
+        search.buttons=[(<HasPower power="NEW" key="btn_addNew"><Button type="primary" onClick={this.addNew} >新建</Button></HasPower>)]
         
         return (
             <div>
-                <SearchForm items={search.items} buttons={search.buttons} onSearch={this.onSearch}> 
-                </SearchForm>
+                <SearchForm items={search.items} buttons={search.buttons} onSearch={this.onSearch}/> 
                 <Table columns={columns} 
                     rowKey={record => record.OrderId}
                     dataSource={this.state.data} 
