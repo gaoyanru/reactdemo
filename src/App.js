@@ -7,6 +7,7 @@ import  '@/style/BasicLayout.less';
 import  '@/style/app.less';
 import logo from './logo.svg';
 import store from '@/store'
+import stet from '@/pages/customer/set'
 
 import { setPowerList } from '@/store/actions'
 
@@ -29,7 +30,8 @@ const pagesMap = {
   'roles_setting': 'system/roleSetting',
   'department_setting': 'system/departmentSetting',
   'user_group': 'system/groupSetting',
-  'cus_my': 'customer/my'
+  'cus_my': 'customer/my',
+  'cus_settings': 'customer/set'
 }
 
 function getCurrentMenu(funs,path){
@@ -43,7 +45,7 @@ function getCurrentMenu(funs,path){
     }
   });
   return menu;
-} 
+}
 
 function getRouterMap(funs){
   var arr = [];
@@ -65,7 +67,7 @@ function getRouterMap(funs){
       }else{
         return false
       }
-      
+
     } catch(error) {
       return false
     }
@@ -155,7 +157,7 @@ class App extends Component {
                 <Route exact path="/main" render={props=>(<div> "hello" </div>)}/>
               </Switch>
             </div>
-          </Content>        
+          </Content>
         </Layout>
       </Layout>
     );

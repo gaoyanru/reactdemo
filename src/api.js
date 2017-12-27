@@ -58,3 +58,6 @@ export const deleteData = (url, params) => {
   return axios.delete(`${base}/${url}`,params).then(res => res.data)
 }
 
+export const getCustomerSetList = (url) => {
+  return axios.get(`${base}/${url}`).then(res => res.data)
+}
