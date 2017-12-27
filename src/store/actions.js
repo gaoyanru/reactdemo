@@ -50,6 +50,34 @@ export function getAllSalers(force,getState) {
         })
     }
 }
+export function getOutworkers(force,getState) {
+    return (dispatch, getState) => {
+        const state = getState();
+        if(state.outworkers && !force){
+            return null;
+        }
+        getListData('outworkers').then(res => {
+            if (res.status) {
+                dispatch({ type: 'get outworkers', data: res.data.list })
+            }
+        })
+    }
+}
+
+export function getAreas(force,getState) {
+    return (dispatch, getState) => {
+        const state = getState();
+        if(state.areas && !force){
+            return null;
+        }
+        getListData('contract/sales').then(res => {
+            if (res.status) {
+                dispatch({ type: 'get current areas', data: res.data })
+            }
+        })
+    }
+}
+
 export function getCustomerType(force,getState) {
     return (dispatch, getState) => {
         const state = getState();
@@ -91,6 +119,34 @@ export function getCustomerSource(force,getState) {
         dispatch({ type: 'CUSTOMER_SOURCE', data: [] })
     }
 }
+export function getMainTask(force,getState) {
+    return (dispatch, getState) => {
+        const state = getState();
+        if(state.main_tasks && !force){
+            return null;
+        }
+        getListData('commontask').then(res => {
+            if (res.status) {
+                dispatch({ type: 'get main task list', data: res.data })
+            }
+        })
+        // dispatch({ type: 'get main task list', data: [] })
+    }
+}
+export function getSubTask(force,getState) {
+    return (dispatch, getState) => {
+        const state = getState();
+        if(state.sub_task && !force){
+            return null;
+        }
+        getListData('outertasksub', {offset:0,limit:9999}).then(res => {
+            if (res.status) {
+                dispatch({ type: 'get sub task list', data: res.data.list })
+            }
+        })
+    }
+}
+
 
 export function setPowerList(payload) {
     return (dispatch) => {

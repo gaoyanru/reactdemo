@@ -7,8 +7,6 @@ import  '@/style/BasicLayout.less';
 import  '@/style/app.less';
 import logo from './logo.svg';
 import store from '@/store'
-import stet from '@/pages/customer/set'
-
 import { setPowerList } from '@/store/actions'
 
 const { Header, Sider, Content } = Layout;
@@ -31,7 +29,8 @@ const pagesMap = {
   'department_setting': 'system/departmentSetting',
   'user_group': 'system/groupSetting',
   'cus_my': 'customer/my',
-  'cus_settings': 'customer/set'
+  'cus_settings': 'customer/set',
+  'outwork_manage': 'outworker/review'
 }
 
 function getCurrentMenu(funs,path){

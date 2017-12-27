@@ -294,9 +294,6 @@ class Main extends Component {
         d.result.then(()=>{
             this.onSearch(this.state.searchParams)
         },()=>{ this.onSearch(this.state.searchParams)});
-
-
-
     }
     showNext = (id)=>{
         const index = _.findIndex(this.state.data,t=>t.Id=== +id)
@@ -330,6 +327,31 @@ class Main extends Component {
 
         })
         
+    }
+    toOther = (row)=>{
+        let saler;
+        Dialog({
+            content: <div><span>选择销售:&nbsp;&nbsp;</span><SalerSelect onChange={v=>{saler=v}}/></div>,
+            width: 540,
+            handleOk: ()=>{
+                return new Promise((resolve, reject) => {
+                    putData(`customer/${row.Id}/${saler}`).then(res=>{
+                        if(res.status){
+                            message.info('转出成功！')
+                            this.onSearch(this.state.searchParams)
+                            resolve()
+                        }
+                    })
+                });
+            },
+            confirmLoading: false,
+            handleCancel (){
+                console.log('onCancel')
+            },
+            title: "客户转出-"+ row.CompanyName 
+        }).result.then(()=>{
+            this.onSearch(this.state.searchParams)
+        },()=>{});
     }
     componentWillMount() {
         this.onSearch();
@@ -375,7 +397,7 @@ class Main extends Component {
             render: (text, record) => (
                 <Button.Group >
                     <HasPower power="DETAIL"  key={"btn_DETAIL"} ><Button size="small" onClick={e=>{this.edit(record)}}>查看</Button></HasPower>
-                    <HasPower power="TOOTHER"  key={"btn_TOOTHER"} ><Button size="small" onClick={e=>{this.edit(record)}}>客户转出</Button></HasPower>
+                    <HasPower power="TOOTHER"  key={"btn_TOOTHER"} ><Button size="small" onClick={e=>{this.toOther(record)}}>客户转出</Button></HasPower>
                     <HasPower power="TOPUB"  key={"btn_TOPUB"} ><Button size="small" onClick={e=>{this.toPub(record)}}>转到公海</Button></HasPower>
                 </Button.Group>
             ),

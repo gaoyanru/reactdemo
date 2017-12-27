@@ -97,6 +97,30 @@ const actions = handleActions({
             ...state,
             groups: data
         }
+    },
+    'get main task list': (state, { data }) =>{
+        return {
+            ...state,
+            main_tasks: data
+        }
+    },
+    'get sub task list': (state, { data }) =>{
+        return {
+            ...state,
+            sub_task: data
+        }
+    },
+    'get current areas': (state, { data }) =>{
+        return {
+            ...state,
+            areas: data
+        }
+    },
+    'get outworkers': (state, { data }) =>{
+        return {
+            ...state,
+            outworkers: data
+        }
     }
 }, defaultState)
 
