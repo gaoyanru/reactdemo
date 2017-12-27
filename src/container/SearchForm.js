@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { Form, Select, Input, Button, DatePicker } from 'antd';
+import zhcn from 'antd/lib/date-picker/locale/zh_CN'
 
+console.log('zhcn',zhcn)
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -19,7 +21,7 @@ class SearchForm extends Component {
       if(item.type === "text"){
         return (
           <FormItem label={item.label} key={index}>
-            {getFieldDecorator(item.field,{initialValue: item.defaultValue ||''})(<Input />)}
+            {getFieldDecorator(item.field,{initialValue: item.defaultValue ||''})(<Input style={{width: 150}}/>)}
           </FormItem>
         )
       }else if(item.type === "select"){
@@ -42,13 +44,13 @@ class SearchForm extends Component {
       }else if(item.type === "custom"){
         return (
           <FormItem label={item.label} key={index}>
-            {getFieldDecorator(item.field,{initialValue: item.defaultValue || null})(<item.view/>)}
+            {getFieldDecorator(item.field,{initialValue: item.defaultValue || null})(<item.view style={{width: 150}}/>)}
           </FormItem>
         );
       }else if(item.type === "date"){
         return (
           <FormItem label={item.label} key={index}>
-            {getFieldDecorator(item.field,{initialValue: item.defaultValue || null})(<DatePicker/>)}
+            {getFieldDecorator(item.field,{initialValue: item.defaultValue || null})(<DatePicker locale={zhcn} style={{width: 150}}/>)}
           </FormItem>
         );
       }

@@ -1,15 +1,17 @@
 import React from 'react'
 import style from '@/config/style'
+import _ from 'lodash'
 
 const Title = function(props){
-  const s = {
+  const s = _.extend({
     background: style.bgColorPrimary,
     color: '#fff',
-    lineHeight: '35px',
-    fontSize:'18px',
-    padding: '0 12px'
-  }
-  return (<div style={s}>{props.title}</div>)
+    lineHeight: '32px',
+    fontSize:'16px',
+    padding: '0 12px',
+    cursor: 'pointer'
+  }, props.style)
+  return (<div style={s} onClick={props.onClick}>{props.title}</div>)
 }
 
 export default Title;

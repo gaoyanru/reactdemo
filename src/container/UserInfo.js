@@ -2,6 +2,9 @@ import React from 'react'
 import { Form, Input, Radio, DatePicker, Button } from 'antd'
 import { getListData } from '@/api'
 import moment from 'moment'
+import PropTypes from 'prop-types'
+import DepartmentSelect from '@/container/DepartmentSelect'
+import RolesSelect from '@/container/RolesSelect'
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 
@@ -26,7 +29,7 @@ class UserInfo extends React.Component {
                 callback('手机号码格式不正确')
                 return;
             }
-            getListData('users/'+ this.props.user.Id + '/checkphone/' + value).then(function(res){
+            getListData('users/'+ (this.props.user.Id || '0') + '/checkphone/' + value).then(function(res){
                 if(res.data){
                     callback()
                 }else{
@@ -86,7 +89,7 @@ class UserInfo extends React.Component {
                   required: true, message: '请填写密码!',
                 }],
               })(
-                <Input type="password" />
+                <Input type="text" />
               )}
             </FormItem> }
             <FormItem
@@ -142,7 +145,29 @@ class UserInfo extends React.Component {
                 <Input style={{ width: '100%' }} />
               )}
             </FormItem>
-            <FormItem {...tailFormItemLayout}>
+            {props.isModal && <FormItem {...formItemLayout}
+              label="部门">
+                {getFieldDecorator('DepartmentCenterId', {
+                rules: [{
+                  required: true, message: '请选择部门',
+                }],
+                initialValue: props.user.DepartmentCenterId,
+              })(
+                <DepartmentSelect/>
+              )}
+            </FormItem>}
+            {props.isModal && <FormItem {...formItemLayout}
+              label="角色">
+                {getFieldDecorator('RoleIds', {
+                rules: [{
+                  required: true, message: '请选择角色',
+                }],
+                initialValue: props.user.RoleIds,
+              })(
+                <RolesSelect/>
+              )}
+            </FormItem>}
+            {props.isModal || <FormItem {...tailFormItemLayout}>
                 <Button
                     type="primary"
                     htmlType="submit"
@@ -150,10 +175,15 @@ class UserInfo extends React.Component {
                 >
                     保存
                 </Button>
-            </FormItem>
+            </FormItem>}
           </Form>
         )
     }
+}
+UserInfo.propTypes = {
+  user: PropTypes.object.isRequired,
+  isNew: PropTypes.bool,
+  isModal: PropTypes.bool
 }
 
 export default Form.create()(UserInfo);

@@ -1,18 +1,187 @@
 import React, { Component } from 'react'
-import { fetchUserInfo, postData, putData } from '@/api'
-import { message, Spin, Table } from 'antd'
+import { getListData, postData, fetchUserInfo, putData } from '@/api'
+import { message, Spin, Table, Button } from 'antd'
 import { connect } from 'react-redux'
-import { getDepartments } from '@/store/actions'
 import Department from '@/container/Department'
+import SearchForm from '@/container/SearchForm'
+import HasPower from '@/container/HasPower'
+import Dialog from '@/container/Dialog'
+import UserInfo from '@/container/UserInfo'
+import {getAllDepartments} from '@/store/actions'
+
+let search = {
+    items: [{
+        label: '员工编号',
+        type: 'text',
+        field: 'employeeno'
+    }, {
+        label: '手机号',
+        type: 'text',
+        field: 'phone'
+    }, {
+        label: '姓名',
+        type: 'text',
+        field: 'realname'
+    }],
+    buttons:[]
+};
+
 
 class Users extends Component {
-    handleDepartmentClick (data){
-        console.log(data)
-       
+    constructor(props) {
+        super(props);
+        this.initPagination = {
+            total:  0,
+            current: 1,
+            pageSize: 15,
+            showTotal(total) {
+              return `共计 ${total} 条`;
+            }
+        }
+        this.state = {
+            loading: false,
+            data: [],
+            deptId: '',
+            searchParams: {},
+            pagination: {
+                ...this.initPagination
+            }
+        }
+        
+        this.handleDepartmentClick = this.handleDepartmentClick.bind(this);
+        this.handleTableChange = this.handleTableChange.bind(this);
+        this.onSearch = this.onSearch.bind(this);
+        this.fetchUsers = this.fetchUsers.bind(this);
+        this.addNew = this.addNew.bind(this);
+        this.editUser = this.editUser.bind(this);
+
+    }
+    handleDepartmentClick (deptId=''){
+        this.setState({
+            deptId: deptId,
+            searchParams: {},
+            pagination: {...this.initPagination}
+        }, this.fetchUsers)
+        this.refs.search.resetFields()
+    }
+    handleTableChange (pagination){
+        this.setState({pagination: pagination},this.fetchUsers)
+    }
+    onSearch(item){
+        this.setState({
+            searchParams: item,
+            pagination: {...this.initPagination}
+        }, this.fetchUsers);
+    }
+    fetchUsers(){
+        this.setState({loading: true});
+        const pagination = this.state.pagination;
+        const params = {
+            showAll: true,
+            ...this.state.searchParams,
+            deptId: this.state.deptId,
+            limit: pagination.pageSize,
+            offset: (pagination.current - 1) * pagination.pageSize
+        };
+        getListData("users", params).then(res => {
+            this.setState((prevState, props) => ({
+              loading: false,
+              data: res.data.list,
+              pagination: {
+                ...prevState.pagination,
+                total: res.data.total
+              }
+            }));
+        })
     }
     componentWillMount() {
-        console.log('componentWillMount');
-        this.props.getDepartments();
+        this.props.getAllDepartments();
+        this.fetchUsers();
+    }
+    addNew() {
+        Dialog({
+            content: <UserInfo wrappedComponentRef={userform=>{this.userform = userform}} user={{}} isNew={true} isModal={true}/>,
+            handleOk: ()=>{
+                return new Promise((resolve, reject) => {
+                    this.userform.props.form.validateFields((err, values) => {
+                      if (!err) {
+                        let formValues = values;
+                        formValues.RoleIds = formValues.RoleIds.join(',')
+  
+                        postData('users', formValues).then(res=>{
+                            message.info('保存成功！')
+                            resolve()
+                        })
+                      }else{
+                        reject(err);
+                      }
+                    });
+                
+                });
+            },
+            confirmLoading: false,
+            handleCancel (){
+                console.log('onCancel')
+            },
+            title: '新增用户' 
+        }).result.then(res=>{
+            this.fetchUsers()
+        },error=>{
+            console.log('Canceled')
+        });
+    }
+    editUser(user) {
+        fetchUserInfo(user.UserId).then(res=>{
+            let result = res.data;
+            result.RoleIds = result.RoleIds.split(',')
+            result.DepartmentCenterId = '' + result.DepartmentCenterId;
+            Dialog({
+                content: <UserInfo wrappedComponentRef={userform=>{this.userform = userform}} user={result} isNew={false} isModal={true}/>,
+                handleOk: ()=>{
+                    return new Promise((resolve, reject) => {
+                        this.userform.props.form.validateFields((err, values) => {
+                          if (!err) {
+                            let formValues = values;
+                            formValues.RoleIds = formValues.RoleIds.join(',')
+                            // let postData =  {...result,...formValues};
+                            // delete postData.PassWord;
+                            postData('users',{...result,...formValues}).then(res=>{
+                                message.info('保存成功！')
+                                resolve()
+                            })
+                          }else{
+                            reject(err);
+                          }
+                        });
+                    
+                    });
+                },
+                confirmLoading: false,
+                handleCancel (){
+                    console.log('onCancel')
+                },
+                title: '编辑用户' 
+            }).result.then(res=>{
+                this.fetchUsers()
+            },error=>{
+                console.log('Canceled')
+            });
+        });
+    }
+    resetPsd(user){
+        putData('users/resetpwd/'+ user.UserId).then(res=>{
+            if(res.status){
+                message.info('密码重置成功！')
+            }
+        })
+    }
+    enableUser(user){
+        putData('users/' + user.UserId + '/enabled/' + (3 - user.Status)).then(res=>{
+            if(res.status){
+                message.info('操作成功！');
+                this.fetchUsers()
+            }
+        })
     }
     render() {
         if(!this.props.departments) return (<Spin style={{ marginLeft: 8 }} />);
@@ -39,21 +208,26 @@ class Users extends Component {
             dataIndex: 'ModifyDate'
         },  {
             title: '操作',
-            render: (text, record) => (
-                <span>
-                    <a ng-show="hasPower('EDIT')" ng-if="customer.Status ==='1'"  href="javascript:;" ng-click="open(customer)">编辑</a>
-                    <a ng-show="hasPower('STOP')" ng-if="customer.Status ==='1'" href="javascript:;" ng-click="status(customer,2)">禁用</a>
-                    <a ng-show="hasPower('STOP')" ng-if="customer.Status ==='2'" href="javascript:;" ng-click="status(customer,1)">启用</a>
-                    <a ng-show="hasPower('STOP')"  ng-if="customer.Status ==='1'" href="javascript:;" ng-click="reset(customer)">重置密码</a>
-                </span>
-            ),
+            render: (text, record) => {
+                // console.log(record.Status, record.Status === '1', 'status')
+                const Status = record.Status === '1' ? '禁用' : '启用'
+                return (
+                    <Button.Group  key={"btn_Group_" + record.UserId} >
+                        {record.Status === '1' && <HasPower power="EDIT" key={"btn_EDIT_" + record.UserId}><Button size="small" onClick={e=>{this.editUser(record)}}>编辑</Button></HasPower>}    
+                        <HasPower power="STOP"  key={"btn_STOP_" + record.UserId} ><Button size="small" onClick={e=>{this.enableUser(record)}}>{Status}</Button></HasPower>
+                        {record.Status === '1' && <HasPower power="RESET" key={"btn_RESET_" + record.UserId}><Button size="small" onClick={e=>{this.resetPsd(record)}}>重置密码</Button></HasPower>}    
+                    </Button.Group>
+                )
+            }
         }];
+        search.buttons=[(<HasPower power="ADD" key="btn_addNew" style={{margin:"0 12px"}}><Button type="primary"  onClick={this.addNew} >新增用户</Button></HasPower>)]
         return (
             <div style={{display:'flex'}}>
-                <Department data={this.props.departments} companyName={this.props.user.SubsidiaryName} onclick={this.handleDepartmentClick}  style={{ width: '300px' }}/>
+                <Department data={this.props.departments}  companyName={this.props.user.SubsidiaryName} onClick={this.handleDepartmentClick} style={{ width: '300px' }}/>
                 <div style={{flex:1,margin:"0 12px"}}>
+                    <SearchForm items={search.items} onSearch={this.onSearch} buttons={search.buttons} values={this.state.searchParams} ref="search"/> 
                     <Table columns={columns} 
-                        rowKey={record => record.OrderId}
+                        rowKey={record => record.UserId}
                         dataSource={this.state.data} 
                         pagination={this.state.pagination}
                         loading={this.state.loading}
@@ -69,16 +243,15 @@ class Users extends Component {
 const mapStateToProps = state => {
   return {
     user: state.user,
-    departments: state.departments
+    departments: state.departments,
   }
 }
-
 const mapDispatchToProps = dispatch => {
   return {
-    getDepartments: payload => {
-      dispatch(getDepartments({offset:0,limit:99999}))
+    getAllDepartments: payload => {
+      dispatch(getAllDepartments())
     }
   }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(Users)
+export default connect(mapStateToProps, mapDispatchToProps)(Users)

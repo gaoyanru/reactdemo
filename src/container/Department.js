@@ -5,7 +5,7 @@ import Title from '@/component/Title'
 class Department extends React.Component {
   state={selected: {}}
   onClick(item){
-    this.props.onclick(item)
+    this.props.onClick(item && item.DepartmentId)
     this.setState({
       selected: item || {}
     })
