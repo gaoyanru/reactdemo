@@ -67,7 +67,12 @@ const actions = handleActions({
             customerSource: data
         }
     }, 
-    
+    'AREAS': (state, { data }) =>{
+        return {
+            ...state,
+            areas: data
+        }
+    },
     'CURRENT_POWERLIST': (state, { data }) => {
         return {
             ...state,
@@ -110,12 +115,7 @@ const actions = handleActions({
             sub_task: data
         }
     },
-    'get current areas': (state, { data }) =>{
-        return {
-            ...state,
-            areas: data
-        }
-    },
+    
     'get outworkers': (state, { data }) =>{
         return {
             ...state,

@@ -98,7 +98,7 @@ class Main extends React.Component {
               label="注册时间"
             >
               {getFieldDecorator('RegisterDate', {
-                initialValue: props.data.RegisterDate.substr(0,4)!=='0001'?moment(props.data.RegisterDate):null
+                initialValue: props.data.RegisterDate && props.data.RegisterDate.substr(0,4)!=='0001'?moment(props.data.RegisterDate):null
               })(
                 <DatePicker/>
               )}

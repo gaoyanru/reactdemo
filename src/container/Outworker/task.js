@@ -1,21 +1,11 @@
 import React from 'react'
-import { Form, Input, Row, Col, Spin } from 'antd'
-import CrmCustomer from '@/component/CrmCustomer'
-import { getListData, deleteData, postData } from '@/api' 
-import TagSelect from '@/component/TagSelect'
-import { connect } from 'react-redux'
-import _ from 'lodash'
-import moment from 'moment'
-import CustomerTrack from '@/component/CustomerTrack'
-import RemindDate from '@/component/RemindDate'
+import { Form, Input } from 'antd'
+import AreaSelect from '@/container/searchComponent/AreaSelect'
+import OutworkerTask from '@/container/Outworker/OutworkerTask'
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea
-const Tags = connect(state => {
-  return {
-    tags: state.tags,
-  }
-})(TagSelect)
+
 
 function hasErrors(fieldsError) {
   return Object.keys(fieldsError).some(field => fieldsError[field]);
@@ -66,7 +56,7 @@ class Main extends React.Component {
                 }],
                 initialValue: props.data.CompanyName
               })(
-                <CompanySelect />
+                <Input />
               )}
             </FormItem>
             <FormItem
@@ -80,7 +70,7 @@ class Main extends React.Component {
                 }],
                 initialValue: props.data.CompanyName
               })(
-                <CompanySelect />
+                <AreaSelect />
               )}
             </FormItem>
         </Form>
@@ -88,4 +78,4 @@ class Main extends React.Component {
     }
 }
 
-export default Main;
+export default Form.create()(Main);;

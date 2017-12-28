@@ -70,9 +70,10 @@ export function getAreas(force,getState) {
         if(state.areas && !force){
             return null;
         }
-        getListData('contract/sales').then(res => {
+        getListData('code/area').then(res => {
             if (res.status) {
-                dispatch({ type: 'get current areas', data: res.data })
+                console.log(res.data )
+                dispatch({ type: 'AREAS', data: res.data })
             }
         })
     }
