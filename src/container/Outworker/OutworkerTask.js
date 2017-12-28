@@ -27,8 +27,7 @@ class Main extends React.Component {
       this.setState({common_value:v});
     }else{
       this.setState(prevState => {
-        console.log(prevState.common_value, v,_.difference(prevState.common_value, v))
-        return {common_value: _.difference(prevState.common_value, v)}
+        return {common_value: _.difference(v, prevState.common_value)}
       })
     }
     
@@ -36,7 +35,7 @@ class Main extends React.Component {
   render() {
     const groups = _.groupBy(_.filter(this.props.main_tasks,{Status:1}), 'CommonTaskId')
     return (
-      <Collapse accordion>
+      <Collapse accordion defaultActiveKey="1">
         <Panel header="通办任务" key="1">
           <Checkbox.Group onChange={this.onCommonChange} value={this.state.common_value}>
             {_.map(groups,(val,key)=>{
@@ -48,7 +47,7 @@ class Main extends React.Component {
             })}
           </Checkbox.Group>
         </Panel>
-        <Panel header="其他" key="2">
+        <Panel header="其他" key="2" disabled={this.state.common_value.length>0}>
           <p>text</p>
         </Panel>
       </Collapse>
