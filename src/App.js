@@ -30,7 +30,8 @@ const pagesMap = {
   'user_group': 'system/groupSetting',
   'cus_my': 'customer/my',
   'cus_settings': 'customer/set',
-  'outwork_manage': 'outworker/review'
+  'outwork_manage': 'outworker/review',
+  'cus_pub': 'customer/pub'
 }
 
 function getCurrentMenu(funs,path){
