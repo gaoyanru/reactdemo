@@ -173,6 +173,7 @@ class Main extends Component {
                                 const data = res.data;
                                 if (data.errorcode == 1) {
                                     message.error(res.data.name);
+                                    reject();
                                 } else {
                                     const customers = JSON.parse(data.name);
                                     Dialog({
@@ -191,12 +192,20 @@ class Main extends Component {
                                             message.info('保存成功！')
                                             resolve()
                                          })
+                                    },()=>{
+                                        reject()
                                     });
 
                                 }
                             }else{
-                                message.info('保存成功！')
-                                resolve()
+                                if(res.status){
+                                    message.info('保存成功！')
+                                    resolve()
+                                }else{
+                                    // message.error(res.message);
+                                    reject()
+                                }
+                                
                             }
                         });
                     }else{

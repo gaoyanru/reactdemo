@@ -19,7 +19,9 @@ class Dialog extends Component {
     this.setState({confirmLoading: true})
     var result = this.props.handleOk(e);
     if(result && result.constructor === Promise){
-      result.then(this.onClose,()=>this.setState({confirmLoading: false}));
+      result.then(this.onClose,()=>{
+        this.setState({confirmLoading: false})
+      });
     }else if(result){
       this.onClose(result);
     }else{
@@ -36,14 +38,16 @@ class Dialog extends Component {
   }
   onClose(result){
     this.setState({visible: false});
+    const that = this;
     setTimeout(()=>{
-      this.props.onClose && this.props.onClose(result)
+      that.props.onClose && that.props.onClose(result)
     },500);
   }
   onCancel(result){
     this.setState({visible: false});
+    const that = this;
     setTimeout(()=>{
-      this.props.onCancel && this.props.onCancel(result)
+      that.props.onCancel && that.props.onCancel(result)
     },500);
   }
   render() {
@@ -72,7 +76,7 @@ function createDialog(options){
   const div = document.createElement('div');
   let dc;
   const dialog = new Promise(function(resolve, reject) {
-    const d = <Dialog store={store} {...options} ref={t=>{dc=t}} />;
+    
     options.onClose = function(arg){
       resolve(arg);
       div.remove();
@@ -81,7 +85,7 @@ function createDialog(options){
       div.remove();
       reject(arg);
     }
-    
+    const d = <Dialog store={store} {...options} ref={t=>{dc=t}} />;
     ReactDOM.render(d, div);
     document.body.appendChild(div);
   });
