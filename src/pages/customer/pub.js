@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Table, Button } from 'antd'
+import _ from 'lodash'
+import { Table, Button, message } from 'antd'
 import { fDate } from '@/config/filters'
 import HasPower from '@/container/HasPower'
 import ImportData from '@/container/searchComponent/ImportData'
@@ -129,7 +130,7 @@ class PubMain extends Component {
           },
           confirmLoading: false,
           handleCancel (){
-              console.log('onCancel')
+            console.log('onCancel')
           },
           title: title
       }).result.then(()=>{
