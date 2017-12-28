@@ -27,9 +27,9 @@ class TagRow extends React.Component {
       <Row style={{borderBottom: '1px solid #ddd', margin: "6px 0",padding:"3px 0"}}>
         <Col span="4" style={{lineHeight:'28px',height: '28px'}}>{this.props.label}</Col>
         <Col span="20">{this.props.tags.map(tag=>{
-          return <CheckableTag 
+          return <CheckableTag
             key={tag.TagName}
-            checked={this.state.selected == tag.Id} 
+            checked={this.state.selected == tag.Id}
             onChange={checked=>{this.handleChange(checked,tag)}}
             > {tag.TagName} </CheckableTag>
         })}</Col>

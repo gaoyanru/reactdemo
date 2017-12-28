@@ -62,7 +62,7 @@ class Main extends React.Component {
                 }],
                 initialValue: props.data.CompanyName
               })(
-                <Input />
+                <Input readOnly={props.readOnly}/>
               )}
             </FormItem>
             <FormItem
@@ -76,7 +76,7 @@ class Main extends React.Component {
                 }],
                 initialValue: props.data.Connector
               })(
-                <Input type="text" />
+                <Input type="text" readOnly={props.readOnly}/>
               )}
             </FormItem>
             <FormItem
@@ -90,7 +90,7 @@ class Main extends React.Component {
                 }],
                 initialValue: props.data.Mobile
               })(
-                <Input type="text" />
+                <Input type="text" readOnly={props.readOnly}/>
               )}
             </FormItem>
             <FormItem
@@ -100,10 +100,10 @@ class Main extends React.Component {
               {getFieldDecorator('RegisterDate', {
                 initialValue: props.data.RegisterDate && props.data.RegisterDate.substr(0,4)!=='0001'?moment(props.data.RegisterDate):null
               })(
-                <DatePicker/>
+                <DatePicker disabled={props.readOnly}/>
               )}
             </FormItem>
-            <FormItem
+            {(!props.readOnly) && <FormItem
               {...formItemLayout}
               label="意向度"
               hasFeedback
@@ -116,18 +116,18 @@ class Main extends React.Component {
               })(
                 <CustomerType hideAll={true}/>
               )}
-            </FormItem>
-            <FormItem
+            </FormItem>}
+            {(!props.readOnly) && <FormItem
               {...formItemLayout}
               label="来源"
             >
               {getFieldDecorator('CustomerSourceId', {
-                initialValue: ''+ (props.data.CustomerSourceId || '') 
+                initialValue: ''+ (props.data.CustomerSourceId || '')
               })(
                  <CustomerSourceSelect hideAll={true}/>
               )}
-            </FormItem>
-            <FormItem
+            </FormItem>}
+            {(!props.readOnly) && <FormItem
               {...formItemLayout}
               label= '备注'
             >
@@ -136,8 +136,8 @@ class Main extends React.Component {
               })(
                 <TextArea rows={4} />
               )}
-            </FormItem>
-            {props.data.Id && <FormItem
+            </FormItem>}
+            {(!props.readOnly) && props.data.Id && <FormItem
               {...formItemLayout}
               label="创建时间"
               hasFeedback
