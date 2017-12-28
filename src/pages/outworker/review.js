@@ -7,7 +7,9 @@ import SubtaskSelect from '@/container/searchComponent/SubtaskSelect'
 import ServiceStatusSelect from '@/container/searchComponent/ServiceStatusSelect'
 import MainTaskStatusSelect from '@/container/searchComponent/MainTaskStatusSelect'
 import OutworkerSelect from '@/container/searchComponent/OutworkerSelect'
+import AreaSelect from '@/container/searchComponent/AreaSelect'
 import ImportData from '@/container/searchComponent/ImportData'
+import OutworkerTask from '@/container/Outworker/Task'
 import RIf from '@/component/RIF'
 
 import { getListData, postData, putData } from '@/api'
@@ -31,22 +33,26 @@ let search = {
         label: '任务名称',
         type: 'custom',
         field: 'taskname',
-        view: TaskSelect
+        view: TaskSelect,
+        defaultValue: ''
     }, {
         label: '当前子任务',
         type: 'custom',
         field: 'childtaskname',
-        view: SubtaskSelect
+        view: SubtaskSelect,
+        defaultValue: ''
     }, {
         label: '外勤人员',
         type: 'custom',
         field: 'outworkId',
-        view: OutworkerSelect
+        view: OutworkerSelect,
+        defaultValue: '0'
     }, {
         label: '服务状态',
         type: 'custom',
         field: 'servicestatus',
-        view: ServiceStatusSelect
+        view: ServiceStatusSelect,
+        defaultValue: ''
     }, {
         label: '任务提交日期',
         type: 'date',
@@ -57,18 +63,22 @@ let search = {
         field: 'endtime'
     }, {
         label: '所属区（县）',
-        type: 'date',
-        field: 'areacode'
+        type: 'custom',
+        field: 'areacode',
+        view: AreaSelect,
+        defaultValue: ''
     }, {
         label: '销售人员',
         type: 'custom',
         field: 'salesId',
-        view: SalerSelect
+        view: SalerSelect,
+        defaultValue: '0'
     }, {
         label: '主任务状态',
         type: 'custom',
         field: 'taskstatus',
-        view: MainTaskStatusSelect
+        view: MainTaskStatusSelect,
+        defaultValue: ''
     }],
     buttons:[]
 };
@@ -93,18 +103,21 @@ class Main extends Component {
         };
         this.onSearch = this.onSearch.bind(this);
         this.handleTableChange = this.handleTableChange.bind(this);
+        this.addNew = this.addNew.bind(this);
         console.log(this)
     }
 
     handleTableChange (pagination){
         this.setState({pagination: pagination}, ()=>{this.onSearch(this.state.searchParams)})
     }
-    onSearch(vals={outworkId:0,salesId:0,sequenceNo:'',companyname:'',connector:'',taskname:'',childtaskname:'',starttime:'',endtime:'',areacode:'',taskstatus:'',servicestatus:''}) {
+    onSearch(vals={}) {
         this.setState({searchParams: vals, loading: true});
         const pagination =this.state.pagination;
-        vals.limit = pagination.pageSize;
-        vals.offset = (pagination.current - 1) * pagination.pageSize;
-        return getListData('maintask', vals).then(res => {
+        let params = _.extend({},{outworkId:0,salesId:0,sequenceNo:'',companyname:'',connector:'',taskname:'',childtaskname:'',starttime:'',endtime:'',areacode:'',taskstatus:'',servicestatus:''},vals)
+        params.limit = pagination.pageSize;
+        params.offset = (pagination.current - 1) * pagination.pageSize;
+        console.log('params',params)
+        return getListData('maintask', params).then(res => {
             if(res.status){
                 const pagination = { ...this.state.pagination };
                 pagination.total = res.data.total;
@@ -123,6 +136,22 @@ class Main extends Component {
     }  
     componentWillMount() {
         this.onSearch();
+    }
+    addNew(){
+        Dialog({
+            content: <OutworkerTask data={{}}  wrappedComponentRef={crmform =>{this.crmform = crmform}}/>,
+            width: 1200,
+            handleOk: ()=>{
+                
+            },
+            confirmLoading: false,
+            handleCancel (){
+                console.log('onCancel')
+            },
+            title: "添加任务" 
+        }).result.then(()=>{
+            this.onSearch(this.state.searchParams)
+        },()=>{});
     }
     render() {
 

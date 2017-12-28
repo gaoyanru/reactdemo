@@ -16,7 +16,7 @@ class Main extends Component {
   }
   handleChange(e) {
     this.setState({value:e});
-    this.props.onChange(e);
+    this.props.onChange(e.trim());
   }
   componentWillMount() {
     this.props.getMainTask()
@@ -25,7 +25,7 @@ class Main extends Component {
     if(!this.props.main_tasks) return <Spin/>;
     const tasks = _.chain(this.props.main_tasks).filter({Status:1}).map(item=>_.pick(item,['CommonTaskId','CommonTaskName'])).uniqBy('CommonTaskId').value()
     const options = tasks.map(d => <Option key={d.CommonTaskId}>{d.CommonTaskName}</Option>);
-    const all = <Option key={0}>全部</Option>
+    const all = <Option key={' '}>全部</Option>
     return (
       <Select style={{width: this.props.width || 150}} defaultValue={this.props.value} onChange={this.handleChange}>
       {(!this.props.hideAll) && all}

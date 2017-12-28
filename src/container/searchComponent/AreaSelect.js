@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Select } from 'antd'
+import { Select, Spin } from 'antd'
 import { connect } from 'react-redux'
 import { getAreas } from '@/store/actions'
 
@@ -16,15 +16,15 @@ class Main extends Component {
   }
   handleChange(e) {
     this.setState({value:e});
-    this.props.onChange(e);
+    this.props.onChange(e.trim());
   }
   componentWillMount() {
     this.props.getAreas()
   }
   render() {
-    if(!this.props.salers) return null;
-    const options = this.props.salers.map(d => <Option key={d.AreaCode}>{d.AreaName}</Option>);
-    const all = <Option key=''>全部</Option>
+    if(!this.props.areas) return <Spin/>;
+    const options = this.props.areas.map(d => <Option key={d.AreaCode}>{d.AreaName}</Option>);
+    const all = <Option key=' '>全部</Option>
     return (
       <Select style={{width: this.props.width || 150}} defaultValue={this.props.value} onChange={this.handleChange}>
       {(!this.props.hideAll) && all}
