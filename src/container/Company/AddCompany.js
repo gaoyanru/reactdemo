@@ -57,63 +57,58 @@ class Main extends Component{
       <Form onSubmit={this.handleSubmit} className="tinyForm">
           <FormItem
             {...formItemLayout}
-            label="任务名称"
+            label="公司名称"
             hasFeedback
           >
-            {getFieldDecorator('TaskName', {
+            {getFieldDecorator('CompanyName', {
               rules: [{
-                required: true, message: '请填写任务名称!',
+                required: true, message: '请填写公司名称!',
               }],
-              initialValue: props.data.TaskName
+              initialValue: props.data.CompanyName
             })(
               <Input/>
             )}
           </FormItem>
           <FormItem
             {...formItemLayout}
-            label="分类名称"
+            label="地址"
             hasFeedback
           >
-            {getFieldDecorator('BusinessType', {
+            {getFieldDecorator('Address', {
               rules: [{
-                required: true, message: '请选择分类名称!',
+                required: true, message: '请填写公司地址!',
               }],
-              initialValue: props.data.BusinessType + '' || ''
+              initialValue: props.data.Address
             })(
-              <Select
-                placeholder="请选择"
-              >
-                <Option value="1">税务任务</Option>
-                <Option value="2">工商任务</Option>
-                <Option value="3">其他任务</Option>
-              </Select>
+              <Input/>
             )}
           </FormItem>
           <FormItem
             {...formItemLayout}
-            label="服务费用"
+            label="管理员手机号"
             hasFeedback
           >
-            {getFieldDecorator('Price', {
+            {getFieldDecorator('Phone', {
               rules: [{
-                required: true, message: '请服务费用!',
+                required: true, message: '请填写管理员手机号!',
               }],
-              initialValue: props.data.Price
+              initialValue: props.data.Phone
             })(
-              <Input type="text"/>
+              <Input/>
             )}
           </FormItem>
           <FormItem
             {...formItemLayout}
-            label="是否启用"
+            label="管理员姓名"
+            hasFeedback
           >
-            {getFieldDecorator('modifier', {
-              initialValue: props.data.Status || '1'
+            {getFieldDecorator('RealName', {
+              rules: [{
+                required: true, message: '请填写管理员姓名!',
+              }],
+              initialValue: props.data.RealName
             })(
-              <Radio.Group>
-                <Radio value="1">启用</Radio>
-                <Radio value="2">停用</Radio>
-              </Radio.Group>
+              <Input/>
             )}
           </FormItem>
         </Form>
