@@ -8,7 +8,7 @@ import  '@/style/app.less';
 import logo from './logo.svg';
 import store from '@/store'
 import { setPowerList } from '@/store/actions'
-import childcompany from '@/pages/zcompany/childcompany'
+import childcompany from '@/pages/statistic/staticOrder'
 
 const { Header, Sider, Content } = Layout;
 
@@ -34,7 +34,8 @@ const pagesMap = {
   'outwork_manage': 'outworker/review',
   'cus_pub': 'customer/pub',
   'outwork_dict': 'outworker/dict',
-  'company_sub': 'zcompany/childcompany'
+  'company_sub': 'zcompany/childcompany',
+  'static_order': 'statistic/staticOrder'
 }
 
 function getCurrentMenu(funs,path){
