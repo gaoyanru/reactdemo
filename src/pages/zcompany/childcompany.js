@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Table, Button, message } from 'antd'
-import { getListData, postData } from '@/api'
+import { getListData, postData, putData } from '@/api'
 import Dialog from '@/container/Dialog'
 import AddCompany from '@/container/Company/AddCompany'
 
@@ -12,7 +12,7 @@ class Main extends Component {
       loading: false
     }
     this.addNew = this.addNew.bind(this);
-    // this.edit = this.edit.bind(this);
+    this.edit = this.edit.bind(this);
     this.openDialog = this.openDialog.bind(this);
   }
 
@@ -41,6 +41,22 @@ class Main extends Component {
                   const formValues = this.crmform.getFieldsValue()
                   console.log(formValues, 'formValues')
                   if(formValues){
+                    if (companyinfo.Id) {
+                      companyinfo.Address = formValues.Address
+                      companyinfo.CityCode = formValues.CityCode
+                      companyinfo.CompanyName = formValues.CompanyName
+                      companyinfo.Phone = formValues.Phone
+                      companyinfo.RealName = formValues.RealName
+                      putData('subsidiary/' + companyinfo.Id, companyinfo).then(res => {
+                        if(res.status){
+                            message.info('保存成功！')
+                            resolve()
+                        }else{
+                            // message.error(res.message);
+                            reject()
+                        }
+                      })
+                    } else {
                       postData('subsidiary?verify=0', formValues).then(res=>{
                         if(res.status){
                             message.info('保存成功！')
@@ -50,6 +66,7 @@ class Main extends Component {
                             reject()
                         }
                       });
+                    }
                   }else{
                       reject();
                   }
@@ -69,10 +86,17 @@ class Main extends Component {
     this.openDialog({},'新增公司')
   }
 
+  edit(row){
+    this.openDialog(row,row.CompanyName)
+  }
+
   render() {
     const columns = [{
       title: '公司名称',
-      dataIndex: 'CompanyName'
+      dataIndex: 'CompanyName',
+      render: (text, record) => {
+        return <span style={{color: '#1890ff', cursor: 'pointer'}} onClick={e=>{this.edit(record)}}>{text}</span>
+      }
     }, {
       title: '地址',
       dataIndex: 'Address'

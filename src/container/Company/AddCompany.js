@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Form, Input, Radio, Select } from 'antd'
 import PropTypes from 'prop-types'
+import { getListData } from '@/api'
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -12,6 +13,9 @@ function hasErrors(fieldsError) {
 class Main extends Component{
   constructor(props) {
     super(props)
+    this.state = {
+      citys: []
+    }
   }
 
   handleSubmit= (e)=> {
@@ -38,6 +42,18 @@ class Main extends Component{
       return formValues
     }
     return null
+  }
+
+  getCity() {
+    getListData('city').then(res => {
+      if (res.status) {
+        this.setState({citys : res.data})
+      }
+    })
+  }
+
+  componentWillMount() {
+    this.getCity()
   }
 
   render () {
@@ -67,6 +83,26 @@ class Main extends Component{
               initialValue: props.data.CompanyName
             })(
               <Input/>
+            )}
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label="城市"
+            hasFeedback
+          >
+            {getFieldDecorator('CityCode', {
+              rules: [{
+                required: true, message: '请选择城市!',
+              }],
+              initialValue: props.data.CityCode || ''
+            })(
+              <Select
+                placeholder="请选择"
+              >
+                {this.state.citys.map((item) => {
+                  return <Option value={item.Code} selected={item.Code == props.data.CityCode}>{item.Name}</Option>
+                })}
+              </Select>
             )}
           </FormItem>
           <FormItem
