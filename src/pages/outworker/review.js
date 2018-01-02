@@ -10,8 +10,10 @@ import OutworkerSelect from '@/container/searchComponent/OutworkerSelect'
 import AreaSelect from '@/container/searchComponent/AreaSelect'
 import ImportData from '@/container/searchComponent/ImportData'
 import OutworkerTask from '@/container/Outworker/Task'
-import RIf from '@/component/RIF'
 
+import TaskListWeight from '@/container/Outworker/TaskListWeight';
+
+import RIf from '@/component/RIF'
 import { getListData, postData, putData } from '@/api'
 import { Table, Button, message} from 'antd'
 import Dialog from '@/container/Dialog'
@@ -83,6 +85,21 @@ let search = {
     buttons:[]
 };
 
+const canSubmit = item => {
+    if (item.OutWorkerStatus == 2 && !item.AccountantStatus) {
+        return false
+    }
+    if (item.OutWorkerStatus == 2 && item.AccountantStatus == 5) {  // 这种情况的时候只能选择资料齐全提交会计
+    return false
+    }
+    if (item.OutWorkerStatus == 6 && item.AccountantStatus == 5) { // 这种情况的时候只能选择资料齐全提交会计 外勤当月只跑完
+    return false
+    }
+    if (item.AccountantStatus == 3 && item.AccountantTaskSource == '外勤') {
+    return false
+    }
+    return true
+}
 
 class Main extends Component {
     constructor(props) {
@@ -104,7 +121,7 @@ class Main extends Component {
         this.onSearch = this.onSearch.bind(this);
         this.handleTableChange = this.handleTableChange.bind(this);
         this.addNew = this.addNew.bind(this);
-        console.log(this)
+        this.view = this.view.bind(this);
     }
 
     handleTableChange (pagination){
@@ -138,20 +155,71 @@ class Main extends Component {
         this.onSearch();
     }
     addNew(){
+
         Dialog({
             content: <OutworkerTask data={{}}  wrappedComponentRef={crmform =>{this.crmform = crmform}}/>,
             width: 1200,
             handleOk: ()=>{
-                
+                return new Promise((resolve, reject) => {
+                    const formdata = this.crmform.getFieldsValue();
+                    let taskform;
+                    if(formdata){
+                        if(formdata.Task.CommonTaskId === 0){
+                            Dialog({
+                                content: <TaskListWeight data={formdata.Task.ChildTasks}  ref={form =>{if(form)taskform = form;}}/>,
+                                width: 600,
+                                handleOk: ()=>{
+                                    if(_.uniqBy(taskform.data,'Weight').length< taskform.data.length){
+                                        message.error('权重不允许重复！')
+                                        return false;
+                                    }
+                                    return true;
+                                },
+                                confirmLoading: false,
+                                handleCancel (){
+                                },
+                                title: "添加任务" 
+                            }).result.then(()=>{
+                                formdata.Task.ChildTasks = taskform.data;
+                                saveData();
+                            },reject);
+                        }else{
+                            saveData();
+                        }
+                    }else{
+                        reject(); 
+                    }
+
+                    function saveData(){
+                        _.each(formdata.Task.ChildTasks, item => {
+                            item.CustomerId = formdata.Customer.Id
+                        });
+                        postData('maintask', {
+                            ...formdata.Task, 
+                            AreaCode: formdata.AreaCode, 
+                            MainTaskName: formdata.MainTaskName, 
+                            CustomerId: formdata.Customer.Id 
+                        }).then(res=>{
+                            if(res.status){
+                                resolve()
+                            }else{
+                               reject(); 
+                            }
+                        },reject);
+                    }
+                });
             },
             confirmLoading: false,
             handleCancel (){
                 console.log('onCancel')
             },
-            title: "添加任务" 
+            title: "修改权重" 
         }).result.then(()=>{
             this.onSearch(this.state.searchParams)
         },()=>{});
+    }
+    view() {
+        
     }
     render() {
 
@@ -214,12 +282,13 @@ class Main extends Component {
             render: val=> fDate(val)
         }, {
             title: '操作',
+            width: 210,
             render: (text, record) => (
                 <Button.Group >
-                    <HasPower key={"btn_DETAIL"} ><Button size="small" onClick={e=>{this.edit(record)}}>查看</Button></HasPower>
+                    <Button size="small" onClick={e=>{this.view(record)}}>查看</Button>
                     <HasPower power="REVIEW"  key={"btn_REVIEW"} ><Button size="small" onClick={e=>{this.toOther(record)}} disabled={record.OutWorkerStatus != 1|| record.ServiceStatus==8}>审核</Button></HasPower>
                     <HasPower power="REJECT"  key={"btn_REJECT"} ><Button size="small" onClick={e=>{this.toOther(record)}} disabled={record.OutWorkerStatus != 1|| record.ServiceStatus==8}>驳回</Button></HasPower>
-                    <HasPower power="SUBMIT"  key={"btn_SUBMIT"} ><Button size="small" onClick={e=>{this.toPub(record)}}>提交</Button></HasPower>
+                    <HasPower power="SUBMIT"  key={"btn_SUBMIT"} ><Button size="small" onClick={e=>{this.toPub(record)}} disabled={canSubmit(record)}>提交</Button></HasPower>
                 </Button.Group>
             ),
         }];

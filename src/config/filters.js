@@ -142,7 +142,27 @@ export const fSubTaskStatus = function(status) {
     }
     return str
 }
-
+export const fSubTaskDetailStatus = function(status) {
+    var str = ''
+    switch (+status) {
+        case 1:
+            str = '待分配'
+            break;
+        case 2:
+            str = '待处理'
+            break;
+        case 3:
+            str = '进行中'
+            break;
+        case 4:
+            str = '已取消'
+            break;
+        case 5:
+            str = '已完成'
+            break;
+    }
+    return str
+}
 // 日期类
 export const fDate =(val)=>{
     if((!val) || val.length<10 || val.substr(0,4)==='0001') return '';

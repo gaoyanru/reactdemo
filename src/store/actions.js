@@ -7,7 +7,8 @@ export const login = (payload) => (dispatch) => {
             sessionStorage.setItem('token', loginRes.data.Token)
             getListData('mycity').then(res=>{
                 if(res.status){
-                    loginRes.data.CityCode = res.data.Code
+                    loginRes.data.CityCode = res.data.Code;
+                    loginRes.data.CityName = res.data.Name;
                     sessionStorage.setItem('user', JSON.stringify(loginRes.data))
                     dispatch({ type: 'LOGIN_USER', data: loginRes.data })
                 }

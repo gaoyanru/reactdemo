@@ -24,8 +24,9 @@ class Main extends Component {
     if(!this.props.outworkers) return <Spin/>;
     const options = this.props.outworkers.map(d => <Option key={d.UserId}>{d.RealName}</Option>);
     const all = <Option key={0}>全部</Option>
+
     return (
-      <Select style={{width: this.props.width || 150}} defaultValue={this.props.value} onChange={this.handleChange}>
+      <Select style={{width: this.props.width || 150}} value={this.props.value||this.state.value} defaultValue={this.props.value} disabled={this.props.disabled} onChange={this.handleChange}>
       {(!this.props.hideAll) && all}
       {options}
       </Select>

@@ -9,6 +9,8 @@ import logo from './logo.svg';
 import store from '@/store'
 import { setPowerList } from '@/store/actions'
 
+import Test from '@/pages/testpage'
+
 const { Header, Sider, Content } = Layout;
 
 class WithPower extends Component {
@@ -154,7 +156,7 @@ class App extends Component {
             <div style={{ minHeight: 'calc(100vh - 260px)' }}>
               <Switch>
                 {routers}
-                <Route exact path="/main" render={props=>(<div> "hello" </div>)}/>
+                <Route exact path="/main" component={Test}/>
               </Switch>
             </div>
           </Content>
