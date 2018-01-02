@@ -5,11 +5,13 @@ import HasPower from '@/container/HasPower'
 import ImportData from '@/container/searchComponent/ImportData'
 import CustomerType from '@/container/searchComponent/CustomerType'
 import SearchForm from '@/container/SearchForm'
-import { getListData, postData } from '@/api'
+import { getListData, postData, putData, deleteData } from '@/api'
 import CrmCustomer from '@/component/CrmCustomer'
 import CrmCustomerRepeatWarning from '@/container/CrmCustomerRepeatWarning'
+import CrmCustomerView from '@/container/CrmCustomerView'
 import Dialog from '@/container/Dialog'
 import _ from 'lodash'
+import Confirm from '@/component/Confirm'
 
 let search = {
     items: [{
@@ -29,6 +31,30 @@ let search = {
     }],
     buttons:[]
 };
+
+class DialogScan extends Component {
+  constructor(props) {
+    super(props);
+    this.state= {loading: false}
+  }
+
+  onClose = ()=>{
+    this.props.onClose
+  }
+
+  onNext = ()=>{
+    this.setState({loading: true})
+    this.props.onNext().then(res=>{
+      this.setState({loading: false})
+    })
+  }
+  render (){
+    return (
+      [<Button key="back" type="primary" onClick={this.props.onClose}>关闭</Button>,
+        <Button key="toput" type="primary" loading={this.state.loading} onClick={this.onNext.bind(this)}>下一条</Button>
+    ])
+  }
+}
 
 class PubMain extends Component {
   constructor(props) {
@@ -51,6 +77,8 @@ class PubMain extends Component {
     this.onSearch = this.onSearch.bind(this);
     this.openDialog = this.openDialog.bind(this);
     this.addNew = this.addNew.bind(this);
+    this.edit = this.edit.bind(this);
+    this.pickCustomer = this.pickCustomer.bind(this)
   }
 
   handleTableChange (pagination){
@@ -97,6 +125,7 @@ class PubMain extends Component {
                               const data = res.data;
                               if (data.errorcode == 1) {
                                   message.error(res.data.name);
+                                  reject();
                               } else {
                                   const customers = JSON.parse(data.name);
                                   Dialog({
@@ -115,12 +144,20 @@ class PubMain extends Component {
                                           message.info('保存成功！')
                                           resolve()
                                        })
+                                  },()=>{
+                                      reject()
                                   });
 
                               }
                           }else{
-                              message.info('保存成功！')
-                              resolve()
+                              if(res.status){
+                                  message.info('保存成功！')
+                                  resolve()
+                              }else{
+                                  // message.error(res.message);
+                                  reject()
+                              }
+
                           }
                       });
                   }else{
@@ -142,6 +179,79 @@ class PubMain extends Component {
     this.openDialog({},'新增客户')
   }
 
+  edit(row){
+    let current = row.Id;
+    console.log(row.CompanyName, 'CompanyName')
+    const  closeDialog = ()=>{
+      d.close()
+    }
+    const next =()=>{
+        const that = this;
+        return new Promise((resolve,reject)=>{
+            that.crmform.saveCustomer().then(customer=>{
+               resolve()
+               that.showNext(customer.Id)
+            })
+        });
+      }
+    const d = Dialog({
+      content: <CrmCustomerView customerId={row.Id} ref={crmform =>{this.crmform = crmform}} readOnly={true}/>,
+      width: 1200,
+      confirmLoading: false,
+      handleCancel: ()=> true,
+      handleOk: ()=>true,
+      title: row.CompanyName,
+      footer: <DialogScan onClose={closeDialog} onNext={next}/>
+    })
+
+    d.result.then(()=>{
+      this.onSearch(this.state.searchParams)
+    },()=>{ this.onSearch(this.state.searchParams)});
+  }
+
+  showNext = (id)=>{
+      const index = _.findIndex(this.state.data,t=>t.Id=== +id)
+      if(index>-1 && index< this.state.data.length){
+          if(index+1< this.state.data.length){
+              this.crmform.showNext(this.state.data[index+1].Id)
+          }else{
+              const pagination = this.state.pagination;
+              if((pagination.current-1)*pagination.pageSize + index +1 < pagination.total){
+                  this.setState({
+                      pagination: {...pagination, current:pagination.current+1}
+                  })
+                  this.onSearch(this.state.searchParams).then(res=>{
+                      this.crmform.showNext(res.data.list[0].Id)
+                  })
+              }
+          }
+      }
+  }
+
+  pickCustomer(row){
+    console.log(row)
+    putData('opencustomer/' + row.Id + '/6').then((res)=>{
+      if(res.status){
+        message.info('操作成功！')
+        this.onSearch(this.state.searchParams)
+      }
+    })
+  }
+
+  deleteItem(row){
+    Confirm({
+      handleOk:()=>{
+        deleteData('opencustomer/' + row.Id).then((res)=>{
+          if(res.status){
+            message.info('删除成功！')
+            this.onSearch(this.state.searchParams)
+          }
+        })
+      },
+      message: '确认要删除吗？'
+    })
+  }
+
   render() {
     const columns = [{
       title: '公司名称',
@@ -160,9 +270,9 @@ class PubMain extends Component {
       title: '操作',
       render: (text, record) => (
         <Button.Group >
-          <HasPower power="DETAIL"  key={"btn_DETAIL"} ><Button size="small" onClick={e=>{this.edit(record)}}>查看</Button></HasPower>
-          <HasPower power="TOOTHER"  key={"btn_TOOTHER"} ><Button size="small" onClick={e=>{this.toOther(record)}}>抢客户</Button></HasPower>
-          <HasPower power="TOPUB"  key={"btn_TOPUB"} ><Button size="small" onClick={e=>{this.toPub(record)}}>删除</Button></HasPower>
+          <HasPower power="DETEAL"  key={"btn_DETEAL"} ><Button size="small" onClick={e=>{this.edit(record)}}>查看</Button></HasPower>
+          <HasPower power="GETCUS"  key={"btn_GETCUS"} ><Button size="small" onClick={e=>{this.pickCustomer(record)}}>抢客户</Button></HasPower>
+          <HasPower power="DELETE"  key={"btn_DELETE"} ><Button size="small" onClick={e=>{this.deleteItem(record)}}>删除</Button></HasPower>
         </Button.Group>
       ),
     }];

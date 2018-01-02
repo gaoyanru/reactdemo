@@ -19,8 +19,8 @@ class Main extends React.Component {
   render() {
     return (
       <div style={this.props.style} className="track-list">
-        <Title title= '跟踪记录'/>
-        <TextArea rows={2} onBlur={this.handleChange} onPressEnter={this.handleChange} />
+        {(!this.props.readOnly) && <Title title= '跟踪记录'/>}
+        {(!this.props.readOnly) && <TextArea rows={2} onBlur={this.handleChange} onPressEnter={this.handleChange} />}
         <List
           bordered
           dataSource={this.props.data}

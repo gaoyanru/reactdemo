@@ -142,6 +142,7 @@ export const fSubTaskStatus = function(status) {
     }
     return str
 }
+
 export const fSubTaskDetailStatus = function(status) {
     var str = ''
     switch (+status) {
@@ -161,11 +162,46 @@ export const fSubTaskDetailStatus = function(status) {
             str = '已完成'
             break;
     }
+    return str;
+}
+export const fOutworkStatus = function(status) {
+    var str = ''
+    switch (+status) {
+        case 1:
+            str = '启用'
+            break;
+        case 2:
+            str = '停用'
+
+            break;
+    }
     return str
 }
+
 // 日期类
 export const fDate =(val)=>{
     if((!val) || val.length<10 || val.substr(0,4)==='0001') return '';
     return val.substr(0, 10);
 }
 
+// 类型
+export const fBusinessType = function(type) {
+    var str = ''
+    switch (+type) {
+        case 1:
+            str = '税务'
+            break;
+        case 2:
+            str = '工商'
+            break;
+        case 3:
+            str = '其他'
+            break;
+    }
+    return str
+}
+
+// 费用类
+export const fPrice =(val)=>{
+    return '￥' + val.toFixed(2)
+}

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Form, Input, Row, Col, Spin } from 'antd'
 import CrmCustomer from '@/component/CrmCustomer'
-import { getListData, deleteData, postData } from '@/api' 
+import { getListData, deleteData, postData } from '@/api'
 import TagSelect from '@/component/TagSelect'
 import { connect } from 'react-redux'
 import _ from 'lodash'
@@ -33,7 +33,7 @@ class Main extends React.Component {
           var result = that.cusform.getFieldsValue();
           if (result) {
             let org = this.state.customer;
-            if(org.RegisterDate && org.RegisterDate.substr(0,4)!=='0001') 
+            if(org.RegisterDate && org.RegisterDate.substr(0,4)!=='0001')
               org.RegisterDate = moment(org.RegisterDate).format('YYYY-MM-DD');
             else
               org.RegisterDate = null
@@ -48,7 +48,7 @@ class Main extends React.Component {
             reject();
           }
         })
-        
+
     }
     getFieldsValue = ()=>{
       const errors = this.props.form.getFieldsError();
@@ -147,18 +147,18 @@ class Main extends React.Component {
       this.getRemindDate()
     }
     render () {
-      console.log(this.state.tagSelected)
+      console.log(this.state.tagSelected, 'tagSelected')
       return (<Row>
-        <Col span={8}> {this.state.customer.Id? <CrmCustomer data={this.state.customer} wrappedComponentRef={cusform =>{this.cusform = cusform}} /> : <Spin/>}</Col>
+        <Col span={8}> {this.state.customer.Id? <CrmCustomer data={this.state.customer} wrappedComponentRef={cusform =>{this.cusform = cusform}} readOnly={this.props.readOnly}/> : <Spin/>}</Col>
         <Col span={16}>
-          {this.state.tagSelected && <Tags 
-            tags={this.props.tags} 
-            selected={this.state.tagSelected} 
+          {(this.state.tagSelected) && <Tags
+            tags={this.props.tags}
+            selected={this.state.tagSelected}
             addTag={this.addTag}
             deleteTag={this.deleteTag}
             /> || <Spin/>}
-          <CustomerTrack data={this.state.customertrack} submitTrack={this.submitTrack} />
-          <RemindDate data={this.state.reminds} onRemove={this.removeRemind} onAdd={this.addRemind}/>
+          <CustomerTrack data={this.state.customertrack} submitTrack={this.submitTrack} readOnly={this.props.readOnly}/>
+          {(!this.props.readOnly) && <RemindDate data={this.state.reminds} onRemove={this.removeRemind} onAdd={this.addRemind}/>}
         </Col>
       </Row>)
     }
