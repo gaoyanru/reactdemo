@@ -42,31 +42,31 @@ const actions = handleActions({
             ...state,
             roles: data
         }
-    }, 
+    },
     'SALERS': (state, { data }) => {
         return {
             ...state,
             salers: data
         }
-    }, 
+    },
     'CUSTOMER_TYPE': (state, { data }) => {
         return {
             ...state,
             customerTypes: data
         }
-    }, 
+    },
     'CUSTOMER_TAGS': (state, { data }) => {
         return {
             ...state,
             tags: data
         }
-    }, 
+    },
     'CUSTOMER_SOURCE': (state, { data }) => {
         return {
             ...state,
             customerSource: data
         }
-    }, 
+    },
     'AREAS': (state, { data }) =>{
         return {
             ...state,
@@ -115,13 +115,20 @@ const actions = handleActions({
             sub_task: data
         }
     },
-    
+
     'get outworkers': (state, { data }) =>{
         return {
             ...state,
             outworkers: data
         }
-    }
+    },
+
+    'BELONG_COMPANY': (state, { data }) => {
+        return {
+            ...state,
+            belongCompany: data
+        }
+    },
 }, defaultState)
 
 export default actions

@@ -183,3 +183,18 @@ export const addGroup = (payload) => (dispatch, state) =>{
         dispatch(getGroups(true))
     })
 }
+
+export function getBelongCompany(force,getState) {
+    return (dispatch, getState) => {
+        const state = getState();
+        if(state.belongCompany && !force){
+            return null;
+        }
+        getListData('subsidiary').then(res => {
+            if (res.status) {
+                dispatch({ type: 'BELONG_COMPANY', data: res.data.list })
+            }
+        })
+        dispatch({ type: 'BELONG_COMPANY', data: null })
+    }
+}
