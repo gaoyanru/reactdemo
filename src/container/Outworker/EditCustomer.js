@@ -1,9 +1,10 @@
-import React from 'react'
-import { Form, Input, Spin } from 'antd'
-import AreaSelect from '@/container/searchComponent/AreaSelect'
-import AddedValue from '@/container/searchComponent/AddedValue'
-import Title from '@/component/Title'
-import { getListData } from '@/api'
+import React from 'react';
+import { Form, Input, Spin } from 'antd';
+import AreaSelect from '@/container/searchComponent/AreaSelect';
+import AddedValue from '@/container/searchComponent/AddedValue';
+import Title from '@/component/Title';
+import { getListData } from '@/api';
+import UploadFile from '@/container/UploadFile';
 const FormItem = Form.Item;
 const TextArea = Input.TextArea
 
@@ -29,12 +30,11 @@ class Main extends React.Component {
     getFieldsValue = ()=>{
       this.props.form.validateFields();
       const errors = this.props.form.getFieldsError();
-      console.log(errors);
       if(!hasErrors(errors)){
         let formValues =  this.props.form.getFieldsValue()
-        if(this.props.data.Id){
+        if(this.props.customerId){
           if(formValues.RegisterDate) formValues.RegisterDate = formValues.RegisterDate.format('YYYY-MM-DD')
-          return {...this.props.data,...formValues}
+          return {...this.state.data,...formValues}
         }else{
           return formValues
         }
@@ -46,10 +46,10 @@ class Main extends React.Component {
       if(!this.state.data) return <Spin/>;
       const formItemLayout = {
         labelCol: {
-          span: 6,
+          span: 8,
         },
         wrapperCol: {
-          span: 18,
+          span: 16,
         },
       }
       const data = this.state.data;
@@ -152,8 +152,8 @@ class Main extends React.Component {
               {...formItemLayout}
               label="法人身份证号"
             >
-              {getFieldDecorator('PersonCard', {
-                initialValue: data.PersonCard
+              {getFieldDecorator('PersonCardID', {
+                initialValue: data.PersonCardID
               })(
                 <Input />
               )}
@@ -188,7 +188,26 @@ class Main extends React.Component {
                 <TextArea />
               )}
             </FormItem>
-            
+            <FormItem
+              {...formItemLayout}
+              label="上传营业执照"
+            >
+              {getFieldDecorator('BusinessLicense', {
+                initialValue: data.BusinessLicense
+              })(
+                <UploadFile />
+              )}
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="上传法人身份证"
+            >
+              {getFieldDecorator('PersonCardPath', {
+                initialValue: data.PersonCardPath
+              })(
+                <UploadFile />
+              )}
+            </FormItem>
         </Form>
         )
     }

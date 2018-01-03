@@ -121,6 +121,18 @@ const actions = handleActions({
             ...state,
             outworkers: data
         }
+    },
+    'get signkey': (state, { data }) =>{
+        return {
+            ...state,
+            signkey: data
+        }
+    },
+    'remove signkey': (state, { data }) =>{
+        return {
+            ...state,
+            signkey: data
+        }
     }
 }, defaultState)
 

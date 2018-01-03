@@ -34,17 +34,19 @@ class Main extends Component {
   }
   edit(row){
     Dialog({
-        content: <EditCustomer customerId={row.Id}/>,
+        content: <EditCustomer customerId={row.Id} wrappedComponentRef={crmform =>{this.crmform = crmform}}/>,
         width: 800,
         handleOk: ()=>{
             return new Promise((resolve, reject) => {
-                // this.toOther(row.Id,saler).then(res=>{
-                //     if(res.status){
-                //         message.info('转出成功！')
-                //         this.onSearch()
-                //         resolve()
-                //     }
-                // })
+              const data = this.crmform.getFieldsValue();
+              putData(`customer/${data.Id}?verify=1`, data).then(res=>{
+                if(res.status){
+                  message.info("保存成功！");
+                  resolve()
+                }else{
+                  reject()
+                }
+              },()=>reject())
             });
         },
         confirmLoading: false,

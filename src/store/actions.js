@@ -183,3 +183,25 @@ export const addGroup = (payload) => (dispatch, state) =>{
         dispatch(getGroups(true))
     })
 }
+export function getSignkey(force,getState) {
+    return (dispatch, getState) => {
+        const state = getState();
+        if(state.signkey){
+            return state.signkey;
+        }
+        return getListData('signkey').then(res => {
+            if (res.status) {
+                delete res.data.Filename;
+                delete res.data.key;
+                delete res.data.callback;
+                delete res.data.expire;
+                delete res.data.Host;
+                dispatch({ type: 'get signkey', data: res.data })
+                setTimeout(()=>{
+                    console.log('remove signkey')
+                    dispatch({ type: 'remove signkey', data: null})
+                },  1000)
+            }
+        })
+    }
+}

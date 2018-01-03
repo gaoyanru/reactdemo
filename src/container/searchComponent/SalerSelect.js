@@ -25,6 +25,7 @@ class SalerSelect extends Component {
     if(!this.props.salers) return null;
     const options = this.props.salers.map(d => <Option key={d.Id}>{d.RealName}</Option>);
     const all = <Option key={0}>全部</Option>
+    const showAll = !(this.props.multiple || this.props.hideAll);
     return (
       <Select 
         style={{width: this.props.width || 150}} 
@@ -35,7 +36,7 @@ class SalerSelect extends Component {
         defaultValue={this.props.value} 
         onChange={this.handleChange}
       >
-      {(!this.props.multiple) && all}
+      {showAll && all}
       {options}
       </Select>
     );

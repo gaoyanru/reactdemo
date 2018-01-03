@@ -357,9 +357,9 @@ class Main extends Component {
             handleCancel (){
                 console.log('onCancel')
             },
-            title: "客户转出-"+ row.CompanyName 
+            title: "转出-"+ row.CompanyName 
         }).result.then(()=>{
-            this.onSearch(this.state.searchParams)
+            this.onSearch(this.state.searchParams);
         },()=>{});
     }
     componentWillMount() {

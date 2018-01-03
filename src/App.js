@@ -37,7 +37,8 @@ const pagesMap = {
   'cus_pub': 'customer/pub',
   'outwork_dict': 'outworker/dict',
   'company_sub': 'zcompany/childcompany',
-  'static_order': 'statistic/staticOrder'
+  'static_order': 'statistic/staticOrder',
+  'signed_manage': 'contract/signed'
 }
 
 function getCurrentMenu(funs,path){
