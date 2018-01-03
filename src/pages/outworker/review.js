@@ -10,7 +10,7 @@ import OutworkerSelect from '@/container/searchComponent/OutworkerSelect'
 import AreaSelect from '@/container/searchComponent/AreaSelect'
 import ImportData from '@/container/searchComponent/ImportData'
 import OutworkerTask from '@/container/Outworker/Task'
-
+import SubTaskDetail from '@/container/Outworker/SubTaskDetail'
 import TaskListWeight from '@/container/Outworker/TaskListWeight';
 
 import RIf from '@/component/RIF'
@@ -219,7 +219,20 @@ class Main extends Component {
         },()=>{});
     }
     view() {
-        
+        Dialog({
+            content: <OutworkerTask data={{}}  wrappedComponentRef={crmform =>{this.crmform = crmform}}/>,
+            width: 1200,
+            handleOk: ()=>{
+                return true;
+            },
+            confirmLoading: false,
+            handleCancel (){
+                console.log('onCancel')
+            },
+            title: "修改权重" 
+        }).result.then(()=>{
+            this.onSearch(this.state.searchParams)
+        },()=>{});
     }
     render() {
 

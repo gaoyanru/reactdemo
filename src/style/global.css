@@ -109,3 +109,30 @@ form .ant-select:only-child, form .ant-cascader-picker:only-child{
 .form-2col .ant-form-item{
     width: 45%
 }
+.mark-style{
+    width: 30px;
+    height: 20px;
+    background-color: red;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    color: #fff;
+    float: left;
+}
+.mark-style-yellow{
+    background-color: rgb(255, 204, 51);
+}
+.mark-style-yellow:before{
+    content:'低';
+}
+.mark-style-blue{
+    background-color: blue;
+}
+.mark-style-blue:before{
+    content:'中';
+}
+.mark-style-red{
+    background-color: red;
+}
+.mark-style-red:before{
+    content:'高';
+}

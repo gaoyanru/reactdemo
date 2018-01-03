@@ -215,6 +215,23 @@ export const fOrderStatus = function(status) {
     return str;
 }
 
+export const fTaxStatus = function(status) {
+    var str = ''
+    switch (+status) {
+        case 1:
+            str = '未开始'
+            break;
+        case 2:
+            str = '挂起'
+            break;
+        case 3:
+            str = '服务中'
+            break;
+    }
+    return str
+}
+
+
 // 日期类
 export const fDate =(val)=>{
     if((!val) || val.length<10 || val.substr(0,4)==='0001') return '';

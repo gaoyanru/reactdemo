@@ -122,13 +122,24 @@ const actions = handleActions({
             outworkers: data
         }
     },
-
     'BELONG_COMPANY': (state, { data }) => {
         return {
             ...state,
             belongCompany: data
         }
     },
+    'get signkey': (state, { data }) =>{
+        return {
+            ...state,
+            signkey: data
+        }
+    },
+    'remove signkey': (state, { data }) =>{
+        return {
+            ...state,
+            signkey: data
+        }
+    }
 }, defaultState)
 
 export default actions

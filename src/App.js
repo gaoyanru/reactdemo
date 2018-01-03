@@ -39,7 +39,9 @@ const pagesMap = {
   'company_sub': 'zcompany/childcompany',
   'static_order': 'statistic/staticOrder',
   'function_setting': 'system/functionManage',
-  'finance_manage_contract': 'contract/financeAudit'
+  'finance_manage_contract': 'contract/financeAudit',
+  'signed_manage': 'contract/signed',
+  'function_setting': 'system/functionManage'
 }
 
 function getCurrentMenu(funs,path){
