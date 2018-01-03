@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Row, Col, List, Form, Input } from 'antd'
-import { getCustomerSetList } from '@/api'
+import { getListData } from '@/api'
 
 const FormItem = Form.Item;
 
@@ -16,7 +16,7 @@ class SetContent extends Component{
 
   initData() {
     this.setState({loading: true})
-    return getCustomerSetList('cuscategory').then(res => {
+    return getListData('cuscategory').then(res => {
       if (res.status) {
         console.log(res)
         this.setState({
