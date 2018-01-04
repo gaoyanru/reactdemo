@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { Table, Button } from 'antd'
 import { getListData } from '@/api'
 import { fMainTaskStatus, fSubTaskStatus, fDateT } from '@/config/filters'
+import OutworkDialog from '@/container/Contract/OutworkDialog'
+import Dialog from '@/container/Dialog'
 
 class Main extends Component {
   constructor(props) {
@@ -57,7 +59,15 @@ class Main extends Component {
       this.onSearch();
   }
   view(row) {
-
+    Dialog({
+        content: <OutworkDialog Id={row.Id}/>,
+        width: 1000,
+        confirmLoading: false,
+        footer: null,
+        title: '查看详情'
+    }).result.then(()=>{
+        this.onSearch()
+    },()=>{});
   }
   render() {
     const columns = [{

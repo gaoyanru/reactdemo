@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { Table, Button } from 'antd'
 import { getListData } from '@/api'
 import { fDate, fOperation } from '@/config/filters'
+import Dialog from '@/container/Dialog'
+import RemarkDialog from '@/container/Contract/RemarkDialog'
 
 class Main extends Component {
   constructor(props) {
@@ -57,7 +59,15 @@ class Main extends Component {
       this.onSearch();
   }
   view(row) {
-
+    Dialog({
+        content: <RemarkDialog row={row}/>,
+        width: 500,
+        confirmLoading: false,
+        footer: null,
+        title: '查看详情'
+    }).result.then(()=>{
+        this.onSearch()
+    },()=>{});
   }
   render() {
     const columns = [{

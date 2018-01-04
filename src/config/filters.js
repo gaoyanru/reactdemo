@@ -288,3 +288,19 @@ export const fOperation = function(type) {
     }
     return str
 }
+// 标记过滤
+export const fMark = function(type) {
+    var str = ''
+    switch (+type) {
+        case 1:
+            str = '低'
+            break;
+        case 2:
+            str = '中'
+            break;
+        case 3:
+            str = '高'
+            break;
+    }
+    return str
+}

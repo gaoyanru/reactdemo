@@ -22,7 +22,6 @@ class Main extends Component {
     };
     this.onSearch = this.onSearch.bind(this);
     this.handleTableChange = this.handleTableChange.bind(this);
-    this.openDialog = this.openDialog.bind(this);
   }
   handleTableChange (pagination){
       this.setState({pagination: pagination}, ()=>{this.onSearch()})
@@ -51,15 +50,11 @@ class Main extends Component {
           });
       })
   }
-  openDialog(customer,title,width){
 
-  }
   componentWillMount() {
       this.onSearch();
   }
-  view(row) {
 
-  }
   render() {
     const columns = [{
       title: '序列号',
@@ -75,11 +70,6 @@ class Main extends Component {
       title: '操作时间',
       dataIndex: 'OperationTime',
       render: val => fDateT(val)
-    }, {
-      title: '操作',
-      render: (text, record) => (
-          <Button size="small" onClick={e=>{this.view(record)}}>查看</Button>
-      ),
     }];
 
     return (
