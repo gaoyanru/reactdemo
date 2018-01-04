@@ -8,7 +8,7 @@ import  '@/style/app.less';
 import logo from './logo.svg';
 import store from '@/store'
 import { setPowerList } from '@/store/actions'
-import childcompany from '@/pages/system/functionManage'
+import childcompany from '@/pages/contract/financeAudit'
 
 import Test from '@/pages/testpage'
 
@@ -38,6 +38,8 @@ const pagesMap = {
   'outwork_dict': 'outworker/dict',
   'company_sub': 'zcompany/childcompany',
   'static_order': 'statistic/staticOrder',
+  'function_setting': 'system/functionManage',
+  'finance_manage_contract': 'contract/financeAudit',
   'signed_manage': 'contract/signed',
   'function_setting': 'system/functionManage'
 }

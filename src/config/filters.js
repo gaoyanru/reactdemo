@@ -177,6 +177,44 @@ export const fOutworkStatus = function(status) {
     }
     return str
 }
+export const fOrderSource = function(status) {
+    var str = ''
+    switch (+status) {
+        case 1:
+            str = '电商'
+            break;
+        case 2:
+            str = '天猫'
+
+            break;
+    }
+    return str
+}
+export const fOrderStatus = function(status) {
+    var str = ''
+    switch (+status) {
+        case 1:
+            str = '审单待审核'
+            break;
+        case 2:
+            str = '审单已审核'
+            break;
+        case 3:
+            str = '审单驳回'
+            break;
+        case 4:
+            str = '财务已审核/网店到款'
+            break;
+        case 5:
+            str = '财务已驳回'
+            break;
+        case 6:
+            str = '财务确认'
+            break;
+    }
+    return str;
+}
+
 export const fTaxStatus = function(status) {
     var str = ''
     switch (+status) {
