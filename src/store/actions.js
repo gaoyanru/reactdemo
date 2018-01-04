@@ -214,7 +214,7 @@ export function getSignkey(force,getState) {
                 setTimeout(()=>{
                     console.log('remove signkey')
                     dispatch({ type: 'remove signkey', data: null})
-                },  1000)
+                }, 20 * 60 * 1000)
             }
         })
     }

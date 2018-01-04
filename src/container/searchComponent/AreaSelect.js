@@ -24,9 +24,17 @@ class Main extends Component {
   render() {
     if(!this.props.areas) return <Spin/>;
     const options = this.props.areas.map(d => <Option key={d.AreaCode}>{d.AreaName}</Option>);
-    const all = <Option key=' '>全部</Option>
+    const all = <Option key=' '>全部</Option>;
+    if(this.props.disabled){
+      const area = this.props.areas.find(t=>t.AreaCode === this.props.value);
+      if(area){
+        return <span>{area.AreaName}</span>
+      }else{
+        return null;
+      }
+    }
     return (
-      <Select style={{width: this.props.width || 150}} defaultValue={this.props.value} onChange={this.handleChange}>
+      <Select disabled={this.props.disabled} style={{width: this.props.width || 150}} defaultValue={this.props.value} onChange={this.handleChange}>
       {(!this.props.hideAll) && all}
       {options}
       </Select>

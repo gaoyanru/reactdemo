@@ -77,7 +77,7 @@ class Main extends Component {
     // {imageUrl ? <ImageViewer/> : <ImageViewer/>}
     return (
       <div className="file-upload">
-        {imageUrl ? <ImageViewer src={imageUrl}/> : null}
+        {imageUrl ? <ImageViewer src={imageUrl}  additional={this.props.additional}/> : null}
         <Upload
           name="file"
           showUploadList={false}

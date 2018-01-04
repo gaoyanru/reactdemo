@@ -15,7 +15,7 @@ class Main extends React.Component{
     const src = this.props.src;
     const additional =  this.props.additional || '?x-oss-process=image/resize,m_lfit,h_75,w_100'
     return (
-        <div>
+        <div style={{display:'inline-block'}}>
             <img src={src + additional} alt="" onClick={() => { this.setState({ visible: true }); }} style={{cursor: "pointer"}}/>
             <Viewer
             visible={this.state.visible}

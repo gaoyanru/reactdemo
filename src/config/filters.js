@@ -230,7 +230,18 @@ export const fTaxStatus = function(status) {
     }
     return str
 }
-
+export const fAddedValue = function(status) {
+    var str = ''
+    switch (+status) {
+        case 1:
+            str = '小规模'
+            break;
+        case 2:
+            str = '一般纳税人'
+            break;
+    }
+    return str
+}
 
 // 日期类
 export const fDate =(val)=>{

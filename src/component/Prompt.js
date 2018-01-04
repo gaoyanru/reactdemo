@@ -22,7 +22,7 @@ class Prompt extends Component {
     this.onClose(this.state.value);
   }
   handleCancel(e) {
-    this.props.handleCancel(e);
+    this.props.handleCancel && this.props.handleCancel(e);
     this.onCancel();
   }
   onClose(result){
@@ -42,6 +42,8 @@ class Prompt extends Component {
           onOk={(e)=>{this.handleOk(e)}}
           confirmLoading={ this.state.confirmLoading}
           onCancel={(e)=>{this.handleCancel(e)}}
+          okText= "确定"
+          cancelText = "取消"
           maskClosable={false}>
         <Input defaultValue = {this.props.value} onChange={this.onChange}/>
       </Modal>:null

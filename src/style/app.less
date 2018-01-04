@@ -28,7 +28,26 @@
     }
 }
 .company-info{
+    line-height: 40px;
+    height: 40px;
+
     label:not(:first-child){
-        margin: 0 0 0 24px;
+        margin: 0 12px 0 24px;
     } 
+    label:first-child{
+        margin: 0 12px 0 0;
+    } 
+
+}
+.form-3col{
+    .ant-form-item{
+        width: 30%;
+    }
+    .form-row{
+        width: 100%;
+        .ant-form-item-label{
+            width: 115px;
+        }
+    }
+
 }

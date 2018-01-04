@@ -17,7 +17,8 @@ class Dialog extends Component {
   }
   handleOk(e) {
     this.setState({confirmLoading: true})
-    var result = this.props.handleOk(e);
+    const handleOk = this.props.handleOk || this.props.content.handleOk || (()=>e||true);
+    var result = handleOk(e);
     if(result && result.constructor === Promise){
       result.then(this.onClose,()=>{
         this.setState({confirmLoading: false})
@@ -29,7 +30,8 @@ class Dialog extends Component {
     }
   }
   handleCancel(e) {
-    var result = this.props.handleCancel(e);
+    const handleCancel = this.props.handleCancel || this.props.content.handleCancel || (()=>e||true);
+    var result = handleCancel(e);
     if(result && result.constructor === Promise){
       result.then(this.onClose,()=>this.setState({confirmLoading: false}));
     }else{
@@ -51,7 +53,7 @@ class Dialog extends Component {
     },500);
   }
   render() {
-    const Content = this.props.content;
+    let Content = this.props.content;
     return (
       this.state.visible?
       <Modal title={this.props.title}
@@ -93,10 +95,10 @@ function createDialog(options){
   return {
     result: dialog,
     close (arg){
-      dc.handleOk()
+      dc.handleOk(arg)
     },
     cancel(arg){
-      dc.handleCancel()
+      dc.handleCancel(arg)
     }
   };
 }
