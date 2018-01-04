@@ -4,7 +4,7 @@ import SearchForm from '@/container/SearchForm'
 import SalerSelect from '@/container/searchComponent/SalerSelect'
 import AreaSelect from '@/container/searchComponent/AreaSelect'
 import TaxStatusSelect from '@/container/searchComponent/TaxStatusSelect'
-import AddRemark from '@/container/Contract/AddRemark'
+
 import CompanyDialog from '@/container/Contract/CompanyDialog'
 
 import { getListData, postData, putData } from '@/api'
@@ -13,7 +13,7 @@ import Dialog from '@/container/Dialog'
 import { fDate, fTaxStatus } from '@/config/filters'
 import HasPower from '@/container/HasPower'
 import RIf from '@/component/RIF'
-import Prompt from '@/component/Prompt'
+import * as action from '@/config/contractActions'
 
 
 let search = {
@@ -66,35 +66,6 @@ let search = {
     }],
     buttons:[]
 };
-
-class DialogFooter extends Component{
-    constructor(props) {
-        super(props) 
-        this.state= {loading: false}
-    }
-    
-    onClose = ()=>{
-        this.props.onClose
-    }
-    onSave = ()=>{
-        this.setState({loading: true})
-        this.props.onSave().then(res=>{
-            this.setState({loading: false})
-        })
-    }
-    onPub = ()=>{
-       this.setState({loading: true})
-        this.props.onPub().then(res=>{
-            this.setState({loading: false})
-        }) 
-    }
-    render (){
-        return ([<Button key="back" type="primary" onClick={this.props.onClose}>关闭</Button>,
-            <Button key="toput" type="primary" loading={this.state.loading} onClick={this.onPub.bind(this)}>转公海&下一条</Button>,
-             <Button key="submit" type="primary" loading={this.state.loading} onClick={this.onSave.bind(this)}>保存&下一条</Button>
-             ])
-    }
-}
 
 class Main extends Component {
     constructor(props) {
@@ -164,15 +135,10 @@ class Main extends Component {
     view(row){
 
         Dialog({
-            content: <CompanyDialog companyId={row.Id} SequenceNo={row.SequenceNo}/>,
+            content: <CompanyDialog companyId={row.Id} row={row}/>,
             width: 1200,
-            handleOk: ()=>{
-                return true
-            },
             confirmLoading: false,
-            handleCancel (){
-                console.log('onCancel')
-            },
+            footer: null,
             title: row.CompanyName 
         }).result.then(()=>{
             this.onSearch(this.state.searchParams)
@@ -181,58 +147,21 @@ class Main extends Component {
     }
     mark = (row)=>{
         if(!row.RemarkSignId){
-            Dialog({
-                content: <AddRemark wrappedComponentRef={crmform =>{this.crmform = crmform}}/>,
-                width: 540,
-                handleOk: ()=>{
-                    return new Promise((resolve, reject) => {
-                        let form_data = this.crmform.getFieldsValue();
-                        if(form_data){
-                            form_data.CustomerId = row.Id;
-                            form_data.Remark = form_data.Remark + '{' + this.props.curUser.RealName + '}';
-                            putData("companySign", form_data).then(res=>{
-                                if(res.status){
-                                    resolve()
-                                }else{
-                                    reject()
-                                }
-                            },()=>reject())
-                        }else{
-                            reject()
-                        }
-                    });
-                },
-                confirmLoading: false,
-                handleCancel (){
-                    console.log('onCancel')
-                },
-                title: "标记-"+ row.CompanyName 
-            }).result.then(()=>{
+            action.mark(row).then(()=>{
                 this.onSearch(this.state.searchParams)
             },()=>{});
 
         }else{
-            putData('cancelcompanysign?customerId='+ row.Id).then(res=>{
+            action.mark(row).then(res=>{
                 if(res.status){
                     this.onSearch(this.state.searchParams);
                 }
             })
         }
     }
-    guaQi = (row) => {
-        Prompt({
-            title: '挂起原因',
-            handleOk: (res)=>{
-                putData('order/expire/suspend',{
-                    CompanyId: row.Id,
-                    Description: res
-                }).then(res=>{
-                    if(res.status){
-                        message.info('挂起成功！');
-                        this.onSearch(this.state.searchParams);
-                    }
-                })
-            }
+    hangUp = (row) => {
+        action.hangUp(row).then(()=>{
+            this.onSearch(this.state.searchParams);
         })
     }
     toOther = (row) => {
@@ -336,7 +265,7 @@ class Main extends Component {
             render: (text, record) => (
                 <Button.Group >
                     <HasPower power="MARK"  key={"btn_MARK"} ><Button size="small" onClick={e=>{this.mark(record)}}>{record.RemarkSignId?'取消':'标记'}</Button></HasPower>
-                    <HasPower power="GUAQI"  key={"btn_GUAQI"} ><Button size="small" disabled={!record.IfCancelHangup} onClick={e=>{this.guaQi(record)}}>挂起</Button></HasPower>
+                    <HasPower power="GUAQI"  key={"btn_GUAQI"} ><Button size="small" disabled={!record.IfCancelHangup} onClick={e=>{this.hangUp(record)}}>挂起</Button></HasPower>
                     <Button size="small" onClick={e=>{this.toOther(record)}}>换销售</Button>
                 </Button.Group>
             ),

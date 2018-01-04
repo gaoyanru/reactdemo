@@ -21,6 +21,14 @@ class Main extends Component {
     const options = this.state.data.map(d => <Option key={d.id}>{d.label}</Option>);
     const all = <Option key={0}>全部</Option>
     const value = this.props.value && (''+this.props.value) || '';
+    if(this.props.disabled){
+      const item = this.state.data.find(t=>t.id === this.props.value);
+      if(item){
+        return <span>{item.label}</span>
+      }else{
+        return null;
+      }
+    }
     return (
       <Select style={{width: this.props.width || 150}} defaultValue={value} onChange={this.handleChange}>
       {(!this.props.hideAll) && all}

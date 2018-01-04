@@ -122,6 +122,7 @@ class Main extends Component {
         this.handleTableChange = this.handleTableChange.bind(this);
         this.addNew = this.addNew.bind(this);
         this.view = this.view.bind(this);
+        console.log(this);
     }
 
     handleTableChange (pagination){
@@ -218,9 +219,9 @@ class Main extends Component {
             this.onSearch(this.state.searchParams)
         },()=>{});
     }
-    view() {
+    view(row) {
         Dialog({
-            content: <OutworkerTask data={{}}  wrappedComponentRef={crmform =>{this.crmform = crmform}}/>,
+            content: <SubTaskDetail item={row} curUser={this.props.curUser}  />,
             width: 1200,
             handleOk: ()=>{
                 return true;
@@ -229,7 +230,7 @@ class Main extends Component {
             handleCancel (){
                 console.log('onCancel')
             },
-            title: "修改权重" 
+            title: "外勤任务-" + row.CompanyName 
         }).result.then(()=>{
             this.onSearch(this.state.searchParams)
         },()=>{});

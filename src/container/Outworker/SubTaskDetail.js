@@ -9,6 +9,7 @@ import OutworkerSelect from '@/container/searchComponent/OutworkerSelect'
 import EditCustomer from '@/container/Outworker/EditCustomer'
 import Dialog from '@/container/Dialog'
 import Confirm from '@/component/Confirm'
+import store from '@/store'
 import { powerList } from '@/config/filters'
 
 
@@ -29,13 +30,13 @@ class Main extends Component {
     this.changeStatus = this.changeStatus.bind(this);
     this.edit = this.edit.bind(this);
 
-    this.hasPower= powerList(props.functions);
+    this.hasPower= powerList(store.getState().functions);
     this.onSearch();
   }
   edit(row){
     Dialog({
         content: <EditCustomer customerId={row.Id} wrappedComponentRef={crmform =>{this.crmform = crmform}}/>,
-        width: 800,
+        width: 1200,
         handleOk: ()=>{
             return new Promise((resolve, reject) => {
               const data = this.crmform.getFieldsValue();
