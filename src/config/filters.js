@@ -248,6 +248,10 @@ export const fDate =(val)=>{
     if((!val) || val.length<10 || val.substr(0,4)==='0001') return '';
     return val.substr(0, 10);
 }
+export const fDateT =(val)=>{
+    if((!val) || val.length<10 || val.substr(0,4)==='0001') return '';
+    return val.replace('T', ' ');
+}
 
 // 类型
 export const fBusinessType = function(type) {
@@ -269,4 +273,18 @@ export const fBusinessType = function(type) {
 // 费用类
 export const fPrice =(val)=>{
     return '￥' + val.toFixed(2)
+}
+
+// 操作过滤
+export const fOperation = function(type) {
+    var str = ''
+    switch (+type) {
+        case 1:
+            str = '标记'
+            break;
+        case 2:
+            str = '挂起'
+            break;
+    }
+    return str
 }

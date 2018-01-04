@@ -13,6 +13,9 @@ class OrderTable extends Component {
       pagination: {
           current: 1,
           pageSize: 15,
+          pageSizeOptions: ['20','50','80','100','200'],
+          showQuickJumper: true,
+          showSizeChanger: true,
           showTotal(total) {
             return `共计 ${total} 条`;
           }
@@ -45,10 +48,10 @@ class OrderTable extends Component {
         vals.treatedOrder = 0
       }
       console.log(vals, 'vals')
-      // if (vals.offset === 0) {
-      //   vals.starttime = vals.starttime ? vals.starttime.format('YYYY-MM-DD') : '';
-      //   vals.endtime = vals.endtime ? vals.endtime.format('YYYY-MM-DD') : '';
-      // }
+      if (vals.offset === 0) {
+        vals.starttime = vals.starttime ? vals.starttime.format('YYYY-MM-DD') : '';
+        vals.endtime = vals.endtime ? vals.endtime.format('YYYY-MM-DD') : '';
+      }
       getListData('contract/financelist', vals).then(res => {
           if(res.status){
               const pagination = { ...this.state.pagination };
@@ -89,8 +92,12 @@ class OrderTable extends Component {
 
   checkAll() {
     console.log(this.state.selectedRowKeys, '批量审核时的选中参数')
-    const selectKeys = this.state.selectedRowKeys.length > 0 ? JSON.stringify(this.state.selectedRowKeys) : ''
-    console.log(selectKeys, 'selectKeys')
+    if (this.state.selectedRowKeys.length === 0) {
+      message.error('请至少选择一个公司！');
+      return false
+    }
+    const selectKeys = this.state.selectedRowKeys
+    console.log(selectKeys, typeof(selectKeys), 'selectKeys')
     Confirm({
         handleOk:()=>{
           putData('contract/financeauditlist', selectKeys).then(res => {
@@ -98,6 +105,7 @@ class OrderTable extends Component {
             if (res.status) {
               message.info('审核成功！');
               this.Search()
+              this.setState({selectedRowKeys: []})
             }
           })
         },
@@ -121,7 +129,7 @@ class OrderTable extends Component {
       dataIndex: 'Connector',
     }, {
       title: '签单销售',
-      dataIndex: 'SaleName',
+      dataIndex: 'SalesName',
     }, {
       title: '订单来源',
       dataIndex: 'OrderSourceId',
@@ -136,7 +144,7 @@ class OrderTable extends Component {
       title: '订单状态',
       dataIndex: 'OrderStatus',
       render: (val, record)=> {
-        console.log(val, record)
+        // console.log(val, record)
         var str = ''
         switch (+val) {
             case 1:
@@ -170,6 +178,9 @@ class OrderTable extends Component {
     const rowSelection = !this.props.isAll ? {
       selectedRowKeys,
       onChange: this.onSelectChange,
+      getCheckboxProps: record => ({
+          disabled: record.OrderStatus != 2
+      })
     } : null;
     return (
       <div>

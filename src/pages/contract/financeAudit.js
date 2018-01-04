@@ -31,7 +31,7 @@ let search = {
     }, {
         label: '订单来源',
         type: 'select',
-        field: 'orderSource',
+        field: 'orderSourceId',
         data:{
           0: "全部",
           1: "电商",
@@ -90,6 +90,12 @@ class Finance extends Component {
     const Authorize = sessionStorage.getItem('token')
     var Params = _.cloneDeep(this.state.searchParams)
     Params.Authorize = Authorize
+    if (Params.starttime === null) {
+      Params.starttime = ''
+    }
+    if (Params.endtime === null) {
+      Params.endtime = ''
+    }
     console.log(Params, 'Params')
     var query = ''
     for (let i in Params) {
