@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
-import { Table } from 'antd'
-import { getListData } from '@/api'
+import { Table, Button, message } from 'antd'
+import { getListData, putData } from '@/api'
 import {fOrderSource, fOrderStatus} from '@/config/filters'
 import _ from 'lodash'
+import Confirm from '@/component/Confirm'
+
 class OrderTable extends Component {
   constructor(props) {
     super(props);
@@ -21,6 +23,7 @@ class OrderTable extends Component {
     };
     this.Search = this.Search.bind(this);
     this.handleTableChange = this.handleTableChange.bind(this);
+    this.checkAll = this.checkAll.bind(this);
   }
 
   handleTableChange (pagination){
@@ -42,10 +45,10 @@ class OrderTable extends Component {
         vals.treatedOrder = 0
       }
       console.log(vals, 'vals')
-      if (vals.offset === 0) {
-        vals.starttime = vals.starttime ? vals.starttime.format('YYYY-MM-DD') : '';
-        vals.endtime = vals.endtime ? vals.endtime.format('YYYY-MM-DD') : '';
-      }
+      // if (vals.offset === 0) {
+      //   vals.starttime = vals.starttime ? vals.starttime.format('YYYY-MM-DD') : '';
+      //   vals.endtime = vals.endtime ? vals.endtime.format('YYYY-MM-DD') : '';
+      // }
       getListData('contract/financelist', vals).then(res => {
           if(res.status){
               const pagination = { ...this.state.pagination };
@@ -84,7 +87,26 @@ class OrderTable extends Component {
     this.setState({ selectedRowKeys });
   }
 
+  checkAll() {
+    console.log(this.state.selectedRowKeys, '批量审核时的选中参数')
+    const selectKeys = this.state.selectedRowKeys.length > 0 ? JSON.stringify(this.state.selectedRowKeys) : ''
+    console.log(selectKeys, 'selectKeys')
+    Confirm({
+        handleOk:()=>{
+          putData('contract/financeauditlist', selectKeys).then(res => {
+            console.log(res)
+            if (res.status) {
+              message.info('审核成功！');
+              this.Search()
+            }
+          })
+        },
+        message: '确认要批量审核吗？'
+    })
+  }
+
   render() {
+    const btnStyle = {position:' relative', bottom: '45px'}
     const columns = [{
       title: '所属公司',
       dataIndex: 'SubsidiaryName',
@@ -113,24 +135,56 @@ class OrderTable extends Component {
     }, {
       title: '订单状态',
       dataIndex: 'OrderStatus',
-      render: val=> fOrderStatus(val)
+      render: (val, record)=> {
+        console.log(val, record)
+        var str = ''
+        switch (+val) {
+            case 1:
+                str = '审单待审核'
+                break;
+            case 2:
+                str = '审单已审核'
+                break;
+            case 3:
+                str = '审单驳回'
+                break;
+            case 4:
+                if (+record.OrderSourceId === 1) {
+                  str = '财务已审核'
+                  break;
+                } else if (+record.OrderSourceId === 2) {
+                  str = '网店到款'
+                  break;
+                }
+            case 5:
+                str = '财务已驳回'
+                break;
+            case 6:
+                str = '财务确认'
+                break;
+        }
+        return str;
+      }
     }];
     const { selectedRowKeys } = this.state;
-    const rowSelection = {
+    const rowSelection = !this.props.isAll ? {
       selectedRowKeys,
       onChange: this.onSelectChange,
-    };
+    } : null;
     return (
-      <Table columns={columns}
-          rowKey={record => record.OrderId}
-          dataSource={this.state.data}
-          pagination={this.state.pagination}
-          loading={this.state.loading}
-          onChange={this.handleTableChange}
-          size="middle"
-          bordered={true}
-          rowSelection={rowSelection}
-      />
+      <div>
+        <Table columns={columns}
+            rowKey={record => record.OrderId}
+            dataSource={this.state.data}
+            pagination={this.state.pagination}
+            loading={this.state.loading}
+            onChange={this.handleTableChange}
+            size="middle"
+            bordered={true}
+            rowSelection={rowSelection}
+        />
+        {(!this.props.isAll) && <Button style={btnStyle} type="primary" onClick={this.checkAll} >批量审核</Button>}
+      </div>
     )
   }
 }

@@ -5,6 +5,7 @@ import { getListData } from '@/api'
 import { Table, Button, Tabs } from 'antd'
 import HasPower from '@/container/HasPower'
 import OrderTable from '@/container/OrderTable'
+import _ from 'lodash'
 
 const TabPane = Tabs.TabPane;
 
@@ -75,6 +76,7 @@ class Finance extends Component {
       searchParams: {}
     };
     this.onSearch = this.onSearch.bind(this);
+    this.export = this.export.bind(this);
   }
 
   onSearch(res) {
@@ -82,18 +84,35 @@ class Finance extends Component {
     this.setState({searchParams: res});
   }
 
+  export() {
+    console.log(this.state.searchParams , 'download 参数')
+    console.log(sessionStorage, 'sessionStorage')
+    const Authorize = sessionStorage.getItem('token')
+    var Params = _.cloneDeep(this.state.searchParams)
+    Params.Authorize = Authorize
+    console.log(Params, 'Params')
+    var query = ''
+    for (let i in Params) {
+      query += '&' + i + '=' + Params[i]
+    }
+    query = '?' + query.slice(1)
+    console.log(query)
+    var url = '/api/download/financelist' + query
+    window.open(url)
+  }
+
   render() {
-    search.buttons=[(<HasPower power="EXPORT" key="btn_export"><Button type="primary" onClick={this.export} >导出</Button></HasPower>)]
+    search.buttons=[(<HasPower power="EXPORT" key="btn_export"><Button style={{marginLeft: '10px'}} type="primary" onClick={this.export} >导出</Button></HasPower>)]
 
     return (
         <div>
           <SearchForm items={search.items} buttons={search.buttons} onSearch={this.onSearch}/>
           <Tabs defaultActiveKey="NOALL" onChange={this.callback}>
             <TabPane tab="待处理订单" key="NOALL">
-              <OrderTable key="orderTable1" SearchParams={this.state.searchParams} isAll={false}/>
+              <OrderTable SearchParams={this.state.searchParams} isAll={false}/>
             </TabPane>
             <TabPane tab="全部订单" key="ALL">
-              <OrderTable key="orderTable2" SearchParams={this.state.searchParams} isAll={true}/>
+              <OrderTable SearchParams={this.state.searchParams} isAll={true}/>
             </TabPane>
           </Tabs>
         </div>
