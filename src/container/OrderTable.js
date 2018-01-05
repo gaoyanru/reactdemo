@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import { Table, Button, message } from 'antd'
 import { getListData, putData } from '@/api'
-import {fOrderSource, fOrderStatus} from '@/config/filters'
+import {fOrderSource, fServiceStatus, fAccountantStatus, fPartTax } from '@/config/filters'
 import _ from 'lodash'
 import Confirm from '@/component/Confirm'
+import Dialog from '@/container/Dialog'
+import AccountDetailDialog from '@/container/Contract/AccountDetailDialog'
 
 class OrderTable extends Component {
   constructor(props) {
@@ -52,7 +54,7 @@ class OrderTable extends Component {
         vals.starttime = vals.starttime ? vals.starttime.format('YYYY-MM-DD') : '';
         vals.endtime = vals.endtime ? vals.endtime.format('YYYY-MM-DD') : '';
       }
-      getListData('contract/financelist', vals).then(res => {
+      getListData(this.props.SearchUrl, vals).then(res => {
           if(res.status){
               const pagination = { ...this.state.pagination };
               pagination.total = res.data.total;
@@ -113,75 +115,131 @@ class OrderTable extends Component {
     })
   }
 
+  accountview(row){
+
+      Dialog({
+          content: <AccountDetailDialog companyId={row.CustomerId} row={row}/>,
+          width: 1200,
+          confirmLoading: false,
+          footer: null,
+          title: row.CompanyName
+      }).result.then(()=>{
+          this.onSearch()
+      },()=>{});
+
+  }
+
   render() {
     const btnStyle = {position:' relative', bottom: '45px'}
-    const columns = [{
-      title: '所属公司',
-      dataIndex: 'SubsidiaryName',
-    }, {
-      title: '订单号',
-      dataIndex: 'OrderNo',
-    }, {
-      title: '甲方',
-      dataIndex: 'CompanyName',
-    }, {
-      title: '联系人',
-      dataIndex: 'Connector',
-    }, {
-      title: '签单销售',
-      dataIndex: 'SalesName',
-    }, {
-      title: '订单来源',
-      dataIndex: 'OrderSourceId',
-      render: val=> fOrderSource(val)
-    }, {
-      title: '签订日期',
-      dataIndex: 'ContractDate',
-    }, {
-      title: '订单总金额',
-      dataIndex: 'Amount',
-    }, {
-      title: '订单状态',
-      dataIndex: 'OrderStatus',
-      render: (val, record)=> {
-        // console.log(val, record)
-        var str = ''
-        switch (+val) {
-            case 1:
-                str = '审单待审核'
-                break;
-            case 2:
-                str = '审单已审核'
-                break;
-            case 3:
-                str = '审单驳回'
-                break;
-            case 4:
-                if (+record.OrderSourceId === 1) {
-                  str = '财务已审核'
+    if (this.props.TableFrom === 'finance') {
+      var { selectedRowKeys } = this.state;
+      var rowSelection = !this.props.isAll ? {
+        selectedRowKeys,
+        onChange: this.onSelectChange,
+        getCheckboxProps: record => ({
+            disabled: record.OrderStatus != 2
+        })
+      } : null;
+      var columns = [{
+        title: '所属公司',
+        dataIndex: 'SubsidiaryName',
+      }, {
+        title: '订单号',
+        dataIndex: 'OrderNo',
+        render: (val,record) => (<a href="javascript:;" onClick={e=>{this.view(record)}}>{val}</a>)
+      }, {
+        title: '甲方',
+        dataIndex: 'CompanyName',
+        render: (val,record) => (<a href="javascript:;" onClick={e=>{this.view(record)}}>{val}</a>)
+      }, {
+        title: '联系人',
+        dataIndex: 'Connector',
+      }, {
+        title: '签单销售',
+        dataIndex: 'OrderSalesName',
+      }, {
+        title: '订单来源',
+        dataIndex: 'OrderSourceId',
+        render: val=> fOrderSource(val)
+      }, {
+        title: '签订日期',
+        dataIndex: 'ContractDate',
+      }, {
+        title: '订单总金额',
+        dataIndex: 'Amount',
+      }, {
+        title: '订单状态',
+        dataIndex: 'OrderStatus',
+        render: (val, record)=> {
+          // console.log(val, record)
+          var str = ''
+          switch (+val) {
+              case 1:
+                  str = '审单待审核'
                   break;
-                } else if (+record.OrderSourceId === 2) {
-                  str = '网店到款'
+              case 2:
+                  str = '审单已审核'
                   break;
-                }
-            case 5:
-                str = '财务已驳回'
-                break;
-            case 6:
-                str = '财务确认'
-                break;
+              case 3:
+                  str = '审单驳回'
+                  break;
+              case 4:
+                  if (+record.OrderSourceId === 1) {
+                    str = '财务已审核'
+                    break;
+                  } else if (+record.OrderSourceId === 2) {
+                    str = '网店到款'
+                    break;
+                  }
+              case 5:
+                  str = '财务已驳回'
+                  break;
+              case 6:
+                  str = '财务确认'
+                  break;
+          }
+          return str;
         }
-        return str;
-      }
-    }];
-    const { selectedRowKeys } = this.state;
-    const rowSelection = !this.props.isAll ? {
-      selectedRowKeys,
-      onChange: this.onSelectChange,
-      getCheckboxProps: record => ({
-          disabled: record.OrderStatus != 2
-      })
-    } : null;
+      }];
+    } else if (this.props.TableFrom === 'account') {
+      var columns = [{
+        title: '订单号',
+        dataIndex: 'OrderNo',
+        render: (val,record) => (<a href="javascript:;" onClick={e=>{this.accountview(record)}}>{val}</a>)
+      }, {
+        title: '公司名称',
+        dataIndex: 'CompanyName',
+        render: (val,record) => (<a href="javascript:;" onClick={e=>{this.accountview(record)}}>{val}</a>)
+      }, {
+        title: '所属区域',
+        dataIndex: 'AreaName',
+      }, {
+        title: '联系人',
+        dataIndex: 'Connector',
+      }, {
+        title: '当前负责销售',
+        dataIndex: 'SalesName',
+      }, {
+        title: '来源',
+        dataIndex: 'AccountantTaskSource'
+      }, {
+        title: '签订日期',
+        dataIndex: 'ContractDate',
+      }, {
+        title: '服务状态',
+        dataIndex: 'ServiceStatus',
+        render: val=> fServiceStatus(val)
+      }, {
+        title: '会计审核状态',
+        dataIndex: 'AccountantStatus',
+        render: val=> fAccountantStatus(val)
+      }, {
+        title: '部分报税',
+        dataIndex: 'PartTax',
+        render: val=> fPartTax(val)
+      }];
+    }
+
     return (
       <div>
         <Table columns={columns}
@@ -194,7 +252,7 @@ class OrderTable extends Component {
             bordered={true}
             rowSelection={rowSelection}
         />
-        {(!this.props.isAll) && <Button style={btnStyle} type="primary" onClick={this.checkAll} >批量审核</Button>}
+        {(!this.props.isAll) && (this.props.TableFrom === 'finance') && <Button style={btnStyle} type="primary" onClick={this.checkAll} >批量审核</Button>}
       </div>
     )
   }

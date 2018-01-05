@@ -52,7 +52,7 @@ let search = {
     }, {
         label: '签单销售',
         type: 'text',
-        field: 'saleName'
+        field: 'OrderSalesName'
     }, {
         label: '合同编号',
         type: 'text',
@@ -115,10 +115,10 @@ class Finance extends Component {
           <SearchForm items={search.items} buttons={search.buttons} onSearch={this.onSearch}/>
           <Tabs defaultActiveKey="NOALL" onChange={this.callback}>
             <TabPane tab="待处理订单" key="NOALL">
-              <OrderTable SearchParams={this.state.searchParams} isAll={false}/>
+              <OrderTable SearchParams={this.state.searchParams} SearchUrl={'contract/financelist'} TableFrom={'finance'} isAll={false}/>
             </TabPane>
             <TabPane tab="全部订单" key="ALL">
-              <OrderTable SearchParams={this.state.searchParams} isAll={true}/>
+              <OrderTable SearchParams={this.state.searchParams} SearchUrl={'contract/financelist'} TableFrom={'finance'} isAll={true}/>
             </TabPane>
           </Tabs>
         </div>

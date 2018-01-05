@@ -91,6 +91,9 @@ export const fCheckStatus = function(status) {
 export const fPartTax = function(status) {
     var str = ''
     switch (+status) {
+        case 0:
+          str = '(空)'
+          break;
         case 1:
             str = '国税报道'
             break;
@@ -190,30 +193,6 @@ export const fOrderSource = function(status) {
     }
     return str
 }
-export const fOrderStatus = function(status) {
-    var str = ''
-    switch (+status) {
-        case 1:
-            str = '审单待审核'
-            break;
-        case 2:
-            str = '审单已审核'
-            break;
-        case 3:
-            str = '审单驳回'
-            break;
-        case 4:
-            str = '财务已审核/网店到款'
-            break;
-        case 5:
-            str = '财务已驳回'
-            break;
-        case 6:
-            str = '财务确认'
-            break;
-    }
-    return str;
-}
 
 export const fTaxStatus = function(status) {
     var str = ''
@@ -241,6 +220,24 @@ export const fAddedValue = function(status) {
             break;
     }
     return str
+}
+export const fAccountantStatus = function(status) {
+    var str = ''
+    switch (+status) {
+        case 1:
+            str = '待审核'
+            break;
+        case 2:
+            str = '已审核'
+            break;
+        case 3:
+            str = '已驳回'
+            break;
+        case 5:
+            str = '部分审核'
+            break;
+    }
+    return str;
 }
 
 // 日期类
