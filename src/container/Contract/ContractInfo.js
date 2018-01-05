@@ -69,6 +69,7 @@ class Main extends Component {
   }
   render() {
     const data = this.state.initRow;
+    console.log(data.ServiceStart, data.AccountantStatus, 'render')
     return(
       <div>
         <Row className="company-info">

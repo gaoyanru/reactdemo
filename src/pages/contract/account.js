@@ -6,7 +6,7 @@ import HasPower from '@/container/HasPower'
 import OrderTable from '@/container/OrderTable'
 import _ from 'lodash'
 import AreaSelect from '@/container/searchComponent/AreaSelect'
-
+import { connect } from 'react-redux'
 const TabPane = Tabs.TabPane;
 
 let search = {
@@ -112,4 +112,8 @@ class Finance extends Component {
   }
 }
 
-export default Finance
+export default connect(({account}) => {
+  return {
+    account
+  }
+})(Finance)

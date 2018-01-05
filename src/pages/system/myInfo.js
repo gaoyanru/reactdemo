@@ -43,12 +43,12 @@ class MyInfo extends Component {
         if(!this.state.userInfo) return (<Spin/>);
         return (
             <div>
-                <Card title="我的信息" bordered={false} style={{ width: 600 }}>                
+                <Card title="我的信息" bordered={false} style={{ width: 600 }}>
                     <div style={{width:'600px',padding:'24px'}}>
                         <UserInfo user={this.state.userInfo} onSubmit={this.handleSubmit} />
                     </div>
                 </Card>
-                <Card title="修改密码" bordered={false} style={{ width: 600 }}> 
+                <Card title="修改密码" bordered={false} style={{ width: 600 }}>
                     <div style={{width:'600px',padding:'24px'}}>
                         <ResetPassword  onSubmit={this.resetPassword} />
                     </div>
@@ -57,9 +57,9 @@ class MyInfo extends Component {
         )
     }
 }
-const mapStateToProps = state => {
+const mapStateToProps = ({common}) => {
   return {
-    userId: state.user.Id
+    userId: common.user.Id
   }
 }
 export default connect(mapStateToProps)(MyInfo)

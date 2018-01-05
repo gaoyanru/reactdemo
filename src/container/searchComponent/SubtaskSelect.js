@@ -32,9 +32,9 @@ class Main extends Component {
     );
   }
 }
-const mapStateToProps = state => {
+const mapStateToProps = ({common}) => {
   return {
-    sub_task: state.sub_task,
+    sub_task: common.sub_task,
   }
 }
 const mapDispatchToProps = dispatch => {

@@ -29,9 +29,9 @@ class RolesSelect extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = ({common}) => {
   return {
-    roles: state.roles,
+    roles: common.roles,
   }
 }
 const mapDispatchToProps = dispatch => {

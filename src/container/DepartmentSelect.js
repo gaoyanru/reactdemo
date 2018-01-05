@@ -28,9 +28,9 @@ class DepartmentSelect extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = ({common}) => {
   return {
-    departments: state.departments,
+    departments: common.departments,
   }
 }
 const mapDispatchToProps = dispatch => {

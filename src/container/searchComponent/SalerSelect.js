@@ -27,13 +27,13 @@ class SalerSelect extends Component {
     const all = <Option key={0}>全部</Option>
     const showAll = !(this.props.multiple || this.props.hideAll);
     return (
-      <Select 
-        style={{width: this.props.width || 150}} 
-        mode={this.props.multiple?'multiple':''} 
-        showSearch={!this.props.multiple} 
+      <Select
+        style={{width: this.props.width || 150}}
+        mode={this.props.multiple?'multiple':''}
+        showSearch={!this.props.multiple}
         optionFilterProp="children"
         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-        defaultValue={this.props.value} 
+        defaultValue={this.props.value}
         onChange={this.handleChange}
       >
       {showAll && all}
@@ -42,9 +42,9 @@ class SalerSelect extends Component {
     );
   }
 }
-const mapStateToProps = state => {
+const mapStateToProps = ({common}) => {
   return {
-    salers: state.salers,
+    salers: common.salers,
   }
 }
 const mapDispatchToProps = dispatch => {

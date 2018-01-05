@@ -6,7 +6,7 @@ import _ from 'lodash'
 import Confirm from '@/component/Confirm'
 import Dialog from '@/container/Dialog'
 import AccountDetailDialog from '@/container/Contract/AccountDetailDialog'
-
+import store from '@/store'
 class OrderTable extends Component {
   constructor(props) {
     super(props);
@@ -117,16 +117,33 @@ class OrderTable extends Component {
 
   accountview(row){
 
-      Dialog({
+      const dialog = Dialog({
           content: <AccountDetailDialog companyId={row.CustomerId} row={row}/>,
           width: 1200,
           confirmLoading: false,
           footer: null,
           title: row.CompanyName
-      }).result.then(()=>{
+      })
+      dialog.result.then(()=>{
           this.onSearch()
       },()=>{});
-
+      store.dispatch({
+        type: 'set contract account modal status',
+        status: {
+          modal1: true
+        }
+      })
+      if (this.unsubscribe) {
+        this.unsubscribe();
+      }
+      this.unsubscribe = store.subscribe(() => {
+        const {account} = store.getState()
+        if(!account.modal1) {
+          dialog.cancel()
+          console.log(this, 'this')
+          this.Search()
+        }
+      })
   }
 
   render() {

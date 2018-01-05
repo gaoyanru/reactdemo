@@ -63,7 +63,7 @@ function getRouterMap(funs){
   funs.forEach(f=>{
     arr = arr.concat(f.Children);
   });
-  const state = store.getState()
+  const state = store.getState().common
   arr = arr.map(f=>{
     const key = f.FunctionKey.replace('main.','');
     try{
@@ -174,10 +174,10 @@ class App extends Component {
     );
   }
 }
-const mapStateToProps = state => {
+const mapStateToProps = ({common}) => {
   return {
-    functions: JSON.parse(state.user.FunctionList),
-    currentUser: state.user
+    functions: JSON.parse(common.user.FunctionList),
+    currentUser: common.user
   }
 }
 export default connect(

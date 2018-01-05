@@ -2,10 +2,10 @@ import { connect } from 'react-redux'
 import { login } from '@/store/actions'
 import Login from '@/container/Login'
 
-const mapStateToProps = state => {
+const mapStateToProps = ({common}) => {
   return {
-    loading: state.loading,
-    isLogin: state.isLogin
+    loading: common.loading,
+    isLogin: common.isLogin
   }
 }
 const mapDispatchToProps = dispatch => {

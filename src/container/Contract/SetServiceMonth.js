@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Button, Row, Col, Form, DatePicker, message } from 'antd'
 import _ from 'lodash'
 import { putData, postData } from '@/api'
-
+import store from '@/store'
 
 const FormItem = Form.Item;
 
@@ -40,6 +40,14 @@ class ModelForm extends Component {
     var ServiceStart = _.extend(this.props.form.getFieldsValue().serviceStartDate).format('YYYY-MM')
     var ServiceEnd = this.state.serviceEndDate
     putData('order/audit/pass/' + info.OrderId + '?accountantTaskSource=' + AccountantTaskSource + '&partTax=' + PartTax + '&serviceStatus=' + ServiceStatus + '&serviceStartDate=' + ServiceStart + '&serviceEndDate=' + ServiceEnd).then(res => {
+      console.log(store)
+      store.dispatch({
+        type: 'set contract account modal status',
+        status: {
+          modal1: false,
+          modal2: false
+        }
+      })
       if (res.status) {
         message.info('审核成功！');
         // 关闭上一个弹窗并且刷新列表
@@ -52,11 +60,11 @@ class ModelForm extends Component {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 6 },
+        sm: { span: 8 },
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 14 },
+        sm: { span: 16 },
       },
     }
     return (

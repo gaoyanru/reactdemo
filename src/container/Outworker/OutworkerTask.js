@@ -62,7 +62,7 @@ class Main extends React.Component {
         return {common_value: _.difference(v, prevState.common_value)}
       },this.handleChange)
     }
-    
+
   }
   onOtherChange(v){
     this.setState({other_value:v},this.handleChange);
@@ -113,10 +113,10 @@ class Main extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = ({common}) => {
   return {
-    main_tasks: state.main_tasks,
-    sub_task: state.sub_task
+    main_tasks: common.main_tasks,
+    sub_task: common.sub_task
   }
 }
 const mapDispatchToProps = dispatch => {

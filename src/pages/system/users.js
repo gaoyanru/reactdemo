@@ -47,7 +47,7 @@ class Users extends Component {
                 ...this.initPagination
             }
         }
-        
+
         this.handleDepartmentClick = this.handleDepartmentClick.bind(this);
         this.handleTableChange = this.handleTableChange.bind(this);
         this.onSearch = this.onSearch.bind(this);
@@ -107,7 +107,7 @@ class Users extends Component {
                       if (!err) {
                         let formValues = values;
                         formValues.RoleIds = formValues.RoleIds.join(',')
-  
+
                         postData('users', formValues).then(res=>{
                             message.info('保存成功！')
                             resolve()
@@ -116,14 +116,14 @@ class Users extends Component {
                         reject(err);
                       }
                     });
-                
+
                 });
             },
             confirmLoading: false,
             handleCancel (){
                 console.log('onCancel')
             },
-            title: '新增用户' 
+            title: '新增用户'
         }).result.then(res=>{
             this.fetchUsers()
         },error=>{
@@ -153,14 +153,14 @@ class Users extends Component {
                             reject(err);
                           }
                         });
-                    
+
                     });
                 },
                 confirmLoading: false,
                 handleCancel (){
                     console.log('onCancel')
                 },
-                title: '编辑用户' 
+                title: '编辑用户'
             }).result.then(res=>{
                 this.fetchUsers()
             },error=>{
@@ -185,7 +185,7 @@ class Users extends Component {
     }
     render() {
         if(!this.props.departments) return (<Spin style={{ marginLeft: 8 }} />);
-        const columns = [{ 
+        const columns = [{
             title: '员工编号',
             dataIndex: 'EmployeeNo'
         }, {
@@ -213,9 +213,9 @@ class Users extends Component {
                 const Status = record.Status === '1' ? '禁用' : '启用'
                 return (
                     <Button.Group  key={"btn_Group_" + record.UserId} >
-                        {record.Status === '1' && <HasPower power="EDIT" key={"btn_EDIT_" + record.UserId}><Button size="small" onClick={e=>{this.editUser(record)}}>编辑</Button></HasPower>}    
+                        {record.Status === '1' && <HasPower power="EDIT" key={"btn_EDIT_" + record.UserId}><Button size="small" onClick={e=>{this.editUser(record)}}>编辑</Button></HasPower>}
                         <HasPower power="STOP"  key={"btn_STOP_" + record.UserId} ><Button size="small" onClick={e=>{this.enableUser(record)}}>{Status}</Button></HasPower>
-                        {record.Status === '1' && <HasPower power="RESET" key={"btn_RESET_" + record.UserId}><Button size="small" onClick={e=>{this.resetPsd(record)}}>重置密码</Button></HasPower>}    
+                        {record.Status === '1' && <HasPower power="RESET" key={"btn_RESET_" + record.UserId}><Button size="small" onClick={e=>{this.resetPsd(record)}}>重置密码</Button></HasPower>}
                     </Button.Group>
                 )
             }
@@ -225,25 +225,25 @@ class Users extends Component {
             <div style={{display:'flex'}}>
                 <Department data={this.props.departments}  companyName={this.props.user.SubsidiaryName} onClick={this.handleDepartmentClick} style={{ width: '300px' }}/>
                 <div style={{flex:1,margin:"0 12px"}}>
-                    <SearchForm items={search.items} onSearch={this.onSearch} buttons={search.buttons} values={this.state.searchParams} ref="search"/> 
-                    <Table columns={columns} 
+                    <SearchForm items={search.items} onSearch={this.onSearch} buttons={search.buttons} values={this.state.searchParams} ref="search"/>
+                    <Table columns={columns}
                         rowKey={record => record.UserId}
-                        dataSource={this.state.data} 
+                        dataSource={this.state.data}
                         pagination={this.state.pagination}
                         loading={this.state.loading}
                         onChange={this.handleTableChange}
                         size="middle"
                         bordered={true}
                     />
-                </div>                
+                </div>
             </div>
         )
     }
 }
-const mapStateToProps = state => {
+const mapStateToProps = ({common}) => {
   return {
-    user: state.user,
-    departments: state.departments,
+    user: common.user,
+    departments: common.departments,
   }
 }
 const mapDispatchToProps = dispatch => {
