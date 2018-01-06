@@ -181,7 +181,7 @@ export const fOrderSource = function(status) {
     var str = ''
     switch (+status) {
         case 1:
-            str = '电商'
+            str = '电销'
             break;
         case 2:
             str = '天猫'
@@ -190,7 +190,7 @@ export const fOrderSource = function(status) {
     }
     return str
 }
-export const fOrderStatus = function(status) {
+export const fOrderStatus = function(status,sourceId) {
     var str = ''
     switch (+status) {
         case 1:
@@ -203,7 +203,10 @@ export const fOrderStatus = function(status) {
             str = '审单驳回'
             break;
         case 4:
-            str = '财务已审核/网店到款'
+            if(sourceId === 1)
+                str = '财务已审核';
+            else
+                str = '网店到款';
             break;
         case 5:
             str = '财务已驳回'

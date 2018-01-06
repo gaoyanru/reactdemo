@@ -14,6 +14,7 @@ class Dialog extends Component {
     this.handleOk = this.handleOk.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.onClose = this.onClose.bind(this);
+    this.refresh = this.refresh.bind(this);
   }
   handleOk(e) {
     this.setState({confirmLoading: true})
@@ -37,6 +38,9 @@ class Dialog extends Component {
     }else{
       this.onCancel(result);
     }
+  }
+  refresh(){
+    this.forceUpdate();
   }
   onClose(result){
     this.setState({visible: false});
@@ -94,6 +98,7 @@ function createDialog(options){
 
   return {
     result: dialog,
+    dialog: dc,
     close (arg){
       dc.handleOk(arg)
     },

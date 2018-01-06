@@ -41,7 +41,8 @@ const pagesMap = {
   'function_setting': 'system/functionManage',
   'finance_manage_contract': 'contract/financeAudit',
   'signed_manage': 'contract/signed',
-  'function_setting': 'system/functionManage'
+  'function_setting': 'system/functionManage',
+  'contract_manage': 'contract/review'
 }
 
 function getCurrentMenu(funs,path){

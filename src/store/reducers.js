@@ -139,6 +139,12 @@ const actions = handleActions({
             ...state,
             signkey: data
         }
+    },
+    'getMainItemList': (state, { data }) =>{
+        return {
+            ...state,
+            contractItems: data
+        }
     }
 }, defaultState)
 

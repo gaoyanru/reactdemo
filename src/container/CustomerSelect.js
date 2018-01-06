@@ -31,7 +31,16 @@ class Main extends Component {
     this.onSearch = this.onSearch.bind(this);
 
   }
-
+  componentWillReceiveProps(nextProps){
+    const data = nextProps.value;
+    if(data && data.Id){
+      const company = {
+        CompanyName: data.CompanyName,
+        Id: data.CustomerId
+      }
+      this.setState({selected: company});
+    }
+  }
   handleInputChange(e){
     this.setState({
       param: e.target.value
@@ -77,6 +86,7 @@ class Main extends Component {
 
   }
   render() {
+    console.log(this.props)
     const columns = [{
             title: '公司名称',
             dataIndex: 'CompanyName',
@@ -95,7 +105,12 @@ class Main extends Component {
         }]
     return (
       <div style={{paddingRight: '35px'}}>
-        <Input onClick={this.showModal} addonAfter={<Icon type="plus" onClick={this.showModal} />} value={this.state.selected.CompanyName} readOnly onChange={this.handleChange}/>
+        <Input 
+          onClick={e=>{if(!(this.state.selected.Id && this.props.canEdit)) this.showModal()}} 
+          addonAfter={<Icon type="plus" onClick={this.showModal} />} 
+          value={this.state.selected.CompanyName} 
+          readOnly = {!(this.state.selected.Id && this.props.canEdit)}
+          onChange={this.handleChange}/>
         <Modal title= "选择公司"
             width= {800}
             visible={this.state.visible}

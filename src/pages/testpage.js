@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Test from '@/pages/contract/signed'
+import Test from '@/container/Contract/AddOrderDialog'
 import { setPowerList } from '@/store/actions'
 import { connect } from 'react-redux'
 class Main extends Component {
@@ -9,10 +9,10 @@ class Main extends Component {
         // props.setPowerList(this.functions)
     }
     render() {
-        const item = {"Id":3231,"SequenceNo":3231,"CompanyName":"66公司大明子","AreaName":"怀柔区","Connector":"收拾","SalesName":"管理员","ServiceStatus":3,"OutWorkerStatus":2,"AccountantStatus":null,"PartTax":null,"OrderId":8867,"MainTaskName":"工商变更","MainTaskStatus":1,"childTaskName":"网上申请","OutWorkerName":null,"SubmitTaskTime":"2017-12-27T18:54:22","Status":1,"Remark":"发","AccountantTaskSource":null,"AgentStatus":3}
+        const data = {"CustomerId":101552386 ,"CompanyName":"达特福德","Connector":"foodd","Mobile":"1589348934","SalesId":117,"SalesName":"管理员","CrmOrderItems":[{"Group":1,"MainItemId":1,"ContractNo":"asdf123","ChildItemId":1,"Amount":"1200","Remark":"12","OrderMonths":"12"}],"ContractDate":"2018-01-05","Remark":"123","BookKeepFeed":1200,"FinanceServiceFeed":0,"OutWorkServiceFeed":0,"AgentFeed":0,"Amount":1200,"OrderSourceId":"1","PayInfoList":[{"PayTypeId":"1","id":"pid_1","PayAccountNo":"12331","PayTime":"2018-01-05","PayImagePath":"https://pilipa.oss-cn-beijing.aliyuncs.com/FileUploads/ERP/201801/bwHKmX6P6C.jpg"}]};
         return (
-            <div style={{width:1000}}>
-                <Test  {...this.props}  />
+            <div style={{width:1200}}>
+                <Test readOnly data = {data} />
             </div>
         )
     }

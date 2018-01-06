@@ -11,7 +11,7 @@ const Title = function(props){
     padding: '0 12px',
     cursor: 'pointer'
   }, props.style)
-  return (<div style={s} onClick={props.onClick}>{props.title}</div>)
+  return (<div style={s} onClick={props.onClick}>{props.title} <span style={{...s,float:'right'}}>{props.addon}</span></div>)
 }
 
 export default Title;

@@ -219,3 +219,18 @@ export function getSignkey(force,getState) {
         })
     }
 }
+
+export function getMainItemList(payload, getState){
+    return (dispatch, getState) => {
+        const state = getState();
+        if(state.contractItems){
+            return state.contractItems;
+        }
+        dispatch({ type: 'getMainItemList', data: [] })
+        return getListData('contract/getmainitemlist').then(res => {
+            if (res.status) {
+                dispatch({ type: 'getMainItemList', data: res.data })
+            }
+        })
+    }
+}
