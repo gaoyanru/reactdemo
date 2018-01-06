@@ -30,20 +30,20 @@ class Main extends Component {
       return (<OptGroup label={key} key={key}>{arr.map(d => <Option key={d.Id}>{d.TagName}</Option>)}</OptGroup>)
     })
     return (
-      <Select 
-        style={{width: this.props.width || 160}} 
-        maxTagCount={1} 
-        maxTagPlaceholder="..." 
-        mode="multiple" 
+      <Select
+        style={{width: this.props.width || 160}}
+        maxTagCount={1}
+        maxTagPlaceholder="..."
+        mode="multiple"
         onChange={this.handleChange}>
       {options}
       </Select>
     );
   }
 }
-const mapStateToProps = state => {
+const mapStateToProps = ({common}) => {
   return {
-    tags: state.tags,
+    tags: common.tags,
   }
 }
 const mapDispatchToProps = dispatch => {

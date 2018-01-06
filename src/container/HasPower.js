@@ -21,9 +21,9 @@ class HasPower extends React.Component {
     }
   }
 }
-const mapStateToProps = state => {
+const mapStateToProps = ({common}) => {
   return {
-    functions: state.functions
+    functions: common.functions
   }
 }
 

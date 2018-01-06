@@ -20,7 +20,7 @@ class Main extends Component {
         this.state = {
             selected: null
         }
-        
+
         this.handleGroupClick = this.handleGroupClick.bind(this);
         this.fetchSalers = this.fetchSalers.bind(this);
         this.addNew = this.addNew.bind(this);
@@ -88,14 +88,14 @@ class Main extends Component {
                             reject()
                         }
                     })
-                
+
                 });
             },
             confirmLoading: false,
             handleCancel (){
                 console.log('onCancel')
             },
-            title: '新增用户' 
+            title: '新增用户'
         };
         Dialog(options).result.then(res=>{
             this.fetchSalers()
@@ -123,10 +123,10 @@ class Main extends Component {
                 return (
                     <Button.Group  key={"btn_Group_" + record.Id} >
                         <Button size="small" onClick={e=>{this.setLeader(record)}}>设为组长</Button>
-                        <Popconfirm placement="topRight" title="确认要删除？" 
+                        <Popconfirm placement="topRight" title="确认要删除？"
                             onConfirm={this.removeUser.bind(this,record)}
                             onClick={e=>{e.stopPropagation()}}
-                            okText="是" 
+                            okText="是"
                             cancelText="否">
                             <Button size="small">移除成员</Button>
                         </Popconfirm>
@@ -141,40 +141,40 @@ class Main extends Component {
                       size="small"
                       bordered
                       dataSource={this.props.groups}
-                      renderItem={item => (<List.Item 
-                        className={this.state.selected.DepartmentId === item.DepartmentId? "m-list-item active":"m-list-item"} 
+                      renderItem={item => (<List.Item
+                        className={this.state.selected.DepartmentId === item.DepartmentId? "m-list-item active":"m-list-item"}
                         onClick={(e)=>this.handleGroupClick(item)}
-                        actions={[<Popconfirm placement="topRight" title="确认要删除？" 
+                        actions={[<Popconfirm placement="topRight" title="确认要删除？"
                             onConfirm={this.handleRemoveGroup.bind(this,item)}
                             onClick={e=>{e.stopPropagation()}}
-                            okText="是" 
-                            cancelText="否"><Button shape="circle" icon="close" /></Popconfirm>]} 
-                        >{item.DepartmentName} 
+                            okText="是"
+                            cancelText="否"><Button shape="circle" icon="close" /></Popconfirm>]}
+                        >{item.DepartmentName}
                         </List.Item>)}
                     />
-                    <div style={{textAlign:'center', margin:'12px'}}> <Button type="primary" onClick={e=>{this.addNew()}}>新增分组</Button> </div>  
+                    <div style={{textAlign:'center', margin:'12px'}}> <Button type="primary" onClick={e=>{this.addNew()}}>新增分组</Button> </div>
                 </div>
-                
+
                 <div style={{flex:1,margin:"0 12px"}}>
                     <div style={{textAlign: 'right'}}> <Button type="primary" size="large" onClick={this.addUsers} style={{margin: '0 0 20px 0'}}>增加成员</Button> </div>
-                    <Table columns={columns} 
+                    <Table columns={columns}
                         rowKey={record => record.Id}
                         pagination={false}
-                        dataSource={this.state.data} 
+                        dataSource={this.state.data}
                         loading={this.state.loading}
                         onChange={this.handleTableChange}
                         size="middle"
                         bordered={true}
                     />
-                </div>                
+                </div>
             </div>
         )
     }
 }
-const mapStateToProps = state => {
+const mapStateToProps = ({common}) => {
   return {
-    user: state.user,
-    groups: state.groups,
+    user: common.user,
+    groups: common.groups,
   }
 }
 const mapDispatchToProps = dispatch => {

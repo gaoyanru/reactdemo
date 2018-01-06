@@ -38,9 +38,9 @@ class Main extends Component {
     );
   }
 }
-const mapStateToProps = state => {
+const mapStateToProps = ({common}) => {
   return {
-    customerTypes: state.customerTypes,
+    customerTypes: common.customerTypes,
   }
 }
 const mapDispatchToProps = dispatch => {

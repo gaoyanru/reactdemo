@@ -57,3 +57,7 @@ export const putData = (url, params) => {
 export const deleteData = (url, params) => {
   return axios.delete(`${base}/${url}`,params).then(res => res.data)
 }
+
+export const putDataList = (url, params) => {
+  return axios.put(`${base}/${url}`,{params:params}).then(res => res.data)
+}

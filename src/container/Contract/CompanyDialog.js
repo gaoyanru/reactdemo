@@ -8,7 +8,10 @@ import _ from 'lodash'
 import * as ContractActions from '@/config/contractActions'
 import Dialog from '@/container/Dialog'
 import ChangeWarning from '@/container/Contract/ChangeWarning'
-
+import OrderAll from '@/container/Contract/OrderAll'
+import OutWork from '@/container/Contract/OutWork'
+import RemarkList from '@/container/Contract/RemarkList'
+import OperateList from '@/container/Contract/OperateList'
 
 const TabPane = Tabs.TabPane;
 
@@ -65,7 +68,7 @@ class Main extends React.Component {
           companyInfo: {...prevState.companyInfo, isEditing: true, syncDate: res.syncDate}
         }));
       });
-      
+
     }
   }
   onAction(action,params){
@@ -104,10 +107,18 @@ class Main extends React.Component {
         <div>
           <Tabs type="card" style={{width: '100%'}} activeKey={this.state.activeKey} onTabClick={this.onTabClick}>
             <TabPane tab="公司信息" key="1">{ this.state.companyInfo?(this.state.companyInfo.isEditing? <EditCustomer data={this.state.companyInfo} wrappedComponentRef={view=>{this.editform = view;}}/>:<ViewCustomer data={this.state.companyInfo}/>):<Spin/> }</TabPane>
-            <TabPane tab="订单汇总信息" key="2"></TabPane>
-            <TabPane tab="外勤任务" key="3">Content of Tab Pane 3</TabPane>
-            <TabPane tab="备注信息" key="4">Content of Tab Pane 3</TabPane>
-            <TabPane tab="操作记录" key="5">Content of Tab Pane 3</TabPane>
+            <TabPane tab="订单汇总信息" key="2">
+              <OrderAll companyId={this.props.companyId}/>
+            </TabPane>
+            <TabPane tab="外勤任务" key="3">
+              <OutWork companyId={this.props.companyId}/>
+            </TabPane>
+            <TabPane tab="备注信息" key="4">
+              <RemarkList companyId={this.props.companyId}/>
+            </TabPane>
+            <TabPane tab="操作记录" key="5">
+              <OperateList companyId={this.props.companyId}/>
+            </TabPane>
           </Tabs>
         </div>
       </div>

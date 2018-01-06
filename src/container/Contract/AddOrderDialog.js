@@ -7,7 +7,7 @@ import Dialog from '@/container/Dialog'
 import Title from '@/component/Title'
 
 import CustomerBaseInfo from '@/container/Contract/CustomerBaseInfo'
-import ContractInfo from '@/container/Contract/ContractInfo'
+import ContractInfo from '@/container/Contract/ContractForm'
 import PayInfo from '@/container/Contract/PayInfo'
 
 class Main extends React.Component {

@@ -11,9 +11,9 @@ import RemindDate from '@/component/RemindDate'
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea
-const Tags = connect(state => {
+const Tags = connect(({common}) => {
   return {
-    tags: state.tags,
+    tags: common.tags,
   }
 })(TagSelect)
 

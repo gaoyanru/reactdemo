@@ -11,7 +11,7 @@ const pagesMap = {
   'contract_manage' : 'contract/manage',
   'user_my': 'system/myInfo'
 }
- 
+
 function getCurrentMenu(funs,path){
   const current = path.substr(1).replace('/','.');
   let menu = {parentId: [],funId: []};
@@ -23,7 +23,7 @@ function getCurrentMenu(funs,path){
     }
   });
   return menu;
-} 
+}
 
 function getRouterMap(funs){
   var arr = [];
@@ -44,7 +44,7 @@ function getRouterMap(funs){
       }else{
         return false
       }
-      
+
     } catch(error) {
       return false
     }
@@ -95,9 +95,9 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = ({common}) => {
   return {
-    functions: JSON.parse(state.user.FunctionList),
+    functions: JSON.parse(common.user.FunctionList),
   }
 }
 export default connect(

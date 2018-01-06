@@ -91,6 +91,9 @@ export const fCheckStatus = function(status) {
 export const fPartTax = function(status) {
     var str = ''
     switch (+status) {
+        case 0:
+          str = '(空)'
+          break;
         case 1:
             str = '国税报道'
             break;
@@ -190,6 +193,7 @@ export const fOrderSource = function(status) {
     }
     return str
 }
+
 export const fOrderStatus = function(status,sourceId) {
     var str = ''
     switch (+status) {
@@ -218,6 +222,7 @@ export const fOrderStatus = function(status,sourceId) {
     return str;
 }
 
+
 export const fTaxStatus = function(status) {
     var str = ''
     switch (+status) {
@@ -245,11 +250,33 @@ export const fAddedValue = function(status) {
     }
     return str
 }
+export const fAccountantStatus = function(status) {
+    var str = ''
+    switch (+status) {
+        case 1:
+            str = '待审核'
+            break;
+        case 2:
+            str = '已审核'
+            break;
+        case 3:
+            str = '已驳回'
+            break;
+        case 5:
+            str = '部分审核'
+            break;
+    }
+    return str;
+}
 
 // 日期类
 export const fDate =(val)=>{
     if((!val) || val.length<10 || val.substr(0,4)==='0001') return '';
     return val.substr(0, 10);
+}
+export const fDateT =(val)=>{
+    if((!val) || val.length<10 || val.substr(0,4)==='0001') return '';
+    return val.replace('T', ' ');
 }
 
 // 类型
@@ -272,4 +299,34 @@ export const fBusinessType = function(type) {
 // 费用类
 export const fPrice =(val)=>{
     return '￥' + val.toFixed(2)
+}
+
+// 操作过滤
+export const fOperation = function(type) {
+    var str = ''
+    switch (+type) {
+        case 1:
+            str = '标记'
+            break;
+        case 2:
+            str = '挂起'
+            break;
+    }
+    return str
+}
+// 标记过滤
+export const fMark = function(type) {
+    var str = ''
+    switch (+type) {
+        case 1:
+            str = '低'
+            break;
+        case 2:
+            str = '中'
+            break;
+        case 3:
+            str = '高'
+            break;
+    }
+    return str
 }

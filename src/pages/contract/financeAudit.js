@@ -31,7 +31,7 @@ let search = {
     }, {
         label: '订单来源',
         type: 'select',
-        field: 'orderSource',
+        field: 'orderSourceId',
         data:{
           0: "全部",
           1: "电商",
@@ -52,7 +52,7 @@ let search = {
     }, {
         label: '签单销售',
         type: 'text',
-        field: 'saleName'
+        field: 'OrderSalesName'
     }, {
         label: '合同编号',
         type: 'text',
@@ -90,6 +90,12 @@ class Finance extends Component {
     const Authorize = sessionStorage.getItem('token')
     var Params = _.cloneDeep(this.state.searchParams)
     Params.Authorize = Authorize
+    if (Params.starttime === null) {
+      Params.starttime = ''
+    }
+    if (Params.endtime === null) {
+      Params.endtime = ''
+    }
     console.log(Params, 'Params')
     var query = ''
     for (let i in Params) {
@@ -109,10 +115,10 @@ class Finance extends Component {
           <SearchForm items={search.items} buttons={search.buttons} onSearch={this.onSearch}/>
           <Tabs defaultActiveKey="NOALL" onChange={this.callback}>
             <TabPane tab="待处理订单" key="NOALL">
-              <OrderTable SearchParams={this.state.searchParams} isAll={false}/>
+              <OrderTable SearchParams={this.state.searchParams} SearchUrl={'contract/financelist'} TableFrom={'finance'} isAll={false}/>
             </TabPane>
             <TabPane tab="全部订单" key="ALL">
-              <OrderTable SearchParams={this.state.searchParams} isAll={true}/>
+              <OrderTable SearchParams={this.state.searchParams} SearchUrl={'contract/financelist'} TableFrom={'finance'} isAll={true}/>
             </TabPane>
           </Tabs>
         </div>
