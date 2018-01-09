@@ -12,9 +12,9 @@ function hasErrors(fieldsError) {
 }
 
 class Main extends React.Component {
+
     state= {
       customer:{},
-      customerId: this.props.customerId,
       tags: null
     }
     componentWillMount(){

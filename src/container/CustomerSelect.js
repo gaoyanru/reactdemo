@@ -29,14 +29,19 @@ class Main extends Component {
     this.showModal = this.showModal.bind(this);
     this.handleTableSelectChange = this.handleTableSelectChange.bind(this);
     this.onSearch = this.onSearch.bind(this);
-
+    if(props.value){
+      this.state.selected = {
+        CompanyName: props.value.CompanyName,
+        Id: props.value.Id
+      }
+    }
   }
   componentWillReceiveProps(nextProps){
     const data = nextProps.value;
     if(data && data.Id){
       const company = {
         CompanyName: data.CompanyName,
-        Id: data.CustomerId
+        Id: data.Id
       }
       this.setState({selected: company});
     }

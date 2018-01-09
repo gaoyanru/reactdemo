@@ -50,10 +50,18 @@ class PayInfo extends React.Component {
 class Main extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      OrderSourceId: "1",
-      PayInfoList: [{PayTypeId: 0,id:_.uniqueId('pid_')}]
+    if(!props.data.OrderSourceId){
+      this.state = {
+        OrderSourceId: "1",
+        PayInfoList: [{PayTypeId: 0,id:_.uniqueId('pid_')}]
+      }
+    }else{
+      this.state = {
+        OrderSourceId: ""+ props.data.OrderSourceId,
+        PayInfoList: props.data.PayInfoList
+      }
     }
+    
     this.onFiledChange = this.onFiledChange.bind(this);
     this.getFieldsValue = this.getFieldsValue.bind(this);
     this.validateField = this.validateField.bind(this);
@@ -119,9 +127,9 @@ class Main extends React.Component {
         <Row style={{padding: '12px 0'}}>
           <Col span={3}>
             <label>订单来源：</label>
-            <Select value={this.state.OrderSourceId} disabled={this.props.readOnly} onChange={v=>{this.setState({OrderSourceId:v})}}>
-              <Option key={1}>电销</Option>
-              <Option key={2}>天猫</Option>
+            <Select value={this.state.OrderSourceId} style={{width:'80px'}} disabled={this.props.readOnly} onChange={v=>{this.setState({OrderSourceId:v})}}>
+              <Option key={"1"}>电销</Option>
+              <Option key={"2"}>天猫</Option>
             </Select>
           </Col>
           {(+this.state.OrderSourceId) ===1 &&(

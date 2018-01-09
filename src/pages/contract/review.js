@@ -102,7 +102,9 @@ class Main extends Component {
         title: '新增订单'
     })
     dialog.result.then((res)=>{
-        console.log(res)
+        this.setState(prestate=>{
+          prestate.searchParams._id = _.uniqueId('r_')
+        });
     },()=>{});
   }
   render() {

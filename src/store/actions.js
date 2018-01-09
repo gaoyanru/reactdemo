@@ -4,6 +4,9 @@ export const login = (payload) => (dispatch) => {
     dispatch({ type: 'LOADING', data: true })
     requestLogin(payload).then(loginRes => {
         if (loginRes.status) {
+
+            loginRes.IsChannel = !!payload.usertype;
+            
             sessionStorage.setItem('token', loginRes.data.Token)
             getListData('mycity').then(res=>{
                 if(res.status){

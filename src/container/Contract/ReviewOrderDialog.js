@@ -29,7 +29,7 @@ class Main extends Component {
       remark: '',
       auditVal: 0
     };
-    putData('contract/audit', post).then(res =>{
+    putData('order/audit', post).then(res =>{
         // console.log(res)
       if(res.status) {
         message.info('审核成功')
@@ -42,7 +42,7 @@ class Main extends Component {
         title: '驳回原因',
         handleOk: (resStr)=>{
           return new Promise((resolve, reject) => {
-            putData('contract/audit',{
+            putData('order/audit',{
                 OrderId: this.props.data.OrderId,
                 remark: resStr,
                 auditVal: 1

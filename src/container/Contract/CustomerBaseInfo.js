@@ -41,7 +41,7 @@ class Main extends React.Component {
     CustomerSelected = (v)=>{
       console.log('CustomerSelected', v);
       const setFieldsValue = this.props.form.setFieldsValue;
-      setFieldsValue({CompanyId: v.CompanyId});
+      setFieldsValue({CompanyId: v.CustomerId});
       setFieldsValue({CompanyName: v.CompanyName});
       setFieldsValue({Connector: v.Connector});
       setFieldsValue({Mobile: v.Mobile});
@@ -49,6 +49,12 @@ class Main extends React.Component {
     }
     render () {
       let data = this.props.data || {};
+      if(data && (!data.Company) && data.CustomerId){
+        data.Company = {
+          CompanyName: data.CompanyName,
+          Id: data.CustomerId
+        }
+      }
       const formItemLayout = {
         labelCol: {
           span: 8,
