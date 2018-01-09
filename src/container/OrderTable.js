@@ -1,12 +1,10 @@
 import React, { Component } from 'react'
 import { Table, Button, message } from 'antd'
 import { getListData, putData } from '@/api'
-import {fOrderSource, fServiceStatus, fAccountantStatus, fPartTax } from '@/config/filters'
+import {fOrderSource } from '@/config/filters'
 import _ from 'lodash'
 import Confirm from '@/component/Confirm'
-import Dialog from '@/container/Dialog'
-import AccountDetailDialog from '@/container/Contract/AccountDetailDialog'
-import store from '@/store'
+
 class OrderTable extends Component {
   constructor(props) {
     super(props);
@@ -70,11 +68,12 @@ class OrderTable extends Component {
           });
       })
   }
-  componentWillMount () {
-    this.Search()
-  }
+  // componentWillMount () {
+  //   this.Search()
+  // }
   componentWillReceiveProps(props) { // 在组件接收到新的props的时候调用
     console.log(props, 'props Search')
+    console.log(this.props, 'this.props')
     var pagination = {
       current: 1,
       pageSize: 15,
@@ -115,148 +114,77 @@ class OrderTable extends Component {
     })
   }
 
-  accountview(row){
-
-      const dialog = Dialog({
-          content: <AccountDetailDialog companyId={row.CustomerId} row={row}/>,
-          width: 1200,
-          confirmLoading: false,
-          footer: null,
-          title: row.CompanyName
-      })
-      dialog.result.then(()=>{
-          this.onSearch()
-      },()=>{});
-      store.dispatch({
-        type: 'set contract account modal status',
-        status: {
-          modal1: true
-        }
-      })
-      if (this.unsubscribe) {
-        this.unsubscribe();
-      }
-      this.unsubscribe = store.subscribe(() => {
-        const {account} = store.getState()
-        if(!account.modal1) {
-          dialog.cancel()
-          console.log(this, 'this')
-          this.Search()
-        }
-      })
-  }
-
   render() {
     const btnStyle = {position:' relative', bottom: '45px'}
-    if (this.props.TableFrom === 'finance') {
-      var { selectedRowKeys } = this.state;
-      var rowSelection = !this.props.isAll ? {
-        selectedRowKeys,
-        onChange: this.onSelectChange,
-        getCheckboxProps: record => ({
-            disabled: record.OrderStatus != 2
-        })
-      } : null;
-      var columns = [{
-        title: '所属公司',
-        dataIndex: 'SubsidiaryName',
-      }, {
-        title: '订单号',
-        dataIndex: 'OrderNo',
-        render: (val,record) => (<a href="javascript:;" onClick={e=>{this.view(record)}}>{val}</a>)
-      }, {
-        title: '甲方',
-        dataIndex: 'CompanyName',
-        render: (val,record) => (<a href="javascript:;" onClick={e=>{this.view(record)}}>{val}</a>)
-      }, {
-        title: '联系人',
-        dataIndex: 'Connector',
-      }, {
-        title: '签单销售',
-        dataIndex: 'OrderSalesName',
-      }, {
-        title: '订单来源',
-        dataIndex: 'OrderSourceId',
-        render: val=> fOrderSource(val)
-      }, {
-        title: '签订日期',
-        dataIndex: 'ContractDate',
-      }, {
-        title: '订单总金额',
-        dataIndex: 'Amount',
-      }, {
-        title: '订单状态',
-        dataIndex: 'OrderStatus',
-        render: (val, record)=> {
-          // console.log(val, record)
-          var str = ''
-          switch (+val) {
-              case 1:
-                  str = '审单待审核'
+    var { selectedRowKeys } = this.state;
+    var rowSelection = !this.props.isAll ? {
+      selectedRowKeys,
+      onChange: this.onSelectChange,
+      getCheckboxProps: record => ({
+          disabled: record.OrderStatus != 2
+      })
+    } : null;
+    var columns = [{
+      title: '所属公司',
+      dataIndex: 'SubsidiaryName',
+    }, {
+      title: '订单号',
+      dataIndex: 'OrderNo',
+      render: (val,record) => (<a href="javascript:;" onClick={e=>{this.view(record)}}>{val}</a>)
+    }, {
+      title: '甲方',
+      dataIndex: 'CompanyName',
+      render: (val,record) => (<a href="javascript:;" onClick={e=>{this.view(record)}}>{val}</a>)
+    }, {
+      title: '联系人',
+      dataIndex: 'Connector',
+    }, {
+      title: '签单销售',
+      dataIndex: 'OrderSalesName',
+    }, {
+      title: '订单来源',
+      dataIndex: 'OrderSourceId',
+      render: val=> fOrderSource(val)
+    }, {
+      title: '签订日期',
+      dataIndex: 'ContractDate',
+    }, {
+      title: '订单总金额',
+      dataIndex: 'Amount',
+    }, {
+      title: '订单状态',
+      dataIndex: 'OrderStatus',
+      render: (val, record)=> {
+        // console.log(val, record)
+        var str = ''
+        switch (+val) {
+            case 1:
+                str = '审单待审核'
+                break;
+            case 2:
+                str = '审单已审核'
+                break;
+            case 3:
+                str = '审单驳回'
+                break;
+            case 4:
+                if (+record.OrderSourceId === 1) {
+                  str = '财务已审核'
                   break;
-              case 2:
-                  str = '审单已审核'
+                } else if (+record.OrderSourceId === 2) {
+                  str = '网店到款'
                   break;
-              case 3:
-                  str = '审单驳回'
-                  break;
-              case 4:
-                  if (+record.OrderSourceId === 1) {
-                    str = '财务已审核'
-                    break;
-                  } else if (+record.OrderSourceId === 2) {
-                    str = '网店到款'
-                    break;
-                  }
-              case 5:
-                  str = '财务已驳回'
-                  break;
-              case 6:
-                  str = '财务确认'
-                  break;
-          }
-          return str;
+                }
+            case 5:
+                str = '财务已驳回'
+                break;
+            case 6:
+                str = '财务确认'
+                break;
         }
-      }];
-    } else if (this.props.TableFrom === 'account') {
-      var columns = [{
-        title: '订单号',
-        dataIndex: 'OrderNo',
-        render: (val,record) => (<a href="javascript:;" onClick={e=>{this.accountview(record)}}>{val}</a>)
-      }, {
-        title: '公司名称',
-        dataIndex: 'CompanyName',
-        render: (val,record) => (<a href="javascript:;" onClick={e=>{this.accountview(record)}}>{val}</a>)
-      }, {
-        title: '所属区域',
-        dataIndex: 'AreaName',
-      }, {
-        title: '联系人',
-        dataIndex: 'Connector',
-      }, {
-        title: '当前负责销售',
-        dataIndex: 'SalesName',
-      }, {
-        title: '来源',
-        dataIndex: 'AccountantTaskSource'
-      }, {
-        title: '签订日期',
-        dataIndex: 'ContractDate',
-      }, {
-        title: '服务状态',
-        dataIndex: 'ServiceStatus',
-        render: val=> fServiceStatus(val)
-      }, {
-        title: '会计审核状态',
-        dataIndex: 'AccountantStatus',
-        render: val=> fAccountantStatus(val)
-      }, {
-        title: '部分报税',
-        dataIndex: 'PartTax',
-        render: val=> fPartTax(val)
-      }];
-    }
-
+        return str;
+      }
+    }];
     return (
       <div>
         <Table columns={columns}
