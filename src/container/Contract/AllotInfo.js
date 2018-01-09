@@ -86,6 +86,7 @@ class Main extends Component {
             }
             if(data.AccountantStatus != 3){
               this.OutworkerCheck()
+              return;
             }
           }
           this.props.closeDialog()
@@ -191,7 +192,7 @@ class Main extends Component {
           <Col span={2}>
             <Button.Group>
               <HasPower power="TOKJ"  key={"btn_TOKJ"}>
-                <Button type="primary" disabled={data.DisableCommitAccount == 1 || data.OrderStatus == 7 || data.OrderStatus == 8} onClick={this.AccountCheck.bind(this)}>审核提交会计</Button>
+                <Button type="primary" disabled={data.DisableCommitAccount == 0 || data.OrderStatus == 7 || data.OrderStatus == 8} onClick={this.AccountCheck.bind(this)}>审核提交会计</Button>
               </HasPower>
               <HasPower power="TOWQ"  key={"btn_TOWQ"}>
                 <Button type="primary" disabled={data.DisableOutWorkCommitAccount == 1 || data.OrderStatus == 7 || data.OrderStatus == 8} onClick={this.OutworkerCheck}>审核提交外勤</Button>
