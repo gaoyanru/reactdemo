@@ -75,7 +75,7 @@ class Main extends Component {
             dataIndex: 'Mobile',
         }, {
             title: '外勤服务费',
-            dataIndex: 'SaleName'
+            dataIndex: 'SalesName'
         }, {
             title: '代收费用',
             dataIndex: 'AccountantName'

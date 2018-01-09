@@ -14,9 +14,20 @@ class Main extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      companyInfo: {}
+      data: null
     }
     this.onSave = this.onSave.bind(this);
+    this.getOrderDetail = this.getOrderDetail.bind(this);
+    if(props.id){
+      this.getOrderDetail(props.id)
+    }
+  }
+  getOrderDetail(id){
+    getListData('order/'+ id).then(res=>{
+      if(res.status){
+        this.setState({data: res.data});
+      }
+    })
   }
   onSave(){
     
@@ -49,10 +60,10 @@ class Main extends React.Component {
   render() {
     return (
       <div style={this.props.style} className="order-dialog">
-        <CustomerBaseInfo wrappedComponentRef={e=>{this.CustomerBaseInfo = e}} data={this.props.data} readOnly={this.props.readOnly}/>
-        <ContractInfo ref={e=>{this.ContractInfo = e}} data={this.props.data} readOnly={this.props.readOnly}/>
-        <PayInfo ref={e=>{this.PayInfo = e}} data={this.props.data} readOnly={this.props.readOnly}/>
-        <div style={{textAlign:'center'}}><Button type="primary" disabled={this.props.readOnly} onClick={this.onSave}>保存并提交</Button></div>
+        <CustomerBaseInfo wrappedComponentRef={e=>{this.CustomerBaseInfo = e}} data={this.state.data} readOnly={this.props.readOnly}/>
+        <ContractInfo ref={e=>{this.ContractInfo = e}} data={this.state.data} readOnly={this.props.readOnly}/>
+        <PayInfo ref={e=>{this.PayInfo = e}} data={this.state.data} readOnly={this.props.readOnly}/>
+        {(!this.props.readOnly) && <div style={{textAlign:'center'}}><Button type="primary" onClick={this.onSave}>保存并提交</Button></div>}
       </div>
     );
   }

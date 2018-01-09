@@ -41,7 +41,7 @@ export function getAllRoles(payload,getState) {
 export function getAllSalers(force,getState) {
     return (dispatch, getState) => {
         const state = getState();
-        if(state.salers && !force){
+        if(state.common.salers && !force){
             return null;
         }
         getListData('contract/sales').then(res => {
@@ -54,7 +54,7 @@ export function getAllSalers(force,getState) {
 export function getOutworkers(force,getState) {
     return (dispatch, getState) => {
         const state = getState();
-        if(state.outworkers && !force){
+        if(state.common.outworkers && !force){
             return null;
         }
         getListData('outworkers').then(res => {
@@ -68,7 +68,7 @@ export function getOutworkers(force,getState) {
 export function getAreas(force,getState) {
     return (dispatch, getState) => {
         const state = getState();
-        if(state.areas && !force){
+        if(state.common.areas && !force){
             return null;
         }
         getListData('code/area').then(res => {
@@ -83,7 +83,7 @@ export function getAreas(force,getState) {
 export function getCustomerType(force,getState) {
     return (dispatch, getState) => {
         const state = getState();
-        if(state.customerTypes && !force){
+        if(state.common.customerTypes && !force){
             return null;
         }
         getListData('cuscategory').then(res => {
@@ -97,7 +97,7 @@ export function getCustomerType(force,getState) {
 export function getTags(force,getState) {
     return (dispatch, getState) => {
         const state = getState();
-        if(state.tags && !force){
+        if(state.common.tags && !force){
             return null;
         }
         getListData('tag').then(res => {
@@ -110,7 +110,7 @@ export function getTags(force,getState) {
 export function getCustomerSource(force,getState) {
     return (dispatch, getState) => {
         const state = getState();
-        if(state.customerSource && !force){
+        if(state.common.customerSource && !force){
             return null;
         }
         getListData('customersource').then(res => {
@@ -124,7 +124,7 @@ export function getCustomerSource(force,getState) {
 export function getMainTask(force,getState) {
     return (dispatch, getState) => {
         const state = getState();
-        if(state.main_tasks && !force){
+        if(state.common.main_tasks && !force){
             return null;
         }
         getListData('commontask').then(res => {
@@ -138,7 +138,7 @@ export function getMainTask(force,getState) {
 export function getSubTask(force,getState) {
     return (dispatch, getState) => {
         const state = getState();
-        if(state.sub_task && !force){
+        if(state.common.sub_task && !force){
             return null;
         }
         getListData('outertasksub', {offset:0,limit:9999}).then(res => {
@@ -159,7 +159,7 @@ export function setPowerList(payload) {
 export const getGroups = (force) => (dispatch, getState) => {
     dispatch({ type: 'LOADING', data: true })
     const state = getState();
-    if(state.groups && !force){
+    if(state.common.groups && !force){
         return null;
     }
     getListData('departments').then(res => {
@@ -186,7 +186,7 @@ export const addGroup = (payload) => (dispatch, state) =>{
 export function getBelongCompany(force,getState) {
     return (dispatch, getState) => {
         const state = getState();
-        if(state.belongCompany && !force){
+        if(state.common.belongCompany && !force){
             return null;
         }
         getListData('subsidiary').then(res => {
@@ -200,8 +200,8 @@ export function getBelongCompany(force,getState) {
 export function getSignkey(force,getState) {
     return (dispatch, getState) => {
         const state = getState();
-        if(state.signkey){
-            return state.signkey;
+        if(state.common.signkey){
+            return state.common.signkey;
         }
         return getListData('signkey').then(res => {
             if (res.status) {
@@ -223,8 +223,8 @@ export function getSignkey(force,getState) {
 export function getMainItemList(payload, getState){
     return (dispatch, getState) => {
         const state = getState();
-        if(state.contractItems){
-            return state.contractItems;
+        if(state.common.contractItems){
+            return state.common.contractItems;
         }
         dispatch({ type: 'getMainItemList', data: [] })
         return getListData('contract/getmainitemlist').then(res => {
@@ -234,7 +234,6 @@ export function getMainItemList(payload, getState){
         })
     }
 }
-
 export const getTaskConfigList = () => (dispatch) => {
   getListData('commontask').then(res => {
       if (res.status) {
@@ -244,4 +243,10 @@ export const getTaskConfigList = () => (dispatch) => {
         })
       }
   })
+}
+export function logout(payload, getState){
+    return (dispatch, getState) => {
+        getListData('/security/logout');
+        dispatch({ type: 'LOGOUT', data: null })
+    }
 }

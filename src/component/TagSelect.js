@@ -22,6 +22,7 @@ class TagRow extends React.Component {
       this.setState({selected: 0})
     }
   }
+
   render() {
     return (
       <Row style={{borderBottom: '1px solid #ddd', margin: "6px 0",padding:"3px 0"}}>
@@ -59,6 +60,9 @@ class Main extends React.Component {
     this.setState({
         selectedTags: selectedTags
     });
+  }
+  componentWillMount() {
+    this.props.getTags()
   }
   render() {
     const tagGroups = _.groupBy(this.props.tags,'TagType')

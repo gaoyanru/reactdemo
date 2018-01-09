@@ -8,7 +8,6 @@ import $ from 'jquery'
 class TaskConfDetail extends React.Component {
   processData () {
     const checkedData = this.props.selectedTask
-    console.log(checkedData, 'processData')
     const checkedIds = []
     const { common } = store.getState()
     const data = common.sub_task
@@ -25,12 +24,14 @@ class TaskConfDetail extends React.Component {
     for (let key in data) {
       let BusinessType = data[key].BusinessType
       data[key].checked = checkedIds.indexOf(data[key].Id) > -1
-      if (BusinessType == 1) {
-        processData['税务任务'].push(data[key])
-      } else if (BusinessType == 2) {
-        processData['工商任务'].push(data[key])
-      } else if (BusinessType == 3) {
-        processData['其他任务'].push(data[key])
+      if (data[key].Status == 1) {
+        if (BusinessType == 1) {
+          processData['税务任务'].push(data[key])
+        } else if (BusinessType == 2) {
+          processData['工商任务'].push(data[key])
+        } else if (BusinessType == 3) {
+          processData['其他任务'].push(data[key])
+        }
       }
     }
     return processData

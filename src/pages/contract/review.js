@@ -7,8 +7,9 @@ import HasPower from '@/container/HasPower'
 import OrderTable from '@/container/Contract/OrderTable'
 import _ from 'lodash'
 import { fDate, fOrderSource, fOrderStatus } from '@/config/filters'
-import AddOrderDialog from '@/container/Contract/AddOrderDialog'
+import OrderDialog from '@/container/Contract/OrderDialog'
 import Dialog from '@/container/Dialog'
+import ReviewOrderDialog from '@/container/Contract/ReviewOrderDialog'
 
 const TabPane = Tabs.TabPane;
 
@@ -28,7 +29,7 @@ let search = {
     }, {
         label: '签单销售',
         type: 'text',
-        field: 'saleName'
+        field: 'OrderSalesName'
     }, {
         label: '订单状态',
         type: 'select',
@@ -46,7 +47,7 @@ let search = {
         field: 'orderSource',
         data:{
           0: "全部",
-          1: "电商",
+          1: "电销",
           2: "天猫"
         },
         defaultValue: '0'
@@ -74,6 +75,7 @@ class Main extends Component {
     };
     this.onSearch = this.onSearch.bind(this);
     this.addNew = this.addNew.bind(this);
+    this.viewOrder = this.viewOrder.bind(this);
   }
 
   onSearch(res) {
@@ -81,7 +83,7 @@ class Main extends Component {
   }
   addNew(){
     const dialog = Dialog({
-        content: <AddOrderDialog handler={dialog} ref={e=>{ e && (e.handler = dialog)}}/>,
+        content: <OrderDialog handler={dialog} ref={e=>{ e && (e.handler = dialog)}}/>,
         width: 1300,
         confirmLoading: false,
         footer: null,
@@ -91,14 +93,31 @@ class Main extends Component {
         console.log(res)
     },()=>{});
   }
-
+  viewOrder(row){
+    const dialog = Dialog({
+        content: <ReviewOrderDialog data={row} handler={dialog} ref={e=>{ e && (e.handler = dialog)}}/>,
+        width: 1300,
+        confirmLoading: false,
+        footer: null,
+        title: '新增订单'
+    })
+    dialog.result.then((res)=>{
+        console.log(res)
+    },()=>{});
+  }
   render() {
     const columns = [{
       title: '订单号',
       dataIndex: 'OrderNo',
+      render:(val,record)=>{
+        return <a href="javascript:;" onClick={e=>this.viewOrder(record)}>{val}</a>
+      }
     }, {
       title: '甲方',
       dataIndex: 'CompanyName',
+      render:(val,record)=>{
+        return <a href="javascript:;" onClick={e=>this.viewOrder(record)}>{val}</a>
+      }
     }, {
       title: '联系人',
       dataIndex: 'Connector',

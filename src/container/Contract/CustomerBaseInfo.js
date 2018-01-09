@@ -25,7 +25,7 @@ class Main extends React.Component {
     }
     componentWillReceiveProps(nextProps){
       const data = nextProps.data;
-      if((!data.Company) && data.CustomerId){
+      if(data && (!data.Company) && data.CustomerId){
         data.Company = {
           CompanyName: data.CompanyName,
           Id: data.CustomerId

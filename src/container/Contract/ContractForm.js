@@ -43,7 +43,7 @@ class Accounting extends React.Component {
     const data = this.props.data;
     if(this.props.readOnly){
       return(
-        <tbody className="ant-table-tbody">
+        <tbody className="ant-table-tbody" key="group1">
           <tr className="ant-table-row">
             <td>{data.ContractNo}</td>
             <td>记账报税</td>
@@ -59,7 +59,7 @@ class Accounting extends React.Component {
           </tr>
         </tbody>);
     }else{
-      return (<tbody className="ant-table-tbody">
+      return (<tbody className="ant-table-tbody" key="group1">
           <tr className="ant-table-row">
             <td><Input size="small" defaultValue={data.ContractNo} onChange={e=>{this.setFieldValue({ContractNo:e.target.value})}} /></td>
             <td>记账报税</td>
@@ -138,7 +138,7 @@ class AddedService extends React.Component {
     const data = this.state.data;
     if(this.props.readOnly){
       return(
-        <tbody className="ant-table-tbody">
+        <tbody className="ant-table-tbody" key="group3">
           {data.items.map((item,index)=>{
           return(
             <tr className="ant-table-row" key={item.id}>
@@ -153,7 +153,7 @@ class AddedService extends React.Component {
         })}
         </tbody>);
     }else{
-      return (<tbody className="ant-table-tbody">
+      return (<tbody className="ant-table-tbody" key="group3">
         {data.items.map((item,index)=>{
           return(
             <tr className="ant-table-row"  key={item.id}>
@@ -225,7 +225,7 @@ class Others extends React.Component {
     const data = this.state.data;
     if(this.props.readOnly){
       return(
-        <tbody className="ant-table-tbody">
+        <tbody className="ant-table-tbody" key="group4">
           {data.items.map((item,index)=>{
           return(
             <tr className="ant-table-row"  key={item.id}>
@@ -240,7 +240,7 @@ class Others extends React.Component {
         })}
         </tbody>);
     }else{
-      return (<tbody className="ant-table-tbody">
+      return (<tbody className="ant-table-tbody" key="group4">
         {data.items.map((item,index)=>{
           return(
             <tr className="ant-table-row" key={item.id}>
@@ -280,30 +280,38 @@ class Main extends React.Component {
     this.validateType = this.validateType.bind(this);
     this.delete = this.delete.bind(this);
     this.setAmount = this.setAmount.bind(this);
+    this.formatData = this.formatData.bind(this);
+    const state = this.formatData(props.data);
+    this.state = _.extend(this.state,state);
   }
   componentWillReceiveProps(nextProps){
     const data = nextProps.data;
+    const state = this.formatData(data);
+    this.setState(state);
+  }
+  formatData(data){
     if(data){
       let nextState = _.pick(data, ['ContractDate', 'Remark', 'BookKeepFeed', 'FinanceServiceFeed', 'OutWorkServiceFeed','AgentFeed','Amount']);
       nextState.ContractDate = moment(nextState.ContractDate);
-      const crmOrderItems = data.CrmOrderItems;
+      const crmOrderItems = data.CrmOrderItems || data.Contracts;
       let type1 = _.find(crmOrderItems,{MainItemId:1});
       if(type1) type1.Group = 1;
       let type2 = {
         Group: 2,
-        items: _.chain(crmOrderItems).filter(item=>(item.MainItemId ===2 || item.MainItemId===3)).map(item=>(item.id =_.uniqueId('p3_') && item)).value()
+        items: _.chain(crmOrderItems).filter(item=>(item.MainItemId ===2 || item.MainItemId===3)).each(item=>(item.id =_.uniqueId('p3_'))).value()
       };
       let type3 = {
         Group: 3,
-        items: _.chain(crmOrderItems).filter(item=>(item.MainItemId === 4)).map(item=>(item.id =_.uniqueId('p4_') && item)).value()
+        items: _.chain(crmOrderItems).filter(item=>(item.MainItemId === 4)).each(item=>(item.id =_.uniqueId('p4_'))).value()
       };
-      this.setState({
+      return {
         ...nextState,
         type1,
         type2,
         type3
-      })
+      };
     }
+    return {};
   }
   validateField(){
     let result;
@@ -404,7 +412,7 @@ class Main extends React.Component {
     const AddNew = <Button size="small" type="primary" disabled={this.props.readOnly} onClick={e=>{this.setState({typeVisible: true})}}>添加合同</Button>;
     return (
       <div>
-        <Title title= '合同信息' addon={AddNew}/>
+        {(!this.props.hideTitle) && <Title title= '合同信息' addon={AddNew}/>}
         <div className="ant-table ant-table-middle ant-table-bordered ant-table-scroll-position-left">
           <div className="ant-table-content">
             <div className="ant-table-body">
@@ -422,7 +430,7 @@ class Main extends React.Component {
                 {this.state.type1 && <Accounting readOnly={this.props.readOnly} onAmountChange={this.setAmount} ref={e=>{this.component1 = e}} data={this.state.type1} onDelete={e=>{this.delete(1)}}/>}
                 {this.state.type2 && <AddedService readOnly={this.props.readOnly} onAmountChange={this.setAmount} ref={e=>{this.component2 = e}} data={this.state.type2} onDelete={e=>{this.delete(2)}}/>}
                 {this.state.type3 && <Others readOnly={this.props.readOnly} onAmountChange={this.setAmount} ref={e=>{this.component3 = e}} data={this.state.type3} onDelete={e=>{this.delete(3)}}/>}
-                <tfoot>
+                 {(!this.props.hideTitle) && <tfoot>
                   <tr>
                     <td colSpan={6} style={{background:'#ccc',lineHeight:'34px'}}>
                       <Row>
@@ -435,7 +443,7 @@ class Main extends React.Component {
                       </Row>
                     </td>
                   </tr>
-                </tfoot>
+                </tfoot>}
               </table>
             </div>
           </div>

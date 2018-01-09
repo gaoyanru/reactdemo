@@ -8,9 +8,9 @@ import  '@/style/app.less';
 import '@/style/common.less'
 import logo from './logo.svg';
 import store from '@/store'
-import { setPowerList } from '@/store/actions'
+import { setPowerList, logout } from '@/store/actions'
 
-import Test from '@/pages/testpage'
+import Dashboard from '@/pages/dashboard'
 
 const { Header, Sider, Content } = Layout;
 
@@ -44,7 +44,9 @@ const pagesMap = {
   'function_setting': 'system/functionManage',
   'contract_manage': 'contract/review',
   'accounting_manage': 'contract/account',
-  'go_task_config': 'outworker/taskConfig'
+  'go_task_config': 'outworker/taskConfig',
+  'contract_allot': 'contract/allot',
+  'contract_end_manage': 'contract/end'
 }
 
 function getCurrentMenu(funs,path){
@@ -107,6 +109,8 @@ class App extends Component {
   }
   onMenuClick = ({ key }) => {
     if (key === 'logout') {
+      this.props.logout();
+
       // this.props.dispatch({
       //   type: 'login/logout',
       // });
@@ -167,7 +171,7 @@ class App extends Component {
             <div style={{ minHeight: 'calc(100vh - 260px)' }}>
               <Switch>
                 {routers}
-                <Route exact path="/main" component={Test}/>
+                <Route exact path="/main" component={Dashboard}/>
               </Switch>
             </div>
           </Content>
@@ -182,6 +186,13 @@ const mapStateToProps = ({common}) => {
     currentUser: common.user
   }
 }
+const mapDispatchToProps = dispatch => {
+  return {
+    logout: payload => {
+      dispatch(logout())
+    }
+  }
+}
 export default connect(
-  mapStateToProps
+  mapStateToProps,mapDispatchToProps
 )(App);

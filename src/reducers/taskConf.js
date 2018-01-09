@@ -44,6 +44,6 @@ export default handleActions({
   detailInfo: {
     CommonTaskName: '',
     OutWorkerTasks: [],
-    Weight: ''
+    Weight: 0
   }
 })

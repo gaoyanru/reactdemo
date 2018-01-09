@@ -48,7 +48,7 @@ class TaskConfig extends React.Component {
       type: 'change outworker task config detail info',
       payload: {
         CommonTaskName: '',
-        Weight: '',
+        Weight: 0,
         Status: 2
       }
     })
