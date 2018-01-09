@@ -23,7 +23,7 @@ let search = {
     }, {
         label: '销售人员',
         type: 'text',
-        field: 'saleName'
+        field: 'SalesName'
     }, {
         label: '合同状态',
         type: 'custom',
@@ -82,7 +82,7 @@ class Manage extends Component {
         this.setState({pagination: pagination})
         this.onSearch(this.state.searchParams,pagination);
     }
-    onSearch(vals={"contractNo":"","companyname":"","contact":"","saleName":"","contractStatus":"0","contractType":"0","financeStatus":"0","starttime":null,"endtime":null},pager) {
+    onSearch(vals={"contractNo":"","companyname":"","contact":"","SalesName":"","contractStatus":"0","contractType":"0","financeStatus":"0","starttime":null,"endtime":null},pager) {
 
         this.setState({searchParams: vals, loading: true});
         const pagination = pager || this.state.pagination;
@@ -146,7 +146,7 @@ class Manage extends Component {
             dataIndex: 'Connector',
         }, {
             title: '销售人员',
-            dataIndex: 'SaleName',
+            dataIndex: 'SalesName',
         }, {
             title: '合同类型',
             dataIndex: 'OrderType',

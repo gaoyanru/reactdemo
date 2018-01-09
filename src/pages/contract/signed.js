@@ -37,7 +37,7 @@ let search = {
     }, {
         label: '销售人员',
         type: 'text',
-        field: 'saleName'
+        field: 'SalesName'
     }, {
         label: '运营会计',
         type: 'text',
@@ -244,7 +244,7 @@ class Main extends Component {
             dataIndex: 'Mobile',
         }, {
             title: '当前负责销售',
-            dataIndex: 'SaleName'
+            dataIndex: 'SalesName'
         }, {
             title: '运营会计',
             dataIndex: 'AccountantName'

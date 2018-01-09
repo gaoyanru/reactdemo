@@ -77,8 +77,8 @@ class Main extends Component {
              <label>序列ID:</label>{data.SequenceNo}
              <label>公司名称:</label>{data.CompanyName}
              <label>当前服务日期:</label>{data.ServiceStart} - {data.ServiceEnd}
-             <label>服务状态:</label>{fServiceStatus(data.fServiceStatus)}
-             <label>外勤审核状态:</label>{fCheckStatus(data.AgentStatus)}
+             <label>服务状态:</label>{fServiceStatus(data.ServiceStatus)}
+             <label>外勤审核状态:</label>{fCheckStatus(data.OutWorkerStatus)}
              <label>会计审核状态:</label>{fAccountantStatus(data.AgentStatus)}
           </Col>
           <Col span={2}>

@@ -31,7 +31,7 @@ export const fContractStatus =(val)=>{
 export const fFinancialAuditStatus =(val)=>{
     return contractStatus[val]||''
 }
-export const fServiceStatus = (status)=>{
+export const fServiceStatus = (status)=>{ //服务状态
     var str = ''
     switch (+status) {
         case 1:
@@ -58,7 +58,7 @@ export const fServiceStatus = (status)=>{
     }
     return str
 }
-export const fCheckStatus = function(status) {
+export const fCheckStatus = function(status) { //会计外勤 处理状态
     var str = ''
     switch (+status) {
         case 1:

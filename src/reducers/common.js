@@ -31,6 +31,10 @@ const actions = handleActions({
             loading: false
         }
     },
+    'LOGOUT': (state, { data }) => {
+        sessionStorage.clear()
+        return {}
+    },
     'DEPARTMENTS': (state, { data }) => {
         return {
             ...state,

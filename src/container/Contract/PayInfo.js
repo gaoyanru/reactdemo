@@ -39,7 +39,7 @@ class PayInfo extends React.Component {
       <Row style={{lineHeight: '34px'}}>
         <Col key="pay1" span={5}><label className="ant-form-item-required">支付方式：</label><PayTypeSelect width={120} value={this.state.PayTypeId} onChange={v=>{this.setStateChange({PayTypeId:v})}}/></Col>
         <Rif key="pay2" if={(+this.state.PayTypeId) !== 5}><Col span={5}><label className="ant-form-item-required">支付方账号：</label><Input style={{width:'110px'}} defaultValue={this.state.PayAccountNo} onBlur={v=>{this.setStateChange({PayAccountNo:v.target.value})}}/></Col></Rif>
-        <Col key="pay3" span={5}><label className="ant-form-item-required">支付时间：</label><DatePicker defaultValue={this.state.PayTime} style={{width:'120px'}} onChange={v=>{this.setStateChange({PayTime:v})}}/></Col>
+        <Col key="pay3" span={5}><label className="ant-form-item-required">支付时间：</label><DatePicker style={{width:'120px'}} onChange={v=>{this.setStateChange({PayTime:v})}}/></Col>
         <Rif key="pay4" if={(+this.state.PayTypeId) !== 5}><Col span={5}><label className="ant-form-item-required">凭证：</label><UploadFile value={this.state.PayImagePath} additional="?x-oss-process=image/resize,m_lfit,h_35,w_50" onChange={v=>{this.setStateChange({PayImagePath:v})}}/></Col></Rif>
         <Col key="pay5" span={4}><Button size="small" onClick={this.props.onAdd}>添加</Button><Button size="small" onClick={this.props.onDelete}>删除</Button></Col>
       </Row>

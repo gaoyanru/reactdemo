@@ -400,7 +400,7 @@ class Main extends Component {
             dataIndex: 'Marking',
         }, {
             title: '销售',
-            dataIndex: 'SaleName'
+            dataIndex: 'SalesName'
         }, {
             title: '操作',
             render: (text, record) => (

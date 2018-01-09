@@ -6,6 +6,7 @@ import OrderAll from '@/container/Contract/OrderAll'
 import OutWork from '@/container/Contract/OutWork'
 import _ from 'lodash'
 import ContractInfo from '@/container/Contract/ContractInfo'
+import CurrentOrderInfo from '@/container/Contract/CurrentOrderInfo'
 
 const TabPane = Tabs.TabPane;
 
@@ -13,7 +14,8 @@ class Main extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      companyInfo: {},
+      companyInfo: null,
+      orderInfo: null,
       activeKey: "1"
     }
     this.getCompanyInfo = this.getCompanyInfo.bind(this);
@@ -27,6 +29,12 @@ class Main extends Component {
         companyInfo: res.data
       })
     })
+    getListData('order/'+ this.props.row.OrderId).then(res=>{
+      res.data = _.extend(res.data, this.props.row);
+      this.setState({
+        orderInfo: res.data
+      })
+    })
   }
   onTabClick(arg){
     this.setState({activeKey:arg});
@@ -37,7 +45,10 @@ class Main extends Component {
         <ContractInfo row={this.props.row}/>
         <div>
           <Tabs type="card" style={{width: '100%'}} activeKey={this.state.activeKey} onTabClick={this.onTabClick}>
-            <TabPane tab="公司信息" key="1">{ this.state.companyInfo?(<ViewCustomer data={this.state.companyInfo}/>):<Spin/> }</TabPane>
+            <TabPane tab="公司信息" key="1">
+              { this.state.companyInfo?(<ViewCustomer data={this.state.companyInfo}/>):<Spin/> }
+              { this.state.orderInfo?(<CurrentOrderInfo data={this.state.orderInfo}/>):<Spin/> }
+            </TabPane>
             <TabPane tab="订单汇总信息" key="2">
               <OrderAll companyId={this.props.companyId}/>
             </TabPane>

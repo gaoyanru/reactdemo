@@ -1,21 +1,32 @@
 import React from 'react'
 import { Form, Input, Row, Col, Spin } from 'antd'
+import { connect } from 'react-redux'
 import CrmCustomer from '@/component/CrmCustomer'
 import { getListData, deleteData, postData } from '@/api'
 import TagSelect from '@/component/TagSelect'
-import { connect } from 'react-redux'
 import _ from 'lodash'
 import moment from 'moment'
 import CustomerTrack from '@/component/CustomerTrack'
 import RemindDate from '@/component/RemindDate'
+import { getTags } from '@/store/actions'
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea
+
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getTags: payload => {
+      dispatch(getTags())
+    }
+  }
+}
+
 const Tags = connect(({common}) => {
   return {
     tags: common.tags,
   }
-})(TagSelect)
+}, mapDispatchToProps)(TagSelect)
 
 function hasErrors(fieldsError) {
   return Object.keys(fieldsError).some(field => fieldsError[field]);
@@ -36,7 +47,7 @@ class Main extends React.Component {
             if(org.RegisterDate && org.RegisterDate.substr(0,4)!=='0001')
               org.RegisterDate = moment(org.RegisterDate).format('YYYY-MM-DD');
             else
-              org.RegisterDate = null
+              org.RegisterDate = null;
             function customizer(objValue, othValue) {
               return !Object.keys(objValue).some(field => objValue[field]!=othValue[field])
             }

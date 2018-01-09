@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Test from '@/container/Contract/AddOrderDialog'
+import Test from '@/container/Contract/OrderDialog'
 import { setPowerList } from '@/store/actions'
 import { connect } from 'react-redux'
 class Main extends Component {

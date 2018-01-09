@@ -38,7 +38,7 @@ class Main extends Component {
 }
 const mapStateToProps = state => {
   return {
-    contractItems: state.contractItems,
+    contractItems: state.common.contractItems,
   }
 }
 const mapDispatchToProps = dispatch => {

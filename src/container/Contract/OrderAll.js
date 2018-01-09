@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { Table, Button } from 'antd'
 import { getListData } from '@/api'
+import Dialog from '@/container/Dialog'
+import OrderDialog from '@/container/Contract/OrderDialog'
 
 class Main extends Component {
   constructor(props) {
@@ -9,7 +11,7 @@ class Main extends Component {
         data: [],
         pagination: {
             current: 1,
-            pageSize: 15,
+            pageSize: 10,
             pageSizeOptions: ['20','50','80','100','200'],
             showQuickJumper: true,
             showSizeChanger: true,
@@ -56,7 +58,16 @@ class Main extends Component {
       this.onSearch();
   }
   view(row) {
-
+    const dialog = Dialog({
+        content: <OrderDialog id={row.OrderId} readOnly={true}/>,
+        width: 1300,
+        confirmLoading: false,
+        footer: null,
+        title: '查看订单'
+    })
+    dialog.result.then((res)=>{
+        console.log(res)
+    },()=>{});
   }
   render() {
     const columns = [{
