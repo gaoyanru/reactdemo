@@ -44,7 +44,7 @@ export function getAllSalers(force,getState) {
         if(state.common.salers && !force){
             return null;
         }
-        getListData('contract/sales').then(res => {
+        getListData('order/sales').then(res => {
             if (res.status) {
                 dispatch({ type: 'SALERS', data: res.data })
             }
@@ -227,7 +227,7 @@ export function getMainItemList(payload, getState){
             return state.common.contractItems;
         }
         dispatch({ type: 'getMainItemList', data: [] })
-        return getListData('contract/getmainitemlist').then(res => {
+        return getListData('order/getmainitemlist').then(res => {
             if (res.status) {
                 dispatch({ type: 'getMainItemList', data: res.data })
             }

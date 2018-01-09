@@ -300,10 +300,12 @@ class Main extends React.Component {
         Group: 2,
         items: _.chain(crmOrderItems).filter(item=>(item.MainItemId ===2 || item.MainItemId===3)).each(item=>(item.id =_.uniqueId('p3_'))).value()
       };
+      if(type2.items.length === 0) type2 = null;
       let type3 = {
         Group: 3,
         items: _.chain(crmOrderItems).filter(item=>(item.MainItemId === 4)).each(item=>(item.id =_.uniqueId('p4_'))).value()
       };
+      if(type3.items.length === 0) type3 = null;
       return {
         ...nextState,
         type1,
@@ -311,7 +313,7 @@ class Main extends React.Component {
         type3
       };
     }
-    return {};
+    return null;
   }
   validateField(){
     let result;

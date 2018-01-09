@@ -159,19 +159,23 @@ class Main extends React.Component {
     }
     render () {
       console.log(this.state.tagSelected, 'tagSelected')
-      return (<Row>
-        <Col span={8}> {this.state.customer.Id? <CrmCustomer data={this.state.customer} wrappedComponentRef={cusform =>{this.cusform = cusform}} readOnly={this.props.readOnly}/> : <Spin/>}</Col>
-        <Col span={16}>
-          {(this.state.tagSelected) && <Tags
-            tags={this.props.tags}
-            selected={this.state.tagSelected}
-            addTag={this.addTag}
-            deleteTag={this.deleteTag}
-            /> || <Spin/>}
-          <CustomerTrack data={this.state.customertrack} submitTrack={this.submitTrack} readOnly={this.props.readOnly}/>
-          {(!this.props.readOnly) && <RemindDate data={this.state.reminds} onRemove={this.removeRemind} onAdd={this.addRemind}/>}
-        </Col>
-      </Row>)
+      return (
+      <div>
+        <div className="ant-modal-header" style={{margin: "-12px -24px 12px"}}><div className="ant-modal-title" id="rcDialogTitle1">{ (this.state.customer && this.state.customer.CompanyName) || <Spin/>}</div></div>
+        <Row>
+          <Col span={8}> {this.state.customer.Id? <CrmCustomer data={this.state.customer} wrappedComponentRef={cusform =>{this.cusform = cusform}} readOnly={this.props.readOnly}/> : <Spin/>}</Col>
+          <Col span={16}>
+            {(this.state.tagSelected) && <Tags
+              tags={this.props.tags}
+              selected={this.state.tagSelected}
+              addTag={this.addTag}
+              deleteTag={this.deleteTag}
+              /> || <Spin/>}
+            <CustomerTrack data={this.state.customertrack} submitTrack={this.submitTrack} readOnly={this.props.readOnly}/>
+            {(!this.props.readOnly) && <RemindDate data={this.state.reminds} onRemove={this.removeRemind} onAdd={this.addRemind}/>}
+          </Col>
+        </Row>
+      </div>)
     }
 }
 

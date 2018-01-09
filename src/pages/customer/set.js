@@ -1,17 +1,17 @@
 import React, { Component } from 'react'
-import { Row, Col, List, Form, Input } from 'antd'
+import { Row, Col, List, Form, Input, Spin } from 'antd'
 import { getListData } from '@/api'
-
+import Immutable from 'immutable';
 const FormItem = Form.Item;
 
 class SetContent extends Component{
   constructor(props) {
     super(props)
     this.state= {
-      loading: false,
-      data: []
+      data: null
     };
     this.initData = this.initData.bind(this);
+    this.setFieldValue = this.setFieldValue.bind(this);
   }
 
   initData() {
@@ -20,18 +20,20 @@ class SetContent extends Component{
       if (res.status) {
         console.log(res)
         this.setState({
-            loading: false,
-            data: res.data
+            data: Immutable.fromJS(res.data.sort((a,b)=>(parseInt(a.Name)-parseInt(b.Name))))
         });
       }
       return res;
-    }, err => {
-      this.setState({
-          loading: false
-      });
     })
   }
+  setFieldValue(index,field,value){
+    const data = this.state.data;
+    const item = data.get(index).set(field,value);
+    this.setState({
+      data: data.set(index,item)
+    })
 
+  }
   componentWillMount() {
     this.initData();
   }
@@ -46,50 +48,27 @@ class SetContent extends Component{
   }
 
   render() {
-    const props = this.props;
-    const { getFieldDecorator } = props.form;
+    if(!this.state.data) return <Spin/>
     return (
       <div className="gutter-example">
-        <Form onSubmit={this.handleSubmit}>
-          <Row gutter={{md: 24}}>
-            <Col className="gutter-row" span={6}>
-              <div className="gutter-box">意向度</div>
-              <List
-                itemLayout="horizontal"
-                dataSource={this.state.data}
-                renderItem={item => (
-                  <List.Item>
-                    {item.Name}
-                  </List.Item>
-                )}
-              />
-            </Col>
-            <Col className="gutter-row" span={6}>
-              <div className="gutter-box">库容(/个)</div>
-              <List
-                itemLayout="horizontal"
-                dataSource={this.state.data}
-                renderItem={item => (
-                  <List.Item>
-                    <FormItem>
-                      {getFieldDecorator('item.Repertory', {})(
-                        <Input/>
-                      )}
-                    </FormItem>
-                  </List.Item>
-                )}
-              />
-            </Col>
-            <Col className="gutter-row" span={6}>
-              <div className="gutter-box">跟进期限(/天)</div>
-            </Col>
-            <Col className="gutter-row" span={6}>
-              <div className="gutter-box">最大保护期(/天)</div>
-            </Col>
-          </Row>
-        </Form>
+        <Row gutter={{md: 24}}>
+          <Col className="gutter-row" span={5}>意向度</Col>
+          <Col className="gutter-row" span={5}>库容(/个)</Col>
+          <Col className="gutter-row" span={5}>跟进期限(/天)</Col>
+          <Col className="gutter-row" span={5}>最大保护期(/天)</Col>
+        </Row>
+        {this.state.data.map((item, index)=>{
+          return (
+            <Row gutter={{md: 24}} key={item.get('CustomerCategoryId')} style={{margin:'12px 0'}}>
+              <Col className="gutter-row" span={5}>{item.get('Name')}</Col>
+              <Col className="gutter-row" span={5}><Input value={item.get('Repertory')} onChange={e=>{this.setFieldValue(index,'Repertory',e.target.value)}}/></Col>
+              <Col className="gutter-row" span={5}><Input value={item.get('NoTrackDate')} onChange={e=>{this.setFieldValue(index,'NoTrackDate',e.target.value)}}/></Col>
+              <Col className="gutter-row" span={5}><Input value={item.get('LongestData')} onChange={e=>{this.setFieldValue(index,'LongestData',e.target.value)}}/></Col>
+            </Row>
+          )
+        })}
       </div>
     )
   }
 }
-export default Form.create()(SetContent)
+export default SetContent

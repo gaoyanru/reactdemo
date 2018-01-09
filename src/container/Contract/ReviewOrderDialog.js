@@ -29,7 +29,7 @@ class Main extends Component {
       remark: '',
       auditVal: 0
     };
-    putData('/api/contract/audit', post).then(res =>{
+    putData('contract/audit', post).then(res =>{
         // console.log(res)
       if(res.status) {
         message.info('审核成功')
@@ -42,8 +42,8 @@ class Main extends Component {
         title: '驳回原因',
         handleOk: (resStr)=>{
           return new Promise((resolve, reject) => {
-            putData('/api/contract/audit',{
-                OrderId: this.prop.data.OrderId,
+            putData('contract/audit',{
+                OrderId: this.props.data.OrderId,
                 remark: resStr,
                 auditVal: 1
             }).then(res=>{
@@ -60,10 +60,10 @@ class Main extends Component {
   render() {
     return(
       <div style={this.props.style} className="company-dialog">
-        {this.props.data.Status === 1?(<div style={{float:'right'}}>
+        {this.props.data.OrderStatus === 1?(<Button.Group style={{float:'right'}}>
             <Button type="primary"  onClick={this.pass.bind(this)}>审核</Button> 
             <Button type="primary"  onClick={this.reject.bind(this)}>驳回</Button> 
-          </div>):null}
+          </Button.Group>):null}
         <OrderDialog readOnly={true} id={this.props.data.OrderId}/>
       </div>
     )

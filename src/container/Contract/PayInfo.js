@@ -94,7 +94,7 @@ class Main extends React.Component {
   }
   validateField(){
     var data = this.state;
-    if(data.OrderSourceId === 2) return true;
+    if( (+data.OrderSourceId) === 2) return null;
     const paylist = data.PayInfoList;
     let msg;
     for(let i =0; i<paylist.length; i++){

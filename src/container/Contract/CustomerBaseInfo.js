@@ -73,7 +73,7 @@ class Main extends React.Component {
                 }],
                 initialValue: data.Company
               })(
-                <CustomerSelect canEdit={true}  onChange={this.CustomerSelected}/>
+                <CustomerSelect canEdit={true} readOnly={this.props.readOnly}  onChange={this.CustomerSelected}/>
               )}
             </FormItem>
             <FormItem
@@ -86,7 +86,7 @@ class Main extends React.Component {
                 }],
                 initialValue: data.Connector
               })(
-                <Input />
+                <Input readOnly={this.props.readOnly}/>
               )}
             </FormItem>
              <FormItem
@@ -99,7 +99,7 @@ class Main extends React.Component {
                 }],
                 initialValue: data.Mobile
               })(
-                <Input />
+                <Input readOnly={this.props.readOnly}/>
               )}
             </FormItem>
             <FormItem

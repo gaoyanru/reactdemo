@@ -50,6 +50,7 @@ class Main extends Component {
     this.setState({visible: false})
   }
   showModal(){
+    if(this.props.readOnly) return;
     this.setState({visible: true})
     this.onSearch()
   }
@@ -109,7 +110,7 @@ class Main extends Component {
           onClick={e=>{if(!(this.state.selected.Id && this.props.canEdit)) this.showModal()}} 
           addonAfter={<Icon type="plus" onClick={this.showModal} />} 
           value={this.state.selected.CompanyName} 
-          readOnly = {!(this.state.selected.Id && this.props.canEdit)}
+          readOnly = { this.props.readOnly || !(this.state.selected.Id && this.props.canEdit)}
           onChange={this.handleChange}/>
         <Modal title= "选择公司"
             width= {800}
