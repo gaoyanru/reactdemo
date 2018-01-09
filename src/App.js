@@ -5,6 +5,7 @@ import {Link, Switch, Route} from 'react-router-dom'
 import { connect } from 'react-redux'
 import  '@/style/BasicLayout.less';
 import  '@/style/app.less';
+import '@/style/common.less'
 import logo from './logo.svg';
 import store from '@/store'
 import { setPowerList } from '@/store/actions'
@@ -41,8 +42,9 @@ const pagesMap = {
   'finance_manage_contract': 'contract/financeAudit',
   'signed_manage': 'contract/signed',
   'function_setting': 'system/functionManage',
-  'contract_manage': 'contract/review'
-  'accounting_manage': 'contract/account'
+  'contract_manage': 'contract/review',
+  'accounting_manage': 'contract/account',
+  'go_task_config': 'outworker/taskConfig'
 }
 
 function getCurrentMenu(funs,path){

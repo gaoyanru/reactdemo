@@ -234,3 +234,14 @@ export function getMainItemList(payload, getState){
         })
     }
 }
+
+export const getTaskConfigList = () => (dispatch) => {
+  getListData('commontask').then(res => {
+      if (res.status) {
+        dispatch({
+          type: 'change outworker task config list',
+          data: res.data
+        })
+      }
+  })
+}
