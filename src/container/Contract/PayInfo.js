@@ -30,7 +30,7 @@ class PayInfo extends React.Component {
         <Row style={{lineHeight: '34px'}}>
           <Col key="pay1" span={5}><label className="ant-form-item-required">支付方式：</label><PayTypeSelect width={120} value={this.state.PayTypeId} readOnly/></Col>
           <Rif key="pay2" if={(+data.PayTypeId) !== 5}><Col span={5}><label className="ant-form-item-required">支付方账号：</label>{data.PayAccountNo}</Col></Rif>
-          <Col key="pay3" span={5}><label className="ant-form-item-required">支付时间：</label>{data.PayTime && data.PayTime.format('YYYY-MM-DD')}</Col>
+          <Col key="pay3" span={5}><label className="ant-form-item-required">支付时间：</label>{data.PayTime && moment(data.PayTime).format('YYYY-MM-DD')}</Col>
           <Rif key="pay4" if={(+data.PayTypeId) !== 5}><Col span={5}><label className="ant-form-item-required">凭证：</label><ImageViewer src={data.PayImagePath} additional="?x-oss-process=image/resize,m_lfit,h_30,w_50"  /></Col></Rif>
         </Row>
       )
