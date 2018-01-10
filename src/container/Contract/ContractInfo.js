@@ -56,6 +56,13 @@ class Main extends Component {
           putData('order/audit/reject/' + OrderId).then(res => {
             if (res.status) {
               // 关闭上一个弹窗并且刷新列表
+              store.dispatch({
+                type: 'set contract account modal status',
+                status: {
+                  modal1: false,
+                  modal2: false
+                }
+              })
             }
           })
         },
@@ -83,10 +90,10 @@ class Main extends Component {
           </Col>
           <Col span={2}>
             <Button.Group>
-              {(data.ServiceStart && data.AccountantStatus != 1) && <HasPower power="REVIEW"  key={"btn_REVIEW"}>
+              {(!data.ServiceStart && data.AccountantStatus != 1) && <HasPower power="REVIEW"  key={"btn_REVIEW"}>
                 <Button type="primary" onClick={this.AccountCheck}>会计审核</Button>
               </HasPower>}
-              {(data.ServiceStart && data.AccountantStatus == 1) && <HasPower power="REVIEW"  key={"btn_REVIEW"}>
+              {(data.ServiceStart && data.AccountantStatus != 1) && <HasPower power="REVIEW"  key={"btn_REVIEW"}>
                 <Button type="primary" onClick={this.AccountCheckSecond}>二次会计审核</Button>
               </HasPower>}
               <HasPower power="REJECT"  key={"btn_REJECT"}>

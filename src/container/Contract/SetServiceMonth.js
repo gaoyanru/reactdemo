@@ -56,6 +56,7 @@ class ModelForm extends Component {
   }
   render() {
     const { form, data } = this.props;
+    console.log(data, 'data')
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {

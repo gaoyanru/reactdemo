@@ -123,7 +123,7 @@ class Finance extends Component {
       if(!account.modal1) {
         dialog.cancel()
         console.log(this, 'this')
-        this.Search()
+        this.onSearch(this.state.searchParams)
       }
     })
   }
