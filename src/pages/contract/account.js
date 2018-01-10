@@ -118,12 +118,15 @@ class Finance extends Component {
     if (this.unsubscribe) {
       this.unsubscribe();
     }
+    var that = this
+    console.log(that, 'that')
     this.unsubscribe = store.subscribe(() => {
       const {account} = store.getState()
       if(!account.modal1) {
         dialog.cancel()
-        console.log(this, 'this')
-        this.onSearch(this.state.searchParams)
+        this.refs.searchForm.validateFields((err, values) => {
+          this.onSearch(values)
+        })  
       }
     })
   }
@@ -167,7 +170,7 @@ class Finance extends Component {
     }];
     return (
         <div>
-          <SearchForm items={search.items} buttons={search.buttons} onSearch={this.onSearch}/>
+          <SearchForm items={search.items} buttons={search.buttons} onSearch={this.onSearch} ref="searchForm"/>
           <Tabs defaultActiveKey="NOALL" onChange={this.callback}>
             <TabPane tab="待处理订单" key="NOALL">
               <OrderTable SearchParams={this.state.searchParams} searchUrl={'order/audit/list'} columns={columns} isAll={false}/>

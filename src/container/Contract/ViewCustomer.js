@@ -60,7 +60,7 @@ class Main extends React.Component {
             <label>法人身份证号:</label>{data.PersonCardID}
           </Col>
           <Col span={8}>
-             <label>法人身份证:</label> {data.PersonCardPath?<ImageViewer src={data.PersonCardPath} additional="?x-oss-process=image/resize,m_lfit,h_30,w_50" />: null} 
+             <label>法人身份证:</label> {data.PersonCardPath?<ImageViewer src={data.PersonCardPath} additional="?x-oss-process=image/resize,m_lfit,h_30,w_50" />: null}
           </Col>
         </Row>
         <Row className="company-info">
@@ -68,7 +68,7 @@ class Main extends React.Component {
              <label>营业期限:</label> {fDate(data.RegisterDate)}至{data.NoDeadLine?'无期限':fDate(data.BusnissDeadline)}
           </Col>
         </Row>
-        <Row className="company-info">
+        <Row className="company-info" style={{height: 'auto'}}>
           <Col span={24}>
              <label>经营范围:</label> {data.BusinessScope}
           </Col>
