@@ -6,9 +6,9 @@ import { Table, Button, Tabs } from 'antd'
 import HasPower from '@/container/HasPower'
 import OrderTable from '@/container/OrderTable'
 import _ from 'lodash'
-import {fOrderSource } from '@/config/filters'
+import {fOrderSource, fOrderStatus } from '@/config/filters'
 import Dialog from '@/container/Dialog'
-import OrderDialog from '@/container/Contract/OrderDialog'
+import FinanceOrderDialog from '@/container/Contract/FinanceOrderDialog'
 
 const TabPane = Tabs.TabPane;
 
@@ -112,7 +112,7 @@ class Finance extends Component {
   }
   view(row) {
     const dialog = Dialog({
-      content: <OrderDialog id={row.OrderId} readOnly={true}/>,
+      content: <FinanceOrderDialog id={row.OrderId} data={row} readOnly={true}/>,
       width: 1300,
       confirmLoading: false,
       footer: null,
@@ -155,36 +155,7 @@ class Finance extends Component {
     }, {
       title: '订单状态',
       dataIndex: 'OrderStatus',
-      render: (val, record)=> {
-        // console.log(val, record)
-        var str = ''
-        switch (+val) {
-            case 1:
-                str = '审单待审核'
-                break;
-            case 2:
-                str = '审单已审核'
-                break;
-            case 3:
-                str = '审单驳回'
-                break;
-            case 4:
-                if (+record.OrderSourceId === 1) {
-                  str = '财务已审核'
-                  break;
-                } else if (+record.OrderSourceId === 2) {
-                  str = '网店到款'
-                  break;
-                }
-            case 5:
-                str = '财务已驳回'
-                break;
-            case 6:
-                str = '财务确认'
-                break;
-        }
-        return str;
-      }
+      render: (val, record)=> fOrderStatus(val, record.OrderSourceId)
     }];
     return (
         <div>
