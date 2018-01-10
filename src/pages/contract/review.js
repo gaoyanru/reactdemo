@@ -148,10 +148,10 @@ class Main extends Component {
           <SearchForm items={search.items} buttons={search.buttons} onSearch={this.onSearch}/>
           <Tabs defaultActiveKey="NOALL">
             <TabPane tab="待处理订单" key="NOALL">
-              <OrderTable SearchParams={this.state.searchParams} searchUrl="contract" columns={columns} isAll={false}/>
+              <OrderTable SearchParams={this.state.searchParams} searchUrl="order" columns={columns} isAll={false}/>
             </TabPane>
             <TabPane tab="全部订单" key="ALL">
-              <OrderTable SearchParams={this.state.searchParams} searchUrl="contract" columns={columns} isAll={true}/>
+              <OrderTable SearchParams={this.state.searchParams} searchUrl="order" columns={columns} isAll={true}/>
             </TabPane>
           </Tabs>
         </div>

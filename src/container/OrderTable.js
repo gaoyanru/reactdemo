@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Table, Button, message } from 'antd'
 import { getListData, putData } from '@/api'
-import {fOrderSource } from '@/config/filters'
 import _ from 'lodash'
 import Confirm from '@/component/Confirm'
 
@@ -43,9 +42,9 @@ class OrderTable extends Component {
       vals.limit = pagination.pageSize;
       vals.offset = (pagination.current - 1) * pagination.pageSize;
       if (this.props.isAll) {
-        vals.treatedOrder = 1
-      } else {
         vals.treatedOrder = 0
+      } else {
+        vals.treatedOrder = 1
       }
       console.log(vals, 'vals')
       if (vals.offset === 0) {
@@ -68,22 +67,24 @@ class OrderTable extends Component {
           });
       })
   }
-  // componentWillMount () {
-  //   this.Search()
-  // }
+  componentWillMount () {
+    this.Search()
+  }
   componentWillReceiveProps(props) { // 在组件接收到新的props的时候调用
     console.log(props, 'props Search')
     console.log(this.props, 'this.props')
-    var pagination = {
-      current: 1,
-      pageSize: 15,
-      showTotal(total) {
-        return `共计 ${total} 条`;
+    if(!_.isEqual(this.props.SearchParams,props.SearchParams)){
+      var pagination = {
+        current: 1,
+        pageSize: 15,
+        showTotal(total) {
+          return `共计 ${total} 条`;
+        }
       }
+      this.setState({searchParams: props.SearchParams, pagination: pagination}, () => {
+        this.Search()
+      })
     }
-    this.setState({searchParams: props.SearchParams, pagination: pagination}, () => {
-      this.Search()
-    })
   }
 
   onSelectChange = (selectedRowKeys) => {
@@ -101,7 +102,7 @@ class OrderTable extends Component {
     console.log(selectKeys, typeof(selectKeys), 'selectKeys')
     Confirm({
         handleOk:()=>{
-          putData('contract/financeauditlist', selectKeys).then(res => {
+          putData('order/financeauditlist', selectKeys).then(res => {
             console.log(res)
             if (res.status) {
               message.info('审核成功！');
@@ -124,70 +125,10 @@ class OrderTable extends Component {
           disabled: record.OrderStatus != 2
       })
     } : null;
-    var columns = [{
-      title: '所属公司',
-      dataIndex: 'SubsidiaryName',
-    }, {
-      title: '订单号',
-      dataIndex: 'OrderNo',
-      render: (val,record) => (<a href="javascript:;" onClick={e=>{this.view(record)}}>{val}</a>)
-    }, {
-      title: '甲方',
-      dataIndex: 'CompanyName',
-      render: (val,record) => (<a href="javascript:;" onClick={e=>{this.view(record)}}>{val}</a>)
-    }, {
-      title: '联系人',
-      dataIndex: 'Connector',
-    }, {
-      title: '签单销售',
-      dataIndex: 'OrderSalesName',
-    }, {
-      title: '订单来源',
-      dataIndex: 'OrderSourceId',
-      render: val=> fOrderSource(val)
-    }, {
-      title: '签订日期',
-      dataIndex: 'ContractDate',
-    }, {
-      title: '订单总金额',
-      dataIndex: 'Amount',
-    }, {
-      title: '订单状态',
-      dataIndex: 'OrderStatus',
-      render: (val, record)=> {
-        // console.log(val, record)
-        var str = ''
-        switch (+val) {
-            case 1:
-                str = '审单待审核'
-                break;
-            case 2:
-                str = '审单已审核'
-                break;
-            case 3:
-                str = '审单驳回'
-                break;
-            case 4:
-                if (+record.OrderSourceId === 1) {
-                  str = '财务已审核'
-                  break;
-                } else if (+record.OrderSourceId === 2) {
-                  str = '网店到款'
-                  break;
-                }
-            case 5:
-                str = '财务已驳回'
-                break;
-            case 6:
-                str = '财务确认'
-                break;
-        }
-        return str;
-      }
-    }];
+
     return (
       <div>
-        <Table columns={columns}
+        <Table columns={this.props.columns}
             rowKey={record => record.OrderId}
             dataSource={this.state.data}
             pagination={this.state.pagination}
@@ -197,7 +138,7 @@ class OrderTable extends Component {
             bordered={true}
             rowSelection={rowSelection}
         />
-        {(!this.props.isAll) && (this.props.TableFrom === 'finance') && <Button style={btnStyle} type="primary" onClick={this.checkAll} >批量审核</Button>}
+        {(!this.props.isAll) && <Button style={btnStyle} type="primary" onClick={this.checkAll} >批量审核</Button>}
       </div>
     )
   }

@@ -6,6 +6,9 @@ import { Table, Button, Tabs } from 'antd'
 import HasPower from '@/container/HasPower'
 import OrderTable from '@/container/OrderTable'
 import _ from 'lodash'
+import {fOrderSource } from '@/config/filters'
+import Dialog from '@/container/Dialog'
+import OrderDialog from '@/container/Contract/OrderDialog'
 
 const TabPane = Tabs.TabPane;
 
@@ -77,6 +80,7 @@ class Finance extends Component {
     };
     this.onSearch = this.onSearch.bind(this);
     this.export = this.export.bind(this);
+    this.view = this.view.bind(this);
   }
 
   onSearch(res) {
@@ -106,19 +110,91 @@ class Finance extends Component {
     var url = '/api/download/financelist' + query
     window.open(url)
   }
+  view(row) {
+    const dialog = Dialog({
+      content: <OrderDialog id={row.OrderId} readOnly={true}/>,
+      width: 1300,
+      confirmLoading: false,
+      footer: null,
+      title: '查看订单'
+    })
+    dialog.result.then(()=>{
+        this.onSearch()
+    },()=>{});
+  }
 
   render() {
     search.buttons=[(<HasPower power="EXPORT" key="btn_export"><Button style={{marginLeft: '10px'}} type="primary" onClick={this.export} >导出</Button></HasPower>)]
-
+    const columns = [{
+      title: '所属公司',
+      dataIndex: 'SubsidiaryName',
+    }, {
+      title: '订单号',
+      dataIndex: 'OrderNo',
+      render: (val,record) => (<a href="javascript:;" onClick={e=>{this.view(record)}}>{val}</a>)
+    }, {
+      title: '甲方',
+      dataIndex: 'CompanyName',
+      render: (val,record) => (<a href="javascript:;" onClick={e=>{this.view(record)}}>{val}</a>)
+    }, {
+      title: '联系人',
+      dataIndex: 'Connector',
+    }, {
+      title: '签单销售',
+      dataIndex: 'OrderSalesName',
+    }, {
+      title: '订单来源',
+      dataIndex: 'OrderSourceId',
+      render: val=> fOrderSource(val)
+    }, {
+      title: '签订日期',
+      dataIndex: 'ContractDate',
+    }, {
+      title: '订单总金额',
+      dataIndex: 'Amount',
+    }, {
+      title: '订单状态',
+      dataIndex: 'OrderStatus',
+      render: (val, record)=> {
+        // console.log(val, record)
+        var str = ''
+        switch (+val) {
+            case 1:
+                str = '审单待审核'
+                break;
+            case 2:
+                str = '审单已审核'
+                break;
+            case 3:
+                str = '审单驳回'
+                break;
+            case 4:
+                if (+record.OrderSourceId === 1) {
+                  str = '财务已审核'
+                  break;
+                } else if (+record.OrderSourceId === 2) {
+                  str = '网店到款'
+                  break;
+                }
+            case 5:
+                str = '财务已驳回'
+                break;
+            case 6:
+                str = '财务确认'
+                break;
+        }
+        return str;
+      }
+    }];
     return (
         <div>
           <SearchForm items={search.items} buttons={search.buttons} onSearch={this.onSearch}/>
           <Tabs defaultActiveKey="NOALL" onChange={this.callback}>
             <TabPane tab="待处理订单" key="NOALL">
-              <OrderTable SearchParams={this.state.searchParams} SearchUrl={'contract/financelist'} TableFrom={'finance'} isAll={false}/>
+              <OrderTable SearchParams={this.state.searchParams} SearchUrl={'order/financelist'} columns={columns} isAll={false}/>
             </TabPane>
             <TabPane tab="全部订单" key="ALL">
-              <OrderTable SearchParams={this.state.searchParams} SearchUrl={'contract/financelist'} TableFrom={'finance'} isAll={true}/>
+              <OrderTable SearchParams={this.state.searchParams} SearchUrl={'order/financelist'} columns={columns} isAll={true}/>
             </TabPane>
           </Tabs>
         </div>
