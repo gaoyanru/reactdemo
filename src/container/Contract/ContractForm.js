@@ -47,7 +47,7 @@ class Accounting extends React.Component {
           <tr className="ant-table-row">
             <td>{data.ContractNo}</td>
             <td>记账报税</td>
-            <td>{data.ChildItemName}</td>
+            <td>{data.ChildItemId === 1?"小规模": "一般纳税人"}</td>
             <td>{data.Amount}</td>
             <td>{data.Remark}</td>
             <td></td>
@@ -144,7 +144,7 @@ class AddedService extends React.Component {
             <tr className="ant-table-row" key={item.id}>
               {index===0 && <td rowSpan={data.items.length}>{data.ContractNo}</td>}
               <td><MainItemSelect disabled size="small" defaultValue={item.MainItemId} onChange={v=>{this.setFieldValue(index,{MainItemId: +v});}}/></td>
-              <td><ChildItemSelect disabled size="small" mainId={item.MainItemId}  defaultValue={item.ChildItemId } onChange={v=>{this.setFieldValue(index,{ChildItemId: +v})}} /></td>
+              <td><ChildItemSelect disabled={true} size="small" mainId={item.MainItemId}  defaultValue={item.ChildItemId } onChange={v=>{this.setFieldValue(index,{ChildItemId: +v})}} /></td>
               <td>{item.Amount}</td>
               <td>{data.Remark}</td>
               <td></td>
@@ -159,7 +159,7 @@ class AddedService extends React.Component {
             <tr className="ant-table-row"  key={item.id}>
               {index===0 && <td rowSpan={data.items.length}><Input size="small" defaultValue={data.ContractNo} onChange={e=>{this.setContractNo({ContractNo:e.target.value})}} /></td>}
               <td><MainItemSelect size="small" defaultValue={item.MainItemId} onChange={v=>{this.setFieldValue(index,{MainItemId: +v});}}/></td>
-              <td><ChildItemSelect size="small" mainId={item.MainItemId}  defaultValue={item.ChildItemId } onChange={v=>{this.setFieldValue(index,{ChildItemId: +v})}} /></td>
+              <td><ChildItemSelect disabled={false} size="small" mainId={item.MainItemId}  defaultValue={item.ChildItemId } onChange={v=>{this.setFieldValue(index,{ChildItemId: +v})}} /></td>
               <td><Input size="small" defaultValue={data.Amount} onChange={e=>{this.setFieldValue(index,{Amount:e.target.value})}}/></td>
               <td><Input size="small" maxLength="50" defaultValue={data.Remark} onChange={e=>{this.setFieldValue(index,{Remark:e.target.value})}}/></td>
               <td><Button size="small" onClick={this.onAdd.bind(this,index)}>添加子项目</Button><Button size="small" onClick={this.onDelete.bind(this,index)}>删除</Button></td>
@@ -300,12 +300,18 @@ class Main extends React.Component {
         Group: 2,
         items: _.chain(crmOrderItems).filter(item=>(item.MainItemId ===2 || item.MainItemId===3)).each(item=>(item.id =_.uniqueId('p3_'))).value()
       };
-      if(type2.items.length === 0) type2 = null;
+      if(type2.items.length === 0) 
+        type2 = null;
+      else
+        type2 = _.extend(type2, _.pick(type2.items[0], ['ContractNo','Amount','Remark']));
       let type3 = {
         Group: 3,
         items: _.chain(crmOrderItems).filter(item=>(item.MainItemId === 4)).each(item=>(item.id =_.uniqueId('p4_'))).value()
       };
-      if(type3.items.length === 0) type3 = null;
+      if(type3.items.length === 0) 
+        type3 = null;
+      else
+        type3 = _.extend(type3, _.pick(type3.items[0], ['ContractNo','Amount','Remark']));
       return {
         ...nextState,
         type1,

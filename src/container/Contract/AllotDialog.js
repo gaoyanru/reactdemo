@@ -29,6 +29,9 @@ class Main extends Component {
   closeDialog(){
     this.handler.close();
   }
+  refresh(){
+    this.forceUpdate();
+  }
   getOrderInfo(){
     const row = this.props.row;
     getListData('customerdetail/'+ this.props.row.OrderId).then(res=>{
@@ -72,9 +75,9 @@ class Main extends Component {
   render() {
     return(
       <div style={this.props.style} className="company-dialog">
-        <AllotInfo row={this.state.customerInfo}/>
+        <AllotInfo row={this.state.customerInfo} closeDialog={this.closeDialog} />
         <div>
-          <Tabs type="card" style={{width: '100%'}} activeKey={this.state.activeKey} closeDialog={this.closeDialog} onTabClick={this.onTabClick}>
+          <Tabs type="card" style={{width: '100%'}} activeKey={this.state.activeKey} onTabClick={this.onTabClick}>
             <TabPane tab="公司信息" key="1">
               { this.state.orderInfo && this.state.orderInfo.ServiceStatus < 13 && <Button type="primary" style={{float:'right'}} onClick={this.setEditing}>{this.state.isEditing?'保存':'编辑'}</Button> }
               { this.state.customerInfo?(this.state.isEditing? <EditCustomer data={this.state.customerInfo} wrappedComponentRef={view=>{this.editform = view;}}/>:<ViewCustomer data={this.state.customerInfo}/>):<Spin/> }

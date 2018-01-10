@@ -135,7 +135,7 @@ class Main extends React.Component {
           {(+this.state.OrderSourceId) ===1 &&(
             <Col span={20}>
               {this.state.PayInfoList.map((pay,index)=>{
-                return <PayInfo readOnly={this.props.readOnly} key={pay.id} data={pay} onChange={v=>this.onFiledChange(index,v)} onAdd={()=>{this.onAdd(index)}} onDelete={()=>{this.onDelete(index)}}/>
+                return <PayInfo readOnly={this.props.readOnly} key={pay.id || pay.Id} data={pay} onChange={v=>this.onFiledChange(index,v)} onAdd={()=>{this.onAdd(index)}} onDelete={()=>{this.onDelete(index)}}/>
               })}
             </Col>
             )

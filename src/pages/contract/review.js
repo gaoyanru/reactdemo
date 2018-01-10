@@ -79,7 +79,9 @@ class Main extends Component {
   }
 
   onSearch(res) {
-    this.setState({searchParams: res});
+    const params = {...res};
+    params._id = _.uniqueId('sq_');
+    this.setState({searchParams: params});
   }
   addNew(){
     const dialog = Dialog({
@@ -90,7 +92,7 @@ class Main extends Component {
         title: '新增订单'
     })
     dialog.result.then((res)=>{
-        console.log(res)
+        this.onSearch(this.state.searchParams);
     },()=>{});
   }
   viewOrder(row){
@@ -102,12 +104,7 @@ class Main extends Component {
         title: '新增订单'
     })
     dialog.result.then((res)=>{
-        this.setState(prestate=>{
-          return {
-            ...prestate.searchParams,
-            _id: _.uniqueId('r_')
-          }
-        });
+        this.onSearch(this.state.searchParams);
     },()=>{});
   }
   render() {
