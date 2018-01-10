@@ -84,7 +84,7 @@ class Finance extends Component {
   }
 
   onSearch(res) {
-    console.log(res, 'search')
+    res._id = _.uniqueId('sq_');
     this.setState({searchParams: res});
   }
 
@@ -112,14 +112,14 @@ class Finance extends Component {
   }
   view(row) {
     const dialog = Dialog({
-      content: <FinanceOrderDialog id={row.OrderId} data={row} readOnly={true}/>,
+      content: <FinanceOrderDialog id={row.OrderId} data={row} ref={v=>{if(v) v.handler=dialog;}} readOnly={true}/>,
       width: 1300,
       confirmLoading: false,
       footer: null,
       title: '查看订单'
     })
     dialog.result.then(()=>{
-        this.onSearch()
+      this.onSearch(this.state.searchParams);
     },()=>{});
   }
 

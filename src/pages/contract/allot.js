@@ -89,7 +89,9 @@ class Main extends Component {
   }
 
   onSearch(res) {
-    this.setState({searchParams: res});
+    const params = {...res};
+    params._id = _.uniqueId('sq_');
+    this.setState({searchParams: params});
   }
   viewOrder(row){
      const dialog = Dialog({
@@ -100,19 +102,9 @@ class Main extends Component {
           title: row.CompanyName
       })
       dialog.result.then(()=>{
-        this.setState(prestate=>{
-          return {
-            ...prestate.searchParams,
-            _id: _.uniqueId('r_')
-          }
-        });
+        this.onSearch(this.state.searchParams);
       },()=>{
-        this.setState(prestate=>{
-          return {
-            ...prestate.searchParams,
-            _id: _.uniqueId('r_')
-          }
-        });
+        this.onSearch(this.state.searchParams);
       });
   }
   render() {

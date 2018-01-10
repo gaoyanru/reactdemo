@@ -53,6 +53,7 @@ class Main extends React.Component {
       ...ctrInfo,
       ...payInfo
     };
+    data.OrderSalesId = data.SalesId
 
     postData('order',data).then(res=>{
       if(res.status){
