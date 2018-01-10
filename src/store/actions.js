@@ -4,6 +4,9 @@ export const login = (payload) => (dispatch) => {
     dispatch({ type: 'LOADING', data: true })
     requestLogin(payload).then(loginRes => {
         if (loginRes.status) {
+
+            loginRes.IsChannel = !!payload.usertype;
+            
             sessionStorage.setItem('token', loginRes.data.Token)
             getListData('mycity').then(res=>{
                 if(res.status){
@@ -44,7 +47,7 @@ export function getAllSalers(force,getState) {
         if(state.common.salers && !force){
             return null;
         }
-        getListData('contract/sales').then(res => {
+        getListData('order/sales').then(res => {
             if (res.status) {
                 dispatch({ type: 'SALERS', data: res.data })
             }
@@ -227,17 +230,26 @@ export function getMainItemList(payload, getState){
             return state.common.contractItems;
         }
         dispatch({ type: 'getMainItemList', data: [] })
-        return getListData('contract/getmainitemlist').then(res => {
+        return getListData('order/getmainitemlist').then(res => {
             if (res.status) {
                 dispatch({ type: 'getMainItemList', data: res.data })
             }
         })
     }
 }
-
+export const getTaskConfigList = () => (dispatch) => {
+  getListData('commontask').then(res => {
+      if (res.status) {
+        dispatch({
+          type: 'change outworker task config list',
+          data: res.data
+        })
+      }
+  })
+}
 export function logout(payload, getState){
     return (dispatch, getState) => {
         getListData('/security/logout');
-        dispatch({ type: 'LOGOUT', data: null }) 
+        dispatch({ type: 'LOGOUT', data: null })
     }
 }

@@ -71,7 +71,6 @@ class OrderTable extends Component {
         this.Search();
       });
     }
-    
   }
   render() {
     const btnStyle = {position:' relative', bottom: '45px'}
@@ -79,13 +78,13 @@ class OrderTable extends Component {
     return (
       <div>
         <Table columns={this.props.columns}
-            rowKey={record => record.OrderId}
-            dataSource={this.state.data}
-            pagination={this.state.pagination}
-            loading={this.state.loading}
-            onChange={this.handleTableChange}
-            size="middle"
-            bordered={true}
+          rowKey={record => record.OrderId}
+          dataSource={this.state.data}
+          pagination={this.state.pagination}
+          loading={this.state.loading}
+          onChange={this.handleTableChange}
+          size="middle"
+          bordered={true}
         />
       </div>
     )

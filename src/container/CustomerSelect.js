@@ -29,14 +29,19 @@ class Main extends Component {
     this.showModal = this.showModal.bind(this);
     this.handleTableSelectChange = this.handleTableSelectChange.bind(this);
     this.onSearch = this.onSearch.bind(this);
-
+    if(props.value){
+      this.state.selected = {
+        CompanyName: props.value.CompanyName,
+        Id: props.value.Id
+      }
+    }
   }
   componentWillReceiveProps(nextProps){
     const data = nextProps.value;
     if(data && data.Id){
       const company = {
         CompanyName: data.CompanyName,
-        Id: data.CustomerId
+        Id: data.Id
       }
       this.setState({selected: company});
     }
@@ -50,6 +55,7 @@ class Main extends Component {
     this.setState({visible: false})
   }
   showModal(){
+    if(this.props.readOnly) return;
     this.setState({visible: true})
     this.onSearch()
   }
@@ -109,7 +115,7 @@ class Main extends Component {
           onClick={e=>{if(!(this.state.selected.Id && this.props.canEdit)) this.showModal()}} 
           addonAfter={<Icon type="plus" onClick={this.showModal} />} 
           value={this.state.selected.CompanyName} 
-          readOnly = {!(this.state.selected.Id && this.props.canEdit)}
+          readOnly = { this.props.readOnly || !(this.state.selected.Id && this.props.canEdit)}
           onChange={this.handleChange}/>
         <Modal title= "选择公司"
             width= {800}

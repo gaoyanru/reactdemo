@@ -30,13 +30,15 @@ class Main extends Component {
     this.handler.close();
   }
   getOrderInfo(){
+    const row = this.props.row;
     getListData('customerdetail/'+ this.props.row.OrderId).then(res=>{
+      res.data = _.extend(res.data, row);
       this.setState({
         customerInfo: res.data
       })
     })
     getListData('order/'+ this.props.row.OrderId).then(res=>{
-      res.data = _.extend(res.data, this.props.row);
+      res.data = _.extend(res.data, row);
       this.setState({
         orderInfo: res.data
       })
@@ -70,7 +72,7 @@ class Main extends Component {
   render() {
     return(
       <div style={this.props.style} className="company-dialog">
-        <AllotInfo row={this.props.row}/>
+        <AllotInfo row={this.state.customerInfo}/>
         <div>
           <Tabs type="card" style={{width: '100%'}} activeKey={this.state.activeKey} closeDialog={this.closeDialog} onTabClick={this.onTabClick}>
             <TabPane tab="公司信息" key="1">

@@ -14,12 +14,16 @@ class Main extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: null
+      data: null,
+      readOnly: props.readOnly
     }
     this.onSave = this.onSave.bind(this);
+    this.onEdit = this.onEdit.bind(this);
     this.getOrderDetail = this.getOrderDetail.bind(this);
     if(props.id){
-      this.getOrderDetail(props.id)
+      this.getOrderDetail(props.id);
+    }else{
+      this.state.data = {};
     }
   }
   getOrderDetail(id){
@@ -50,20 +54,25 @@ class Main extends React.Component {
       ...payInfo
     };
 
-    postData('contract',data).then(res=>{
+    postData('order',data).then(res=>{
       if(res.status){
         message.info('保存成功！');
         this.handler.close();
       }
     })
   }
+  onEdit(){
+    this.setState({readOnly: false})
+  }
   render() {
+    if(!this.state.data) return <Spin/>
     return (
       <div style={this.props.style} className="order-dialog">
-        <CustomerBaseInfo wrappedComponentRef={e=>{this.CustomerBaseInfo = e}} data={this.state.data} readOnly={this.props.readOnly}/>
-        <ContractInfo ref={e=>{this.ContractInfo = e}} data={this.state.data} readOnly={this.props.readOnly}/>
-        <PayInfo ref={e=>{this.PayInfo = e}} data={this.state.data} readOnly={this.props.readOnly}/>
-        {(!this.props.readOnly) && <div style={{textAlign:'center'}}><Button type="primary" onClick={this.onSave}>保存并提交</Button></div>}
+        <CustomerBaseInfo wrappedComponentRef={e=>{this.CustomerBaseInfo = e}} data={this.state.data} readOnly={this.state.readOnly}/>
+        <ContractInfo ref={e=>{this.ContractInfo = e}} data={this.state.data} readOnly={this.state.readOnly}/>
+        <PayInfo ref={e=>{this.PayInfo = e}} data={this.state.data} readOnly={this.state.readOnly}/>
+        {this.state.readOnly?(this.state.data.OrderStatus > 2 ?  null : <div style={{textAlign:'center'}}><Button type="primary" onClick={this.onEdit}>编辑</Button></div>)
+          : <div style={{textAlign:'center'}}><Button type="primary" onClick={this.onSave}>保存并提交</Button></div>}
       </div>
     );
   }

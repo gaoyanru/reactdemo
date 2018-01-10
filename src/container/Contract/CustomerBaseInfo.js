@@ -41,7 +41,7 @@ class Main extends React.Component {
     CustomerSelected = (v)=>{
       console.log('CustomerSelected', v);
       const setFieldsValue = this.props.form.setFieldsValue;
-      setFieldsValue({CompanyId: v.CompanyId});
+      setFieldsValue({CompanyId: v.CustomerId});
       setFieldsValue({CompanyName: v.CompanyName});
       setFieldsValue({Connector: v.Connector});
       setFieldsValue({Mobile: v.Mobile});
@@ -49,6 +49,12 @@ class Main extends React.Component {
     }
     render () {
       let data = this.props.data || {};
+      if(data && (!data.Company) && data.CustomerId){
+        data.Company = {
+          CompanyName: data.CompanyName,
+          Id: data.CustomerId
+        }
+      }
       const formItemLayout = {
         labelCol: {
           span: 8,
@@ -73,7 +79,7 @@ class Main extends React.Component {
                 }],
                 initialValue: data.Company
               })(
-                <CustomerSelect canEdit={true}  onChange={this.CustomerSelected}/>
+                <CustomerSelect canEdit={true} readOnly={this.props.readOnly}  onChange={this.CustomerSelected}/>
               )}
             </FormItem>
             <FormItem
@@ -86,7 +92,7 @@ class Main extends React.Component {
                 }],
                 initialValue: data.Connector
               })(
-                <Input />
+                <Input readOnly={this.props.readOnly}/>
               )}
             </FormItem>
              <FormItem
@@ -99,7 +105,7 @@ class Main extends React.Component {
                 }],
                 initialValue: data.Mobile
               })(
-                <Input />
+                <Input readOnly={this.props.readOnly}/>
               )}
             </FormItem>
             <FormItem

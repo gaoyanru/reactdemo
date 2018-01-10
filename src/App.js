@@ -5,6 +5,7 @@ import {Link, Switch, Route} from 'react-router-dom'
 import { connect } from 'react-redux'
 import  '@/style/BasicLayout.less';
 import  '@/style/app.less';
+import '@/style/common.less'
 import logo from './logo.svg';
 import store from '@/store'
 import { setPowerList, logout } from '@/store/actions'
@@ -43,6 +44,7 @@ const pagesMap = {
   'function_setting': 'system/functionManage',
   'contract_manage': 'contract/review',
   'accounting_manage': 'contract/account',
+  'go_task_config': 'outworker/taskConfig',
   'contract_allot': 'contract/allot',
   'contract_end_manage': 'contract/end'
 }
@@ -108,7 +110,7 @@ class App extends Component {
   onMenuClick = ({ key }) => {
     if (key === 'logout') {
       this.props.logout();
-      
+
       // this.props.dispatch({
       //   type: 'login/logout',
       // });

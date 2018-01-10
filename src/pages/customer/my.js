@@ -296,7 +296,7 @@ class Main extends Component {
             confirmLoading: false,
             handleCancel: ()=> true,
             handleOk: ()=>true,
-            title: row.CompanyName,
+            title: '',
             footer: <DialogFooter onClose={closeDialog} onSave={save_next} onPub={pub_next}/>
         })
 

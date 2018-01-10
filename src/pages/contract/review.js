@@ -102,7 +102,9 @@ class Main extends Component {
         title: '新增订单'
     })
     dialog.result.then((res)=>{
-        console.log(res)
+        this.setState(prestate=>{
+          prestate.searchParams._id = _.uniqueId('r_')
+        });
     },()=>{});
   }
   render() {
@@ -123,11 +125,10 @@ class Main extends Component {
       dataIndex: 'Connector',
     }, {
       title: '签单销售',
-      dataIndex: 'SalesName',
+      dataIndex: 'OrderSalesName',
     }, {
       title: '订单来源',
-      dataIndex: 'OrderSourceId',
-      render: val=> fOrderSource(val)
+      dataIndex: 'SourceName'
     }, {
       title: '签订日期',
       dataIndex: 'ContractDate',

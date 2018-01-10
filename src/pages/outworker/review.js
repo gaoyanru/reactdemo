@@ -179,7 +179,7 @@ class Main extends Component {
                                 confirmLoading: false,
                                 handleCancel (){
                                 },
-                                title: "添加任务" 
+                                title: "修改权重" 
                             }).result.then(()=>{
                                 formdata.Task.ChildTasks = taskform.data;
                                 saveData();
@@ -214,7 +214,7 @@ class Main extends Component {
             handleCancel (){
                 console.log('onCancel')
             },
-            title: "修改权重" 
+            title: "添加任务" 
         }).result.then(()=>{
             this.onSearch(this.state.searchParams)
         },()=>{});

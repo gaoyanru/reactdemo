@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Row, Col, message, Form, Modal, DatePicker, Radio } from 'antd'
+import { Button, Row, Col, message, Form, Modal, DatePicker, Radio, Spin } from 'antd'
 import HasPower from '@/container/HasPower'
 import {fServiceStatus, fAccountantStatus, fCheckStatus } from '@/config/filters'
 import Confirm from '@/component/Confirm'
@@ -63,6 +63,7 @@ class Main extends Component {
     this.AccountCheck = this.AccountCheck.bind(this);
     this.OutworkerCheck = this.OutworkerCheck.bind(this);
   }
+
   AccountCheck(){
     Dialog({
         content: <PartSelectDialog ref={view=>{this.view = view}}/>,
@@ -85,6 +86,7 @@ class Main extends Component {
             }
             if(data.AccountantStatus != 3){
               this.OutworkerCheck()
+              return;
             }
           }
           this.props.closeDialog()
@@ -94,8 +96,15 @@ class Main extends Component {
     },()=>{});
   }
   OutworkerCheck() {
+    const customer = {
+      Customer:{
+        CompanyName: this.props.row.CompanyName,
+        Id: this.props.row.customerId
+      },
+       AreaCode: this.props.row.AreaCode
+    };
     Dialog({
-      content: <OutworkerTask data={{}} customer={{}}  wrappedComponentRef={crmform =>{this.crmform = crmform}}/>,
+      content: <OutworkerTask data={customer}  wrappedComponentRef={crmform =>{this.crmform = crmform}}/>,
       width: 1200,
       handleOk: ()=>{
           return new Promise((resolve, reject) => {
@@ -116,7 +125,7 @@ class Main extends Component {
                           confirmLoading: false,
                           handleCancel (){
                           },
-                          title: "添加任务" 
+                          title: "修改权重" 
                       }).result.then(()=>{
                           formdata.Task.ChildTasks = taskform.data;
                           saveData();
@@ -151,13 +160,19 @@ class Main extends Component {
       handleCancel (){
           console.log('onCancel')
       },
-      title: "修改权重" 
+      title: "添加任务" 
     }).result.then(()=>{
-        this.onSearch(this.state.searchParams)
+
     },()=>{});
   }
-  
+  componentWillReceiveProps(nextProps){
+    const data = nextProps.row;
+    if(data){
+      this.setState({initRow: data});
+    }
+  }
   render() {
+    if(!this.state.initRow) return <Spin/>
     const data = this.state.initRow;
     return(
       <div>
@@ -177,7 +192,7 @@ class Main extends Component {
           <Col span={2}>
             <Button.Group>
               <HasPower power="TOKJ"  key={"btn_TOKJ"}>
-                <Button type="primary" disabled={data.DisableCommitAccount == 1 || data.OrderStatus == 7 || data.OrderStatus == 8} onClick={this.AccountCheck.bind(this)}>审核提交会计</Button>
+                <Button type="primary" disabled={data.DisableCommitAccount == 0 || data.OrderStatus == 7 || data.OrderStatus == 8} onClick={this.AccountCheck.bind(this)}>审核提交会计</Button>
               </HasPower>
               <HasPower power="TOWQ"  key={"btn_TOWQ"}>
                 <Button type="primary" disabled={data.DisableOutWorkCommitAccount == 1 || data.OrderStatus == 7 || data.OrderStatus == 8} onClick={this.OutworkerCheck}>审核提交外勤</Button>

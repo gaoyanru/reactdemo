@@ -49,14 +49,12 @@ let search = {
         label: '服务状态',
         type: 'custom',
         field: 'serviceStatus',
-        view: ServiceStatusSelect,
-        defaultValue: '0'
+        view: ServiceStatusSelect
     }, {
         label: '外勤处理状态',
         type: 'custom',
         field: 'serviceStatus',
-        view: OutworkerSelect,
-        defaultValue: '0'
+        view: OutworkerSelect
     }, {
       label: '会计处理状态',
       type: 'select',
