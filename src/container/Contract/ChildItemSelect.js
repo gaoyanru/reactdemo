@@ -29,7 +29,7 @@ class Main extends Component {
   render() {
     if(!this.props.contractItems) return <Spin/>;
     if(!this.props.mainId){
-      return (<Select size={this.props.size} disabled={this.props.disabled} style={{width: this.props.width || 150}} defaultValue={this.props.defaultValue.toString()} onChange={this.handleChange}>
+      return (<Select size={this.props.size} disabled={this.props.disabled} style={{width: this.props.width || 150}}  onChange={this.handleChange}>
       </Select>)
     } 
     const main = this.props.contractItems.find(item=>{return +item.Id === +this.props.mainId})

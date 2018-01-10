@@ -302,7 +302,7 @@ class Main extends Component {
                     <Button size="small" onClick={e=>{this.view(record)}}>查看</Button>
                     <HasPower power="REVIEW"  key={"btn_REVIEW"} ><Button size="small" onClick={e=>{this.toOther(record)}} disabled={record.OutWorkerStatus != 1|| record.ServiceStatus==8}>审核</Button></HasPower>
                     <HasPower power="REJECT"  key={"btn_REJECT"} ><Button size="small" onClick={e=>{this.toOther(record)}} disabled={record.OutWorkerStatus != 1|| record.ServiceStatus==8}>驳回</Button></HasPower>
-                    <HasPower power="SUBMIT"  key={"btn_SUBMIT"} ><Button size="small" onClick={e=>{this.toPub(record)}} disabled={canSubmit(record)}>提交</Button></HasPower>
+                    <HasPower power="SUBMIT"  key={"btn_SUBMIT"} ><Button size="small" onClick={e=>{this.submit(record)}} disabled={canSubmit(record)}>提交</Button></HasPower>
                 </Button.Group>
             ),
         }];
