@@ -25,7 +25,7 @@ let search = {
     }, {
         label: '联系人',
         type: 'text',
-        field: 'contact'
+        field: 'connector'
     }, {
         label: '签单销售',
         type: 'text',

@@ -52,5 +52,5 @@ module.exports = {
   appNodeModules: resolveApp('node_modules'),
   publicUrl: getPublicUrl(resolveApp('package.json')),
   servedPath: getServedPath(resolveApp('package.json')),
-  outputPath: resolveApp('src/output.js')
+  outputPath: resolveApp('src/index.js')
 };

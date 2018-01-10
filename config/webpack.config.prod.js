@@ -208,7 +208,7 @@ module.exports = {
             // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
           },
           {
-            test: /\.scss$/,
+            test: /\.less$/,
             use: [{
                 loader: "style-loader" // creates style nodes from JS strings 
             }, {
@@ -217,7 +217,7 @@ module.exports = {
                   importLoaders: 1
                 }
             }, {
-                loader: "sass-loader" // compiles Sass to CSS 
+                loader: "less-loader" // compiles Sass to CSS 
             }]
           },
           // "file" loader makes sure assets end up in the `build` folder.
