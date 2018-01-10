@@ -27,7 +27,7 @@ class Main extends Component {
   render() {
     if(!this.props.contractItems) return <Spin/>;
     if(!this.props.mainId){
-      return (<Select size={this.props.size} disabled={this.props.disabled} style={{width: this.props.width || 150}} defaultValue={this.props.defaultValue} onChange={this.handleChange}>
+      return (<Select size={this.props.size} disabled={this.props.disabled} style={{width: this.props.width || 150}} defaultValue={this.props.defaultValue.toString()} onChange={this.handleChange}>
       </Select>)
     } 
     const main = this.props.contractItems.find(item=>{return +item.Id === +this.props.mainId})
@@ -43,7 +43,7 @@ class Main extends Component {
     }
     const options = main.Children.map(d => <Option key={d.Id}>{d.ChildItemName}</Option>);
     return (
-      <Select size={this.props.size} disabled={this.props.disabled} value={this.state.value} style={{width: this.props.width || 150}} defaultValue={this.props.defaultValue||this.props.value} onChange={this.handleChange}>
+      <Select size={this.props.size} disabled={this.props.disabled} value={this.state.value} style={{width: this.props.width || 150}} defaultValue={(this.props.defaultValue||this.props.value).toString()} onChange={this.handleChange}>
         {options}
       </Select>
     );

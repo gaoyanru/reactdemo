@@ -100,8 +100,20 @@ class Main extends Component {
           title: row.CompanyName
       })
       dialog.result.then(()=>{
-          this.onSearch()
-      },()=>{});
+        this.setState(prestate=>{
+          return {
+            ...prestate.searchParams,
+            _id: _.uniqueId('r_')
+          }
+        });
+      },()=>{
+        this.setState(prestate=>{
+          return {
+            ...prestate.searchParams,
+            _id: _.uniqueId('r_')
+          }
+        });
+      });
   }
   render() {
     const columns = [{
@@ -144,10 +156,10 @@ class Main extends Component {
         <div>
           <SearchForm items={search.items} buttons={search.buttons} onSearch={this.onSearch}/>
           <Tabs defaultActiveKey="NOALL">
-            <TabPane tab="待处理订单" key="NOALL">
+            <TabPane tab="待处理订单" key="NOALL" forceRender={true}>
               <OrderTable SearchParams={this.state.searchParams} searchUrl="taskdistributionlist" columns={columns} isAll={false}/>
             </TabPane>
-            <TabPane tab="全部订单" key="ALL">
+            <TabPane tab="全部订单" key="ALL" forceRender={true}>
               <OrderTable SearchParams={this.state.searchParams} searchUrl="taskdistributionlist" columns={columns} isAll={true}/>
             </TabPane>
           </Tabs>

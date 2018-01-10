@@ -103,7 +103,10 @@ class Main extends Component {
     })
     dialog.result.then((res)=>{
         this.setState(prestate=>{
-          prestate.searchParams._id = _.uniqueId('r_')
+          return {
+            ...prestate.searchParams,
+            _id: _.uniqueId('r_')
+          }
         });
     },()=>{});
   }
@@ -147,11 +150,11 @@ class Main extends Component {
     return (
         <div>
           <SearchForm items={search.items} buttons={search.buttons} onSearch={this.onSearch}/>
-          <Tabs defaultActiveKey="NOALL">
-            <TabPane tab="待处理订单" key="NOALL">
+          <Tabs defaultActiveKey="NOALL" >
+            <TabPane tab="待处理订单" key="NOALL" forceRender={true}>
               <OrderTable SearchParams={this.state.searchParams} searchUrl="order" columns={columns} isAll={false}/>
             </TabPane>
-            <TabPane tab="全部订单" key="ALL">
+            <TabPane tab="全部订单" key="ALL" forceRender={true}>
               <OrderTable SearchParams={this.state.searchParams} searchUrl="order" columns={columns} isAll={true}/>
             </TabPane>
           </Tabs>

@@ -16,8 +16,9 @@ axios.interceptors.response.use(function(response) {
   return response
 }, function(error) {
   if (error.response && error.response.status === 403){
-    sessionStorage.removeItem('token')
-    window.location.replace('/login')
+    sessionStorage.clear();
+    window.location.replace('#/login')
+    window.location.reload()
   }
   if(typeof error.response.data === "object"){
     message.error(error.response.data.message)
