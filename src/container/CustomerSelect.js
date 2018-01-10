@@ -24,6 +24,7 @@ class Main extends Component {
 
     };
 
+    this.handleTableChange = this.handleTableChange.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.showModal = this.showModal.bind(this);
@@ -35,6 +36,9 @@ class Main extends Component {
         Id: props.value.Id
       }
     }
+  }
+  handleTableChange (pagination){
+    this.setState({pagination: pagination}, ()=>{this.onSearch()})
   }
   componentWillReceiveProps(nextProps){
     const data = nextProps.value;
@@ -87,7 +91,7 @@ class Main extends Component {
             loading: false
         });
     })
-  } 
+  }
   componentWillMount() {
 
   }
@@ -111,10 +115,10 @@ class Main extends Component {
         }]
     return (
       <div style={{paddingRight: '35px'}}>
-        <Input 
-          onClick={e=>{if(!(this.state.selected.Id && this.props.canEdit)) this.showModal()}} 
-          addonAfter={<Icon type="plus" onClick={this.showModal} />} 
-          value={this.state.selected.CompanyName} 
+        <Input
+          onClick={e=>{if(!(this.state.selected.Id && this.props.canEdit)) this.showModal()}}
+          addonAfter={<Icon type="plus" onClick={this.showModal} />}
+          value={this.state.selected.CompanyName}
           readOnly = { this.props.readOnly || !(this.state.selected.Id && this.props.canEdit)}
           onChange={this.handleChange}/>
         <Modal title= "选择公司"
@@ -130,7 +134,7 @@ class Main extends Component {
                 <label title="公司名称/联系人">公司名称/联系人</label>
               </div>
               <div className="ant-col-12 ant-form-item-control-wrapper">
-                <Input onChange={this.handleInputChange} /> 
+                <Input onChange={this.handleInputChange} />
               </div>
               <div className="ant-col-2 ant-form-item-control-wrapper">
                 <Button type="primary" onClick={this.onSearch}>查询</Button>
