@@ -1,80 +1,80 @@
-import React from 'react'
-import { Spin, message, Button } from 'antd'
-import { getListData, postData, putData } from '@/api'
+import React, { Component } from 'react'
+import { Tabs, List, Spin, message, Button } from 'antd'
+import { getListData, putData } from '@/api'
 import _ from 'lodash'
-import * as ContractActions from '@/config/contractActions'
-import Dialog from '@/container/Dialog'
-import Title from '@/component/Title'
+import OrderDialog from '@/container/Contract/OrderDialog'
+import Prompt from '@/component/Prompt'
+import BelongInfo from '@/container/Contract/BelongInfo'
+const TabPane = Tabs.TabPane;
 
-import CustomerBaseInfo from '@/container/Contract/CustomerBaseInfo'
-import ContractInfo from '@/container/Contract/ContractForm'
-import PayInfo from '@/container/Contract/PayInfo'
-
-class Main extends React.Component {
+class Main extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: null,
-      readOnly: props.readOnly
+      canSure: true,
+
     }
-    this.onSave = this.onSave.bind(this);
-    this.onEdit = this.onEdit.bind(this);
-    this.getOrderDetail = this.getOrderDetail.bind(this);
-    if(props.id){
-      this.getOrderDetail(props.id);
-    }else{
-      this.state.data = {};
-    }
+    this.pass = this.pass.bind(this);
+    this.reject = this.reject.bind(this);
+    this.closeDialog = this.closeDialog.bind(this);
   }
-  getOrderDetail(id){
-    getListData('order/'+ id).then(res=>{
-      if(res.status){
-        this.setState({data: res.data});
-      }
-    })
+  closeDialog(){
+    this.handler.close();
   }
-  onSave(){
-    
-    const msg2 = this.ContractInfo.validateField();
-    const msg3 = this.PayInfo.validateField();
-
-    if(msg2) message.error(msg2);
-    if(msg3) message.error(msg3);
-    if(msg2 || msg3) return;
-
-    let cusInfo = this.CustomerBaseInfo.getFieldsValue();
-    if(!cusInfo) return;
-
-    let ctrInfo = this.ContractInfo.getFieldsValue();
-    let payInfo = this.PayInfo.getFieldsValue();
-
-    const data = {
-      ...cusInfo,
-      ...ctrInfo,
-      ...payInfo
+  pass(){
+    const data = this.props.data;
+    const post = {
+      OrderId: data.OrderId,
+      remark: '',
+      auditVal: 0
     };
-
-    postData('order',data).then(res=>{
-      if(res.status){
-        message.info('保存成功！');
-        this.handler.close();
+    putData('order/financeaudit', post).then(res =>{
+        // console.log(res)
+      if(res.status) {
+        message.info('审核成功')
+        this.closeDialog();
       }
-    })
+    });
   }
-  onEdit(){
-    this.setState({readOnly: false})
+  reject(arg){
+    Prompt({
+        title: '驳回原因',
+        handleOk: (resStr)=>{
+          return new Promise((resolve, reject) => {
+            putData('order/financeaudit',{
+                OrderId: this.props.data.OrderId,
+                remark: resStr,
+                auditVal: 1
+            }).then(res=>{
+                if(res.status){
+                    message.info('驳回成功！');
+                    this.closeDialog();
+                    resolve();
+                }
+            })
+          });
+        }
+    });
+  }
+  sure() {
+    console.log('aa')
   }
   render() {
-    if(!this.state.data) return <Spin/>
-    return (
-      <div style={this.props.style} className="order-dialog">
-        <CustomerBaseInfo wrappedComponentRef={e=>{this.CustomerBaseInfo = e}} data={this.state.data} readOnly={this.state.readOnly}/>
-        <ContractInfo ref={e=>{this.ContractInfo = e}} data={this.state.data} readOnly={this.state.readOnly}/>
-        <PayInfo ref={e=>{this.PayInfo = e}} data={this.state.data} readOnly={this.state.readOnly}/>
-        {this.state.readOnly?(this.state.data.OrderStatus > 2 ?  null : <div style={{textAlign:'center'}}><Button type="primary" onClick={this.onEdit}>编辑</Button></div>)
-          : <div style={{textAlign:'center'}}><Button type="primary" onClick={this.onSave}>保存并提交</Button></div>}
+    return(
+      <div style={this.props.style} className="company-dialog">
+        {(this.props.data.OrderSourceId === 1)?(<Button.Group style={{float:'right'}}>
+            <Button type="primary"  onClick={this.pass.bind(this)} disabled={this.props.data.OrderStatus !== 2}>财务审核</Button>
+            <Button type="primary"  onClick={this.reject.bind(this)} disabled={this.props.data.OrderStatus !== 2}>财务驳回</Button>
+          </Button.Group>):null}
+          {this.props.data.OrderSourceId === 2 ?(<Button.Group style={{float:'right'}}>
+              <Button type="primary"  onClick={this.pass.bind(this)} disabled={this.props.data.OrderStatus !== 2}>网店到款</Button>
+              <Button type="primary"  onClick={this.reject.bind(this)} disabled={this.props.data.OrderStatus !== 2}>财务驳回</Button>
+              <Button type="primary"  onClick={this.sure.bind(this)} disabled={this.props.data.OrderStatus !== 4}>财务确认</Button>
+            </Button.Group>):null}
+        <BelongInfo data={this.props.data}/>
+        <OrderDialog readOnly={true} id={this.props.data.OrderId}/>
       </div>
-    );
+    )
   }
 }
 
