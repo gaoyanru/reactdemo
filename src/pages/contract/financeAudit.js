@@ -8,7 +8,7 @@ import OrderTable from '@/container/OrderTable'
 import _ from 'lodash'
 import {fOrderSource } from '@/config/filters'
 import Dialog from '@/container/Dialog'
-import OrderDialog from '@/container/Contract/OrderDialog'
+import FinanceOrderDialog from '@/container/Contract/FinanceOrderDialog'
 
 const TabPane = Tabs.TabPane;
 
@@ -112,7 +112,7 @@ class Finance extends Component {
   }
   view(row) {
     const dialog = Dialog({
-      content: <OrderDialog id={row.OrderId} readOnly={true}/>,
+      content: <FinanceOrderDialog id={row.OrderId} readOnly={true}/>,
       width: 1300,
       confirmLoading: false,
       footer: null,
