@@ -42,7 +42,7 @@ class Main extends Component {
   render() {
     return(
       <div style={this.props.style} className="company-dialog">
-        <ContractInfo row={this.props.row}/>
+        {this.state.orderInfo? (<ContractInfo data={this.state.orderInfo}/>) : <Spin/>}
         <div>
           <Tabs type="card" style={{width: '100%'}} activeKey={this.state.activeKey} onTabClick={this.onTabClick}>
             <TabPane tab="公司信息" key="1">

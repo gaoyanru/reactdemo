@@ -7,13 +7,15 @@ import { putData, postData } from '@/api'
 import SetServiceMonth from '@/container/Contract/SetServiceMonth'
 import store from '@/store'
 import Dialog from '@/container/Dialog'
+import _ from 'lodash'
 
 class Main extends Component {
   constructor(props) {
     super(props);
     this.state = {
       initRow: {},
-      visible: false
+      visible: false,
+      setFirstMonth: ''
     }
     this.AccountCheck = this.AccountCheck.bind(this);
     this.AccountCheckSecond = this.AccountCheckSecond.bind(this);
@@ -22,7 +24,7 @@ class Main extends Component {
   }
   AccountCheck = () => {
     Dialog({
-        content: <SetServiceMonth data={this.props.row}/>,
+        content: <SetServiceMonth data={this.state.initRow}/>,
         width: 500,
         confirmLoading: false,
         footer: null,
@@ -50,12 +52,20 @@ class Main extends Component {
     })
   }
   onReject() {
-    const OrderId = this.props.row.OrderId
+    const OrderId = this.props.data.OrderId
     Confirm({
         handleOk:()=>{
           putData('order/audit/reject/' + OrderId).then(res => {
             if (res.status) {
               // 关闭上一个弹窗并且刷新列表
+              message.info('驳回成功！');
+              store.dispatch({
+                type: 'set contract account modal status',
+                status: {
+                  modal1: false,
+                  modal2: false
+                }
+              })
             }
           })
         },
@@ -63,13 +73,26 @@ class Main extends Component {
     })
   }
   componentWillMount() {
-    this.setState({initRow: this.props.row}, () => {
+    this.setState({initRow: this.props.data}, () => {
       console.log(this.state.initRow, 'initRow')
+      var setFirstMonth = _.filter(this.state.initRow.CrmOrderItems, {
+        "ChildItemId": 1,
+        "MainItemId": 1
+      })
+      this.setState({setFirstMonth: setFirstMonth})
+      console.log(setFirstMonth, 'setFirstMonth')
+      if (setFirstMonth && setFirstMonth.length) {
+        this.setState({isSetFirstMonth: true})
+      } else {
+        this.setState({isSetFirstMonth: false})
+      }
     })
   }
   render() {
     const data = this.state.initRow;
-    console.log(data.ServiceStart, data.AccountantStatus, 'render')
+    // console.log(data.ServiceStart, data.AccountantStatus, 'render')
+    console.log(data.AccountantStatus !== 1)
+    console.log(data.AccountantStatus !== 3)
     return(
       <div>
         <Row className="company-info">
@@ -79,18 +102,18 @@ class Main extends Component {
              <label>当前服务日期:</label>{data.ServiceStart} - {data.ServiceEnd}
              <label>服务状态:</label>{fServiceStatus(data.ServiceStatus)}
              <label>外勤审核状态:</label>{fCheckStatus(data.OutWorkerStatus)}
-             <label>会计审核状态:</label>{fAccountantStatus(data.AgentStatus)}
+             <label>会计审核状态:</label>{fAccountantStatus(data.AccountantStatus)}
           </Col>
           <Col span={2}>
             <Button.Group>
-              {(data.ServiceStart && data.AccountantStatus != 1) && <HasPower power="REVIEW"  key={"btn_REVIEW"}>
-                <Button type="primary" onClick={this.AccountCheck}>会计审核</Button>
+              {(this.state.isSetFirstMonth) && <HasPower power="REVIEW"  key={"btn_REVIEW"}>
+                <Button type="primary" onClick={this.AccountCheck} disabled={data.AccountantStatus === 2}>会计审核</Button>
               </HasPower>}
-              {(data.ServiceStart && data.AccountantStatus == 1) && <HasPower power="REVIEW"  key={"btn_REVIEW"}>
-                <Button type="primary" onClick={this.AccountCheckSecond}>二次会计审核</Button>
+              {(!this.state.isSetFirstMonth) && <HasPower power="REVIEW"  key={"btn_REVIEW"}>
+                <Button type="primary" onClick={this.AccountCheckSecond} disabled={data.AccountantStatus === 2}>会计审核</Button>
               </HasPower>}
-              <HasPower power="REJECT"  key={"btn_REJECT"}>
-                {(data.AccountantStatus != 1) && <Button type="primary" onClick={this.onReject}>会计驳回</Button>}
+             <HasPower power="REJECT"  key={"btn_REJECT"}>
+                <Button type="primary" onClick={this.onReject} disabled={data.AccountantStatus === 2}>会计驳回</Button>
               </HasPower>
             </Button.Group>
           </Col>
