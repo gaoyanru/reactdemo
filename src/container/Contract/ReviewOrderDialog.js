@@ -42,8 +42,6 @@ class Main extends Component {
         title: '驳回原因',
         handleOk: (resStr)=>{
           return new Promise((resolve, reject) => {
-            console.log(this, 'remark')
-            resStr = this.props.data.Remark ? this.props.data.Remark + resStr : resStr
             putData('order/audit',{
                 OrderId: this.props.data.OrderId,
                 remark: resStr,

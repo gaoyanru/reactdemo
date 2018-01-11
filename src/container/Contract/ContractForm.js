@@ -292,7 +292,6 @@ class Main extends React.Component {
   formatData(data){
     if(data){
       let nextState = _.pick(data, ['ContractDate', 'Remark', 'BookKeepFeed', 'FinanceServiceFeed', 'OutWorkServiceFeed','AgentFeed','Amount']);
-      console.log(nextState, 'nextState')
       nextState.ContractDate = moment(nextState.ContractDate);
       const crmOrderItems = data.CrmOrderItems || data.Contracts;
       let type1 = _.find(crmOrderItems,{MainItemId:1});
