@@ -29,6 +29,8 @@ class Main extends React.Component {
   getOrderDetail(id){
     getListData('order/'+ id).then(res=>{
       if(res.status){
+        res.data.SalesId = res.data.OrderSalesId;
+        res.data.SalesName = res.data.OrderSalesName;
         this.setState({data: res.data});
       }
     })
@@ -53,12 +55,13 @@ class Main extends React.Component {
       ...ctrInfo,
       ...payInfo
     };
-    data.OrderSalesId = data.SalesId
+    // data.OrderSalesId = data.SalesId
     if(!this.state.data.OrderId){
       postData('order',data).then(res=>{
         if(res.status){
           message.info('保存成功！');
-          this.handler.close();
+          if(this.handler) this.handler.close();
+          if(this.props.closeDialog) this.props.closeDialog();
         }
       })
     }else{
@@ -66,7 +69,8 @@ class Main extends React.Component {
       putData('order/'+this.state.data.OrderId,_.extend({},this.state.data,data)).then(res=>{
         if(res.status){
           message.info('保存成功！');
-          this.handler.close();
+          if(this.handler) this.handler.close();
+          if(this.props.closeDialog) this.props.closeDialog();
         }
       })
     }

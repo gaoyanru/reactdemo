@@ -64,7 +64,7 @@ class Main extends Component {
             <Button type="primary"  onClick={this.pass.bind(this)}>审核</Button> 
             <Button type="primary"  onClick={this.reject.bind(this)}>驳回</Button> 
           </Button.Group>):null}
-        <OrderDialog readOnly={true} id={this.props.data.OrderId}/>
+        <OrderDialog readOnly={true} id={this.props.data.OrderId} closeDialog ={this.closeDialog}/>
       </div>
     )
   }
