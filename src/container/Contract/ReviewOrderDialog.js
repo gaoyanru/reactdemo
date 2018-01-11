@@ -42,6 +42,8 @@ class Main extends Component {
         title: '驳回原因',
         handleOk: (resStr)=>{
           return new Promise((resolve, reject) => {
+            console.log(this, 'remark')
+            resStr = this.props.data.Remark ? this.props.data.Remark + resStr : resStr
             putData('order/audit',{
                 OrderId: this.props.data.OrderId,
                 remark: resStr,
@@ -61,8 +63,8 @@ class Main extends Component {
     return(
       <div style={this.props.style} className="company-dialog">
         {this.props.data.OrderStatus === 1?(<Button.Group style={{float:'right'}}>
-            <Button type="primary"  onClick={this.pass.bind(this)}>审核</Button> 
-            <Button type="primary"  onClick={this.reject.bind(this)}>驳回</Button> 
+            <Button type="primary"  onClick={this.pass.bind(this)}>审核</Button>
+            <Button type="primary"  onClick={this.reject.bind(this)}>驳回</Button>
           </Button.Group>):null}
         <OrderDialog readOnly={true} id={this.props.data.OrderId}/>
       </div>

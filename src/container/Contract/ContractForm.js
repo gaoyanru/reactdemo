@@ -14,7 +14,7 @@ class Accounting extends React.Component {
     this.state = {
       data: props.data
     }
-    this.setFieldValue = this.setFieldValue.bind(this); 
+    this.setFieldValue = this.setFieldValue.bind(this);
     this.getFieldValue = this.getFieldValue.bind(this);
     this.validateField = this.validateField.bind(this);
 
@@ -71,15 +71,15 @@ class Accounting extends React.Component {
           <tr className="ant-table-row">
             <td colSpan="6" style={{background:'#f8d795',padding:'3px 12px'}}>
               <span>服务期限：
-                <Input maxLength="2" size="small" defaultValue={data.OrderMonths} style={{width: '35px'}} onChange={e=>{this.setFieldValue({OrderMonths:e.target.value})}}/> 
-                + 
+                <Input maxLength="2" size="small" defaultValue={data.OrderMonths} style={{width: '35px'}} onChange={e=>{this.setFieldValue({OrderMonths:e.target.value})}}/>
+                +
                 <Input maxLength="1" size="small" defaultValue={data.GiftMonth} style={{width: '25px'}} onChange={e=>{this.setFieldValue({GiftMonth:e.target.value})}}/>
               </span>
             </td>
           </tr>
         </tbody>);
     }
-    
+
   }
 }
 
@@ -168,7 +168,7 @@ class AddedService extends React.Component {
         })}
         </tbody>);
     }
-    
+
   }
 }
 class Others extends React.Component {
@@ -255,7 +255,7 @@ class Others extends React.Component {
         })}
         </tbody>);
     }
-    
+
   }
 }
 
@@ -292,6 +292,7 @@ class Main extends React.Component {
   formatData(data){
     if(data){
       let nextState = _.pick(data, ['ContractDate', 'Remark', 'BookKeepFeed', 'FinanceServiceFeed', 'OutWorkServiceFeed','AgentFeed','Amount']);
+      console.log(nextState, 'nextState')
       nextState.ContractDate = moment(nextState.ContractDate);
       const crmOrderItems = data.CrmOrderItems || data.Contracts;
       let type1 = _.find(crmOrderItems,{MainItemId:1});
@@ -300,7 +301,7 @@ class Main extends React.Component {
         Group: 2,
         items: _.chain(crmOrderItems).filter(item=>(item.MainItemId ===2 || item.MainItemId===3)).each(item=>(item.id =_.uniqueId('p3_'))).value()
       };
-      if(type2.items.length === 0) 
+      if(type2.items.length === 0)
         type2 = null;
       else
         type2 = _.extend(type2, _.pick(type2.items[0], ['ContractNo','Amount','Remark']));
@@ -308,7 +309,7 @@ class Main extends React.Component {
         Group: 3,
         items: _.chain(crmOrderItems).filter(item=>(item.MainItemId === 4)).each(item=>(item.id =_.uniqueId('p4_'))).value()
       };
-      if(type3.items.length === 0) 
+      if(type3.items.length === 0)
         type3 = null;
       else
         type3 = _.extend(type3, _.pick(type3.items[0], ['ContractNo','Amount','Remark']));
@@ -468,13 +469,13 @@ class Main extends React.Component {
             maskClosable={false}>
             <div className="ant-row ant-form-item">
               <h2 style={{textAlign:'center',cursor:'pointer',margin:"6px 0",background:this.validateType(1)?'#aae2f6':'#ccc',padding:'12px'}} onClick={e=>{this.onTypeSelect(1)}}>
-                记账报税 
+                记账报税
               </h2>
               <h2 style={{textAlign:'center',cursor:'pointer',margin:"6px 0",background:this.validateType(2)?'#aae2f6':'#ccc',padding:'12px'}} onClick={e=>{this.onTypeSelect(2)}}>
-                增值 
+                增值
               </h2>
               <h2 style={{textAlign:'center',cursor:'pointer',margin:"6px 0",background:this.validateType(3)?'#aae2f6':'#ccc',padding:'12px'}} onClick={e=>{this.onTypeSelect(3)}}>
-                代收 
+                代收
               </h2>
             </div>
         </Modal>
