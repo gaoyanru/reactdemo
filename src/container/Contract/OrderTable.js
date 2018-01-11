@@ -41,6 +41,8 @@ class OrderTable extends Component {
       } else {
         vals.treatedOrder = 1
       }
+      vals.starttime = vals.starttime ? vals.starttime.format('YYYY-MM-DD') : '';
+      vals.endtime = vals.endtime ? vals.endtime.format('YYYY-MM-DD') : '';
       getListData(this.props.searchUrl, vals).then(res => {
           if(res.status){
               const pagination = { ...this.state.pagination };
@@ -64,7 +66,7 @@ class OrderTable extends Component {
     if(!_.isEqual(this.props.SearchParams,props.SearchParams)){
       this.setState((preState)=>{
         return {
-          searchParams: props.SearchParams, 
+          searchParams: props.SearchParams,
           pagination: {...preState.pagination, current:1}
         };
       }, () => {

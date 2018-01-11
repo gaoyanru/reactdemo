@@ -32,12 +32,12 @@ class OrderTable extends Component {
     this.setState({pagination: pagination}, ()=>{this.Search()})
   }
   Search() {
-      console.log(this.state.searchParams, 'searchParams')
+      // console.log(this.state.searchParams, 'searchParams')
       this.setState({loading: true});
       const state = _.cloneDeep(this.state);
       const searchParams = state.searchParams;
       const pagination = state.pagination;
-      console.log(pagination, 'pagination')
+      // console.log(pagination, 'pagination')
       var vals = searchParams
       vals.limit = pagination.pageSize;
       vals.offset = (pagination.current - 1) * pagination.pageSize;
@@ -46,11 +46,9 @@ class OrderTable extends Component {
       } else {
         vals.treatedOrder = 1
       }
-      console.log(vals, 'vals')
-      if (vals.offset === 0) {
-        vals.starttime = vals.starttime ? vals.starttime.format('YYYY-MM-DD') : '';
-        vals.endtime = vals.endtime ? vals.endtime.format('YYYY-MM-DD') : '';
-      }
+      // console.log(vals, 'vals')
+      vals.starttime = vals.starttime ? vals.starttime.format('YYYY-MM-DD') : '';
+      vals.endtime = vals.endtime ? vals.endtime.format('YYYY-MM-DD') : '';
       getListData(this.props.SearchUrl, vals).then(res => {
           if(res.status){
               const pagination = { ...this.state.pagination };
@@ -71,8 +69,8 @@ class OrderTable extends Component {
     this.Search()
   }
   componentWillReceiveProps(props) { // 在组件接收到新的props的时候调用
-    console.log(props, 'props Search')
-    console.log(this.props, 'this.props')
+    // console.log(props, 'props Search')
+    // console.log(this.props, 'this.props')
     if(!_.isEqual(this.props.SearchParams,props.SearchParams)){
       var pagination = {
         current: 1,
@@ -88,18 +86,18 @@ class OrderTable extends Component {
   }
 
   onSelectChange = (selectedRowKeys) => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
+    // console.log('selectedRowKeys changed: ', selectedRowKeys);
     this.setState({ selectedRowKeys });
   }
 
   checkAll() {
-    console.log(this.state.selectedRowKeys, '批量审核时的选中参数')
+    // console.log(this.state.selectedRowKeys, '批量审核时的选中参数')
     if (this.state.selectedRowKeys.length === 0) {
       message.error('请至少选择一个公司！');
       return false
     }
     const selectKeys = this.state.selectedRowKeys
-    console.log(selectKeys, typeof(selectKeys), 'selectKeys')
+    // console.log(selectKeys, typeof(selectKeys), 'selectKeys')
     Confirm({
         handleOk:()=>{
           putData('order/financeauditlist', selectKeys).then(res => {
