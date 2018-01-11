@@ -75,10 +75,10 @@ let search = {
 
 class DialogFooter extends Component{
     constructor(props) {
-        super(props) 
+        super(props)
         this.state= {loading: false}
     }
-    
+
     onClose = ()=>{
         this.props.onClose
     }
@@ -92,7 +92,7 @@ class DialogFooter extends Component{
        this.setState({loading: true})
         this.props.onPub().then(res=>{
             this.setState({loading: false})
-        }) 
+        })
     }
     render (){
         return ([<Button key="back" type="primary" onClick={this.props.onClose}>关闭</Button>,
@@ -125,6 +125,8 @@ class Main extends Component {
         this.addNew = this.addNew.bind(this)
         this.edit = this.edit.bind(this)
         this.openDialog = this.openDialog.bind(this)
+        this.toPubBatch = this.toPubBatch.bind(this)
+        this.toOtherBatch = this.toOtherBatch.bind(this)
     }
     onUpload (res){
         if(res.file && res.file.status==="done"){
@@ -186,7 +188,7 @@ class Main extends Component {
                                         handleCancel (){
                                             console.log('onCancel')
                                         },
-                                        title: '新增客户' 
+                                        title: '新增客户'
                                     }).result.then(()=>{
                                          postData('customer?verify=1', formValues).then(res=>{
                                             message.info('保存成功！')
@@ -205,7 +207,7 @@ class Main extends Component {
                                     // message.error(res.message);
                                     reject()
                                 }
-                                
+
                             }
                         });
                     }else{
@@ -217,7 +219,7 @@ class Main extends Component {
             handleCancel (){
                 console.log('onCancel')
             },
-            title: title 
+            title: title
         }).result.then(()=>{
             this.onSearch(this.state.searchParams)
         },()=>{});
@@ -254,7 +256,7 @@ class Main extends Component {
                                         handleCancel (){
                                             console.log('onCancel')
                                         },
-                                        title: '新增客户' 
+                                        title: '新增客户'
                                     }).result.then(()=>{
                                          putData('customer/'+customer.Id+'?verify=1', customer).then(res=>{
                                             message.info('保存成功！')
@@ -318,7 +320,7 @@ class Main extends Component {
                     this.onSearch(this.state.searchParams).then(res=>{
                         this.crmform.showNext(res.data.list[0].Id)
                     })
-                } 
+                }
             }
         }
     }
@@ -335,7 +337,24 @@ class Main extends Component {
             message: '确认要转到公海吗？'
 
         })
-        
+
+    }
+    onSelectChange = (selectedRowKeys) => {
+      this.setState({ selectedRowKeys });
+    }
+    toPubBatch() {
+      if (this.state.selectedRowKeys.length === 0) {
+        message.error('请至少选择一个客户！');
+        return false
+      }
+      const selectKeys = this.state.selectedRowKeys
+      postData('customerocean', selectKeys).then(res => {
+        if (res.status){
+          message.info('转出成功！')
+          this.onSearch(this.state.searchParams)
+          this.setState({selectedRowKeys: []})
+        }
+      })
     }
     toOther = (row)=>{
         let saler;
@@ -357,16 +376,46 @@ class Main extends Component {
             handleCancel (){
                 console.log('onCancel')
             },
-            title: "转出-"+ row.CompanyName 
+            title: "转出-"+ row.CompanyName
         }).result.then(()=>{
             this.onSearch(this.state.searchParams);
         },()=>{});
+    }
+    toOtherBatch() {
+      let saler;
+      Dialog({
+          content: <div><span>选择销售:&nbsp;&nbsp;</span><SalerSelect onChange={v=>{saler=v}}/></div>,
+          width: 540,
+          handleOk: ()=>{
+              return new Promise((resolve, reject) => {
+                  putData(`transcustomer/${saler}`, this.state.selectedRowKeys).then(res=>{
+                      if(res.status){
+                          message.info('转出成功！')
+                          this.onSearch(this.state.searchParams)
+                          this.setState({selectedRowKeys: []})
+                          resolve()
+                      }
+                  })
+              });
+          },
+          confirmLoading: false,
+          handleCancel (){
+              console.log('onCancel')
+          },
+          title: "批量转出客户"
+      }).result.then(()=>{
+          this.onSearch(this.state.searchParams);
+      },()=>{});
     }
     componentWillMount() {
         this.onSearch();
     }
     render() {
-        
+      var { selectedRowKeys } = this.state;
+      var rowSelection = {
+        selectedRowKeys,
+        onChange: this.onSelectChange
+      };
         const columns = [{
             title: '公司名称',
             dataIndex: 'CompanyName'
@@ -411,23 +460,28 @@ class Main extends Component {
                 </Button.Group>
             ),
         }];
-    
+
         search.buttons=[
         <HasPower power="NEW" key="btn_addNew"><Button type="primary" onClick={this.addNew} style={{margin:'0 8px'}}>新增客户</Button></HasPower>,
         <HasPower power="IMPORT" key="btn_IMPORT"><ImportData onChange={this.onUpload} style={{margin:'0 8px'}}/></HasPower>]
-        
+
         return (
-            <div>
-                <SearchForm items={search.items} buttons={search.buttons} onSearch={this.onSearch}/> 
-                <Table columns={columns} 
+            <div style={{position: 'relative'}}>
+                <SearchForm items={search.items} buttons={search.buttons} onSearch={this.onSearch}/>
+                <Table columns={columns}
                     rowKey={record => record.Id}
-                    dataSource={this.state.data} 
+                    dataSource={this.state.data}
                     pagination={this.state.pagination}
                     loading={this.state.loading}
                     onChange={this.handleTableChange}
                     size="middle"
                     bordered={true}
+                    rowSelection={rowSelection}
                 />
+                <div style={{position:'absolute',bottom:'10px'}}>
+                  <Button type="primary" onClick={this.toPubBatch} style={{margin:'0 8px'}}>批量转入公海</Button>
+                  <Button type="primary" onClick={this.toOtherBatch} style={{margin:'0 8px'}}>批量转其他人</Button>
+                </div>
             </div>
         );
     }
