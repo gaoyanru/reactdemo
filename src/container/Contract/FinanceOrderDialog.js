@@ -57,7 +57,19 @@ class Main extends Component {
     });
   }
   sure() {
-    console.log('aa')
+    const data = this.props.data;
+    const post = {
+      OrderId: data.OrderId,
+      remark: '',
+      auditVal: 2
+    };
+    putData('order/financeaudit', post).then(res =>{
+        // console.log(res)
+      if(res.status) {
+        message.info('已确认')
+        this.closeDialog();
+      }
+    });
   }
   render() {
     return(
