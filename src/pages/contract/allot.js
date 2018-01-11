@@ -140,7 +140,7 @@ class Main extends Component {
       render: val=>fCheckStatus(val)
     }, {
       title: '会计处理状态',
-      dataIndex: 'AgentStatus',
+      dataIndex: 'AccountantStatus',
       render: val=>fCheckStatus(val)
     }];
     

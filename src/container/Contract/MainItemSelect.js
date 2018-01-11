@@ -30,7 +30,7 @@ class Main extends Component {
       }
     }
     return (
-      <Select size={this.props.size} disabled={this.props.disabled} style={{width: this.props.width || 150}} defaultValue={(this.props.defaultValue||this.props.value).toString()} onChange={this.handleChange}>
+      <Select size={this.props.size} disabled={this.props.disabled} style={{width: this.props.width || 150}} defaultValue={(this.props.defaultValue||this.props.value||'')+''} onChange={this.handleChange}>
         {options}
       </Select>
     );

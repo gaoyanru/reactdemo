@@ -172,7 +172,7 @@ class Main extends Component {
         this.onSearch();
     }
     render() {
-        
+        if(this.props.curUser.IsCenter) return <span>Hi,{this.props.curUser.RealName}</span>;
         const columns = [{
             title: '公司名称',
             dataIndex: 'CompanyName'

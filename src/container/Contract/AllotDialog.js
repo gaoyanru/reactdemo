@@ -34,7 +34,7 @@ class Main extends Component {
   }
   getOrderInfo(){
     const row = this.props.row;
-    getListData('customerdetail/'+ this.props.row.OrderId).then(res=>{
+    getListData('customerdetail/'+ this.props.row.CustomerId).then(res=>{
       res.data = _.extend(res.data, row);
       this.setState({
         customerInfo: res.data

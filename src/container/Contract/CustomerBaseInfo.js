@@ -60,7 +60,7 @@ class Main extends React.Component {
           span: 8,
         },
         wrapperCol: {
-          span: 16,
+          span: 14,
         }
       };
       
