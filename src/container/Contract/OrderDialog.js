@@ -54,13 +54,23 @@ class Main extends React.Component {
       ...payInfo
     };
     data.OrderSalesId = data.SalesId
+    if(!this.state.data.OrderId){
+      postData('order',data).then(res=>{
+        if(res.status){
+          message.info('保存成功！');
+          this.handler.close();
+        }
+      })
+    }else{
 
-    postData('order',data).then(res=>{
-      if(res.status){
-        message.info('保存成功！');
-        this.handler.close();
-      }
-    })
+      putData('order/'+this.state.data.OrderId,_.extend({},this.state.data,data)).then(res=>{
+        if(res.status){
+          message.info('保存成功！');
+          this.handler.close();
+        }
+      })
+    }
+    
   }
   onEdit(){
     this.setState({readOnly: false})

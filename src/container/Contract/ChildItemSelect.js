@@ -23,7 +23,7 @@ class Main extends Component {
     if(props.mainId !== this.props.mainId){
       this.setState({value: null})
     }else{
-      this.setState({value: '' + (this.props.defaultValue||this.props.value)})
+      this.setState({value: '' + (this.props.defaultValue||this.props.value||'')})
     }
   }
   render() {

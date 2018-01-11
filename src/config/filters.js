@@ -58,7 +58,7 @@ export const fServiceStatus = (status)=>{ //服务状态
     }
     return str
 }
-export const fCheckStatus = function(status) { //会计外勤 处理状态
+export const fCheckStatus = function(status) { //会计,外勤 处理状态
     var str = ''
     switch (+status) {
         case 0:

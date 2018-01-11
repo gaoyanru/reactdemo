@@ -171,7 +171,7 @@ class App extends Component {
             <div style={{ minHeight: 'calc(100vh - 260px)' }}>
               <Switch>
                 {routers}
-                <Route exact path="/main" component={Dashboard}/>
+                <Route exact path="/main" render={arg=>{return <Dashboard curUser={currentUser}/>}}/>
               </Switch>
             </div>
           </Content>

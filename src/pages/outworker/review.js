@@ -21,6 +21,8 @@ import { fDate, fServiceStatus, fCheckStatus, fPartTax, fMainTaskStatus, fSubTas
 import HasPower from '@/container/HasPower'
 import Confirm from '@/component/Confirm'
 
+import PartSelectDialog from '@/container/Contract/PartSelectDialog';
+
 
 let search = {
     items: [{
@@ -100,6 +102,25 @@ const canSubmit = item => {
     }
     return true
 }
+function onlyAll(item) {
+    if (item.OutWorkerStatus == 2 && !item.AccountantStatus) {
+        return false
+    }
+    if (item.OutWorkerStatus == 2 && item.AccountantStatus == 5) {
+        return true // 这种情况的时候只能选择资料齐全提交会计
+    }
+    if (item.OutWorkerStatus == 6 && item.AccountantStatus == 5) {
+        return true // 这种情况的时候只能选择资料齐全提交会计 外勤当月只跑完
+    }
+    if (item.AccountantStatus == 3 && item.AccountantTaskSource == '外勤') {
+        if (item.ServiceStatus == 3) {
+            return false // 外勤二次提交的情况
+        }else{
+            return true // 外勤二次提交的情况
+        }
+    }
+    return false
+}
 
 class Main extends Component {
     constructor(props) {
@@ -134,7 +155,7 @@ class Main extends Component {
         let params = _.extend({},{outworkId:0,salesId:0,sequenceNo:'',companyname:'',connector:'',taskname:'',childtaskname:'',starttime:'',endtime:'',areacode:'',taskstatus:'',servicestatus:''},vals)
         params.limit = pagination.pageSize;
         params.offset = (pagination.current - 1) * pagination.pageSize;
-        console.log('params',params)
+
         return getListData('maintask', params).then(res => {
             if(res.status){
                 const pagination = { ...this.state.pagination };
@@ -235,9 +256,33 @@ class Main extends Component {
             this.onSearch(this.state.searchParams)
         },()=>{});
     }
-    render() {
+    submit(item){
+        let onlyInformationIsAll  = onlyAll(item);
+        
+        const dialog = Dialog({
+            content: <PartSelectDialog ref={view=>{this.view = view}} onlyAll={onlyInformationIsAll}/>,
+            width: 500,
+            confirmLoading: false,
+            handleOk: ()=>{
+              const result = this.view.getValues();
+              return result;
+            },
+            title: '提交会计'
+        });
+        dialog.result.then((select)=>{
+           //$http.put('/api/order/audit/toaccountant/' + $scope.postData.orderId + '/?partTax=' + $scope.partT ).success(function(res) {
+          const data = item;
+          putData(`order/audit/toaccountant/${data.OrderId}/?partTax=${select.select1}`).then(res=>{
+            if(res.status){
+                this.onSearch(this.state.searchParams)
+              }
+          })
 
-        const columns = [{
+        },()=>{});
+    }
+    render() {
+        var that = this;
+        let columns = [{
             title: '序列ID',
             dataIndex: 'SequenceNo',
             className: 'text-right',
@@ -257,23 +302,29 @@ class Main extends Component {
         }, {
             title: '销售人员',
             dataIndex: 'SalesName'
-        }, {
-            title: '服务状态',
-            dataIndex: 'ServiceStatus',
-            render: val=> fServiceStatus(val)
-        }, {
-            title: '审核状态',
-            dataIndex: 'OutWorkerStatus',
-            render: val=> fCheckStatus(val)
-        }, {
-            title: '会计审核',
-            dataIndex: 'AccountantStatus',
-            render: val=> fCheckStatus(val)
-        }, {
-            title: '部分报税',
-            dataIndex: 'PartTax',
-            render: val=> fPartTax(val)
-        }, {
+        }];
+        if(!this.props.curUser.IsChannel){
+            columns = columns.concat([{
+                title: '服务状态',
+                dataIndex: 'ServiceStatus',
+                render: val=> fServiceStatus(val)
+            }, {
+                title: '审核状态',
+                dataIndex: 'OutWorkerStatus',
+                render: val=> fCheckStatus(val)
+            }, {
+                title: '会计审核',
+                dataIndex: 'AccountantStatus',
+                render: val=> fCheckStatus(val)
+            }, {
+                title: '部分报税',
+                dataIndex: 'PartTax',
+                render: val=> fPartTax(val)
+            }])
+        }
+
+
+        columns = columns.concat([{
             title: '任务名称',
             dataIndex: 'MainTaskName',
         }, {
@@ -300,12 +351,12 @@ class Main extends Component {
             render: (text, record) => (
                 <Button.Group >
                     <Button size="small" onClick={e=>{this.view(record)}}>查看</Button>
-                    <HasPower power="REVIEW"  key={"btn_REVIEW"} ><Button size="small" onClick={e=>{this.toOther(record)}} disabled={record.OutWorkerStatus != 1|| record.ServiceStatus==8}>审核</Button></HasPower>
-                    <HasPower power="REJECT"  key={"btn_REJECT"} ><Button size="small" onClick={e=>{this.toOther(record)}} disabled={record.OutWorkerStatus != 1|| record.ServiceStatus==8}>驳回</Button></HasPower>
-                    <HasPower power="SUBMIT"  key={"btn_SUBMIT"} ><Button size="small" onClick={e=>{this.submit(record)}} disabled={canSubmit(record)}>提交</Button></HasPower>
+                    {(!this.props.curUser.IsChannel) && <HasPower power="REVIEW"  key={"btn_REVIEW"} ><Button size="small" onClick={e=>{this.toOther(record)}} disabled={record.OutWorkerStatus != 1|| record.ServiceStatus==8}>审核</Button></HasPower>}
+                    {(!this.props.curUser.IsChannel) && <HasPower power="REJECT"  key={"btn_REJECT"} ><Button size="small" onClick={e=>{this.toOther(record)}} disabled={record.OutWorkerStatus != 1|| record.ServiceStatus==8}>驳回</Button></HasPower>}
+                    {(!this.props.curUser.IsChannel) && <HasPower power="SUBMIT"  key={"btn_SUBMIT"} ><Button size="small" onClick={e=>{this.submit(record)}} disabled={canSubmit(record)}>提交</Button></HasPower>}
                 </Button.Group>
             ),
-        }];
+        }]);
 
         search.buttons=[
         <HasPower power="ADD" key="btn_addNew"><Button type="primary" onClick={this.addNew} style={{margin:'0 8px'}}>新增</Button></HasPower>]

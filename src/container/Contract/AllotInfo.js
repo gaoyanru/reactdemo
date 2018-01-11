@@ -7,50 +7,12 @@ import { putData, postData } from '@/api'
 import _ from 'lodash'
 
 import Dialog from '@/container/Dialog'
+import PartSelectDialog from '@/container/Contract/PartSelectDialog';
 import OutworkerTask from '@/container/Outworker/Task'
 import TaskListWeight from '@/container/Outworker/TaskListWeight';
 
-const RadioGroup = Radio.Group;
 
-class PartSelectDialog extends Component{
-  constructor(props) {
-    super(props);
-    this.state= {
-      select1: 0,
-      select2: 1
-    }
-    this.onChange = this.onChange.bind(this);
-    this.onChange2 = this.onChange2.bind(this);
-  }
-  getValues(){
-    return this.state;
-  }
-  onChange(v){
-    this.setState({select1:v.target.value})
-  }
-  onChange2(v){
-    this.setState({select2:v.target.value})
-  }
-  render(){
-    const radioStyle = {
-      display: 'block',
-      height: '30px',
-      lineHeight: '30px',
-    };
-    return (
-      <div>
-        <RadioGroup onChange={this.onChange} value={this.state.select1}>
-          <Radio style={radioStyle} value={0}>资料齐全，提交会计审核</Radio>
-          <Radio style={radioStyle} value={1}>部分税务报道</Radio>
-        </RadioGroup>
-        {this.state.select1?(<RadioGroup style={{padding:'12px'}} value={this.state.select2} onChange={this.onChange2}>
-          <Radio value={1}>国税报道完毕 </Radio>
-          <Radio value={2}>地税报道完毕</Radio>
-        </RadioGroup>) : null}
-      </div>
-    )
-  }
-}
+
 
 
 class Main extends Component {
@@ -65,8 +27,15 @@ class Main extends Component {
   }
 
   AccountCheck(){
+    const item = this.state.initRow;
+    let isOnlyPartChoose;
+    if (item.DisableCommitAccount == 0 && item.DisableOutWorkCommitAccount == 1) {
+      isOnlyPartChoose = true
+    } else {
+      isOnlyPartChoose = false
+    }
     Dialog({
-        content: <PartSelectDialog ref={view=>{this.view = view}}/>,
+        content: <PartSelectDialog onlyAll={isOnlyPartChoose} ref={view=>{this.view = view}}/>,
         width: 500,
         confirmLoading: false,
         handleOk: ()=>{
