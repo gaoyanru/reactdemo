@@ -23,7 +23,7 @@ class Main extends Component {
     this.getCompanyInfo()
   }
   getCompanyInfo(){
-    getListData('customerdetail/'+ this.props.companyId).then(res=>{
+    getListData('customerdetail/'+ this.props.row.CustomerId).then(res=>{
       res.data = _.extend(res.data, this.props.row);
       this.setState({
         companyInfo: res.data
