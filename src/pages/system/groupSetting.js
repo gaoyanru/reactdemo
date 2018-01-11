@@ -18,7 +18,7 @@ class Main extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selected: null
+            selected: {}
         }
 
         this.handleGroupClick = this.handleGroupClick.bind(this);

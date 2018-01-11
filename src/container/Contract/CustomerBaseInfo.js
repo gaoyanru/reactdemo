@@ -14,13 +14,14 @@ class Main extends React.Component {
     getFieldsValue = ()=>{
       if(this.validateField()) return null;
       const fields = this.props.form.getFieldsValue();
+      const data = this.props.data;
       return {
         CustomerId: fields.Company.Id,
         CompanyName: fields.Company.CompanyName,
         Connector: fields.Connector,
         Mobile: fields.Mobile,
-        SalesId: fields.Company.SalesId,
-        SalesName: fields.Company.SalesName
+        OrderSalesId: fields.Company.SalesId || data.SalesId,
+        OrderSalesName: fields.Company.SalesName || data.SalesName
       }
     }
     componentWillReceiveProps(nextProps){
@@ -116,7 +117,7 @@ class Main extends React.Component {
                 rules: [{
                   required: true, message: '请保证客户有签单销售!'
                 }],
-                initialValue: data.Mobile
+                initialValue: data.SalesName
               })(
                 <Input disabled/>
               )}
