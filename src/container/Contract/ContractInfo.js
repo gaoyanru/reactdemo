@@ -23,13 +23,14 @@ class Main extends Component {
     console.log(store, 'xxx')
   }
   AccountCheck = () => {
-    Dialog({
-        content: <SetServiceMonth data={this.state.initRow}/>,
+    const dialog = Dialog({
+        content: <SetServiceMonth data={this.state.initRow} ref={v=>{if(v) v.handler=dialog;}}/>,
         width: 500,
         confirmLoading: false,
         footer: null,
         title: '设置首报月'
-    }).result.then(()=>{
+    })
+    dialog.result.then(()=>{
         // 关闭弹窗后
     },()=>{});
   }

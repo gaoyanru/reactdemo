@@ -84,8 +84,9 @@ class Finance extends Component {
   }
 
   onSearch(res) {
-    res._id = _.uniqueId('sq_');
-    this.setState({searchParams: res});
+    const params = _.cloneDeep(res)
+    params._id = _.uniqueId('sq_');
+    this.setState({searchParams: params});
   }
 
   export() {

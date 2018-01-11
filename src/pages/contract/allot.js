@@ -6,7 +6,7 @@ import { Table, Button, Tabs } from 'antd'
 import HasPower from '@/container/HasPower'
 import OrderTable from '@/container/Contract/OrderTable'
 import _ from 'lodash'
-import { fDate, fServiceStatus, fCheckStatus } from '@/config/filters'
+import { fDate, fServiceStatus, fCheckStatus, fAccountantStatus } from '@/config/filters'
 
 import Dialog from '@/container/Dialog'
 
@@ -140,10 +140,10 @@ class Main extends Component {
       render: val=>fCheckStatus(val)
     }, {
       title: '会计处理状态',
-      dataIndex: 'AgentStatus',
-      render: val=>fCheckStatus(val)
+      dataIndex: 'AccountantStatus',
+      render: val=>fAccountantStatus(val)
     }];
-    
+
     return (
         <div>
           <SearchForm items={search.items} buttons={search.buttons} onSearch={this.onSearch}/>

@@ -18,6 +18,7 @@ class ModelForm extends Component {
     }
     this.getserviceEndDate = this.getserviceEndDate.bind(this);
     this.submit = this.submit.bind(this);
+    this.closeDialog = this.closeDialog.bind(this);
   }
   componentWillMount() {
     var setFirstMonth = _.filter(this.props.data.CrmOrderItems, {
@@ -25,6 +26,9 @@ class ModelForm extends Component {
       "MainItemId": 1
     })
     this.setState({setFirstMonth: setFirstMonth})
+  }
+  closeDialog(){
+    this.handler.close();
   }
   getserviceEndDate(){
     console.log(this.props.data, 'this.props.data')
@@ -53,6 +57,7 @@ class ModelForm extends Component {
       console.log(store)
       if (res.status) {
         message.info('审核成功！');
+        this.closeDialog();
         store.dispatch({
           type: 'set contract account modal status',
           status: {

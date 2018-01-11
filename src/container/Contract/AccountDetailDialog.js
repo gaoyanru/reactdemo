@@ -50,10 +50,10 @@ class Main extends Component {
               { this.state.orderInfo?(<CurrentOrderInfo data={this.state.orderInfo}/>):<Spin/> }
             </TabPane>
             <TabPane tab="订单汇总信息" key="2">
-              <OrderAll companyId={this.props.companyId}/>
+              <OrderAll companyId={this.props.row.CustomerId}/>
             </TabPane>
             <TabPane tab="外勤任务" key="3">
-              <OutWork companyId={this.props.companyId}/>
+              <OutWork companyId={this.props.row.CustomerId}/>
             </TabPane>
           </Tabs>
         </div>

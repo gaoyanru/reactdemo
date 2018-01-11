@@ -100,7 +100,7 @@ class Finance extends Component {
   }
   accountview(row){
     const dialog = Dialog({
-        content: <AccountDetailDialog companyId={row.CustomerId} row={row}/>,
+        content: <AccountDetailDialog row={row}/>,
         width: 1200,
         confirmLoading: false,
         footer: null,
@@ -126,7 +126,7 @@ class Finance extends Component {
         dialog.cancel()
         this.refs.searchForm.validateFields((err, values) => {
           this.onSearch(values)
-        })  
+        })
       }
     })
   }

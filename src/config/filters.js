@@ -61,6 +61,9 @@ export const fServiceStatus = (status)=>{ //服务状态
 export const fCheckStatus = function(status) { //会计外勤 处理状态
     var str = ''
     switch (+status) {
+        case 0:
+          str = '(空)'
+          break;
         case 1:
             str = '待审核'
             break;
@@ -253,6 +256,9 @@ export const fAddedValue = function(status) {
 export const fAccountantStatus = function(status) {
     var str = ''
     switch (+status) {
+        case 0:
+          str = '(空)'
+          break;
         case 1:
             str = '待审核'
             break;
